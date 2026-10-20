@@ -1,0 +1,9 @@
+name = "techskillnow-mission-inbox"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+APP_URL = "https://your-app.vercel.app"
+# FORWARD_TO = "you@example.com"  # must be a verified destination address in Cloudflare Email Routing
+
+# Set the secret with: npx wrangler secret put INBOUND_SECRET

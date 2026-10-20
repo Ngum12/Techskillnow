@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #fdfbf6;
+  --color-surface: #ffffff;
+  --color-ink: #17201b;
+  --color-muted: #4f5a54;
+  --color-line: #ddd7ca;
+  --color-primary: #1d5440;
+  --color-primary-dark: #143d2e;
+  --color-primary-soft: #e7f0eb;
+  --color-warn: #9a3a16;
+  --color-warn-soft: #fbefe7;
+  --color-ok: #17633a;
+  --color-ok-soft: #e5f3ea;
+  --color-err: #a3261b;
+  --color-err-soft: #fcebe9;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  font-size: 18px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.55;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 52px;
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    border: 2px solid transparent;
+    cursor: pointer;
+    user-select: none;
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+  }
+  .btn-primary:not(:disabled):active {
+    background: var(--color-primary-dark);
+  }
+  .btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .btn-danger {
+    background: var(--color-surface);
+    color: var(--color-err);
+    border-color: var(--color-err);
+  }
+  .input {
+    width: 100%;
+    min-height: 52px;
+    padding: 0.7rem 0.85rem;
+    border: 2px solid var(--color-line);
+    border-radius: 10px;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-size: 1rem;
+  }
+  .input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+  .label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 14px;
+  }
+}
