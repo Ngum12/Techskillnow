@@ -74,7 +74,9 @@ function Player({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLab
   const pendingKey = `tsn_pending_${courseId}`;
   const stepKey = `${locale}:${n}`;
 
-  useEffect(() => setPassed(readLocal<number[]>(passedKey, [])), [passedKey]);
+  useEffect(() => {
+    setPassed(readLocal<number[]>(passedKey, []));
+  }, [passedKey]);
 
   // Spaced review: two questions about earlier steps, once per session, after a few steps.
   useEffect(() => {

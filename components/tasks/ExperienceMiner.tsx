@@ -30,7 +30,10 @@ export function ExperienceMiner({ task, passed, onPass }: { task: ExperienceMine
   const end = useRef<HTMLDivElement>(null);
   const question = task.questions[q];
 
-  useEffect(() => end.current?.scrollIntoView({ block: "nearest", behavior: "smooth" }), [log]);
+  // Braces matter: newer browsers return a Promise from scrollIntoView, and an effect must not return one.
+  useEffect(() => {
+    end.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [log]);
 
   function say(...messages: Message[]) {
     setLog((l) => [...l, ...messages]);
