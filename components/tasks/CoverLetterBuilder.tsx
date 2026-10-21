@@ -32,6 +32,8 @@ export function CoverLetterBuilder({ task, passed, onPass }: { task: CoverLetter
   const [busy, setBusy] = useState(false);
 
   const cvLines = store ? [store.cv.profile, ...store.cv.experiences.flatMap((e) => e.bullets)] : [];
+  // Proofs linked to this advert in an evidence step: offered as starting points for "Why me".
+  const proofs = (task.advert.id && store?.cv.evidence[task.advert.id]) || [];
   const words = countWords(letterText(p));
   const set = (key: keyof LetterParts) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setP({ ...p, [key]: e.target.value });
@@ -87,6 +89,27 @@ export function CoverLetterBuilder({ task, passed, onPass }: { task: CoverLetter
       </label>
       {area("opening", s.opening, fmt(s.openingHint, { role: task.advert.role, org: task.advert.org }), "min-h-24")}
       {area("whyMe", s.whyMe, s.whyMeHint, "min-h-36")}
+      {proofs.length > 0 && (
+        <div className="mt-2 rounded-lg bg-primary-soft p-3">
+          <p className="text-sm font-semibold text-primary">{t.sim3.letterProofs}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {proofs.map((pr) => (
+              <button
+                key={pr.req}
+                type="button"
+                className="min-h-11 rounded-full border border-primary bg-surface px-3 py-1 text-left text-sm"
+                onClick={() => {
+                  setP((cur) => ({ ...cur, whyMe: `${cur.whyMe.trim()} ${pr.proof.replace(/\s*\([^)]*\)$/, "")}`.trim() }));
+                  setIssues(null);
+                }}
+              >
+                + {pr.proof.length > 70 ? `${pr.proof.slice(0, 68)}…` : pr.proof}
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-sm text-muted">{t.sim3.letterProofsHelp}</p>
+        </div>
+      )}
       {area("whyOrg", s.whyOrg, fmt(s.whyOrgHint, { org: task.advert.org }))}
       {area("closing", s.closing, s.closingHint, "min-h-20")}
       <div className="mt-4 grid grid-cols-2 gap-2">

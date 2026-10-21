@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useT } from "./I18n";
 
-type Props = { name: string; course: string; date: string; scoreLine: string; missionLine: string; id: string; qr: boolean[][] };
+type Props = { name: string; course: string; date: string; scoreLine: string; missionLine: string; id: string; qr: boolean[][]; badge: string };
 
 function loadImage(src: string): Promise<HTMLImageElement | null> {
   return new Promise((resolve) => {
@@ -39,7 +39,7 @@ async function drawCertificate(t: ReturnType<typeof useT>, p: Props): Promise<Bl
   ctx.lineWidth = 2;
   ctx.strokeRect(60, 60, W - 120, H - 120);
 
-  const badge = await loadImage("/illustrations/certificate-badge.webp");
+  const badge = await loadImage(`/illustrations/${p.badge}.webp`);
   if (badge) ctx.drawImage(badge, W / 2 - 75, 80, 150, 150);
 
   const cx = W / 2, max = W - 200;

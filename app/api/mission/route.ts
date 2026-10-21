@@ -5,6 +5,7 @@ import { db } from "@/lib/supabase-admin";
 import { env } from "@/lib/env";
 import { isGmail, missionFeedback } from "@/lib/mission-check";
 import { json, readJson } from "@/lib/http";
+import { missionStage } from "@/lib/mission-reply";
 
 /** The learner's mission status (polled by the mission page). */
 export async function GET(req: Request) {
@@ -12,11 +13,16 @@ export async function GET(req: Request) {
   if (!course) return json({ error: "not_found" }, 404);
   const learner = await getLearner(course.id);
   if (!learner) return json({ error: "locked" }, 401);
-  const { data } = await db().from("missions").select("gmail, status, feedback").eq("code", learner.code).eq("course_id", course.id).maybeSingle();
+  const [{ data }, { stage, reply }] = await Promise.all([
+    db().from("missions").select("gmail, status, feedback").eq("code", learner.code).eq("course_id", course.id).maybeSingle(),
+    missionStage(course, learner.code),
+  ]);
   return json({
     gmail: data?.gmail ?? null,
     status: data?.status ?? null,
     feedback: data ? missionFeedback(course.mission, data.feedback ?? []) : [],
+    stage,
+    reply,
   });
 }
 
@@ -35,6 +41,8 @@ export async function POST(req: Request) {
   const key = { code: learner.code, course_id: course.id };
   const { data: existing } = await supabase.from("missions").select("status").match(key).maybeSingle();
   if (existing?.status === "passed") return json({ ok: true });
-  await supabase.from("missions").upsert({ ...key, gmail, status: "waiting", feedback: [], updated_at: new Date().toISOString() });
+  // "application" missions also remember the language, for the recruiter's reply email.
+  const extra = course.mission.kind === "application" ? { locale: await getLocale() } : {};
+  await supabase.from("missions").upsert({ ...key, gmail, status: "waiting", feedback: [], updated_at: new Date().toISOString(), ...extra });
   return json({ ok: true });
 }

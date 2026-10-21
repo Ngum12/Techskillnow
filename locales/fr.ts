@@ -1,5 +1,6 @@
 import en, { type Dict } from "./en";
 import { frCv } from "./fr-cv";
+import { frApp } from "./fr-app";
 
 const fr: Dict = {
   appName: "TechSkillNow",
@@ -247,6 +248,10 @@ const fr: Dict = {
     passed: "Mission réussie ! Votre e-mail était professionnel.",
     failed: "Presque ! Corrigez ceci et envoyez un nouvel e-mail :",
     changeAddress: "Utiliser une autre adresse",
+    appPassed: "Votre candidature a passé toutes les vérifications !",
+    replyTitle: "Le recruteur a répondu",
+    replyHelp: "Nous avons aussi envoyé cet e-mail sur votre Gmail. Répondez-y là-bas (touchez Répondre), depuis la même adresse. Cette page se met à jour toute seule.",
+    replyInGmail: "Répondre dans Gmail",
     back: "Retour à ma progression",
   },
   certificate: {
@@ -308,6 +313,7 @@ const fr: Dict = {
     id: "N° d'attestation",
   },
   ...frCv,
+  ...frApp,
   // The admin area is used by the owner only and stays in English.
   admin: en.admin,
   watermark: "{name} · {phone}",

@@ -13,6 +13,8 @@ type MissionRow = {
   gmail: string;
   status: string;
   updated_at: string;
+  stage?: string;
+  reply_kind?: string | null;
   access_codes: { buyer_name: string } | null;
 };
 
@@ -22,7 +24,7 @@ export default async function MissionsPage() {
   const t = getDict();
   const { data } = await db()
     .from("missions")
-    .select("code, course_id, gmail, status, updated_at, access_codes(buyer_name)")
+    .select("*, access_codes(buyer_name)")
     .eq("status", "waiting")
     .order("updated_at", { ascending: true })
     .limit(200);
@@ -45,8 +47,9 @@ export default async function MissionsPage() {
               <p className="font-semibold">{m.access_codes?.buyer_name ?? m.code}</p>
               <p className="break-all text-muted">{fmt(t.admin.missionFrom, { gmail: m.gmail })}</p>
               <p className="text-sm text-muted">
-                {m.code} · {new Date(m.updated_at).toLocaleString("en-GB")}
+                {m.code} · {m.course_id} · {new Date(m.updated_at).toLocaleString("en-GB")}
               </p>
+              {m.stage === "reply" && <p className="mt-1 text-sm font-semibold text-primary">{fmt(t.admin.missionReplyStage, { kind: m.reply_kind ?? "" })}</p>}
               <MissionReview code={m.code} courseId={m.course_id} />
             </li>
           ))}

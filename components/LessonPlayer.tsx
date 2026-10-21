@@ -10,7 +10,9 @@ import { LanguageSwitch } from "./LanguageSwitch";
 import { LessonProvider } from "./LessonContext";
 import { ReviewCard } from "./ReviewCard";
 import { TaskView } from "./tasks/TaskView";
-import { CvProvider } from "./cv/CvContext";
+import { CvProvider, useCv } from "./cv/CvContext";
+import { QuickCv } from "./cv/QuickCv";
+import { isEmptyCv } from "@/lib/cv/model";
 import { MyCvPanel } from "./cv/MyCvPanel";
 import { InvitePanel } from "./InvitePanel";
 
@@ -203,6 +205,9 @@ function Player({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLab
   );
 
   const step = steps[stepKey];
+  // Learners who start a CV-based course without a CV get a short basic CV form on the setup step.
+  const cvStore = useCv();
+  const needsQuickCv = cvEnabled && !!step?.cvSetup && !!cvStore && cvStore.status !== "loading" && isEmptyCv(cvStore.cv);
   const needsTask = status === "ready" && !!step?.task && !passed.includes(n);
   const isLast = n === total;
 
@@ -276,6 +281,7 @@ function Player({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLab
 
             {status === "ready" && step && (
               <article>
+                {needsQuickCv && <QuickCv onOpenMyCv={() => setShowCv(true)} />}
                 {n <= freeSteps && !paid && <p className="mb-2 inline-block rounded-full bg-primary-soft px-3 py-1 text-sm font-semibold text-primary">{t.learn.freeBadge}</p>}
                 <h1 className="text-[1.6rem] font-bold leading-tight">{step.title}</h1>
                 {step.illustration && (

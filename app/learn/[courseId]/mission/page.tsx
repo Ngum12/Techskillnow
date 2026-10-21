@@ -8,6 +8,7 @@ import { env } from "@/lib/env";
 import { getDict, fmt } from "@/lib/i18n";
 import { missionFeedback } from "@/lib/mission-check";
 import { missionAddress } from "@/lib/mission-address";
+import { missionStage } from "@/lib/mission-reply";
 import { Watermark } from "@/components/Watermark";
 import { MissionPanel } from "@/components/MissionPanel";
 
@@ -24,6 +25,7 @@ export default async function MissionPage({ params }: PageProps<"/learn/[courseI
   const t = getDict(locale);
   const j = await getJourney(learner, course);
   if (!j.lessonsDone) redirect(`/learn/${course.id}/finish`);
+  const { stage, reply } = await missionStage(course, learner.code);
 
   return (
     <main className="mx-auto max-w-xl px-5 pb-10 pt-6">
@@ -42,7 +44,7 @@ export default async function MissionPage({ params }: PageProps<"/learn/[courseI
         missionEmail={missionAddress(learner.code)}
         subjectExample={fmt(course.mission.subjectExample ?? t.mission.subjectExample, { name: learner.buyerName })}
         advert={course.mission.advert}
-        initial={j.mission ? { ...j.mission, feedback: missionFeedback(course.mission, j.mission.feedback) } : null}
+        initial={j.mission ? { ...j.mission, feedback: missionFeedback(course.mission, j.mission.feedback), stage, reply } : null}
       />
       <Watermark name={learner.buyerName} phoneLast4={learner.phoneLast4} />
     </main>

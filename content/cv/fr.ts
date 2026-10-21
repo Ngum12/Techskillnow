@@ -815,6 +815,7 @@ const course: Course = {
   price: 1000,
   series: "Décrocher un emploi · 1 sur 4",
   usesCv: true,
+  badge: "cv-certificate-badge",
   freeSteps: 1,
   steps: [
     {

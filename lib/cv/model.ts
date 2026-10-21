@@ -8,7 +8,22 @@ export type LanguageLevel = "native" | "fluent" | "good" | "basic";
 export type CvLanguage = { id: string; name: string; level: LanguageLevel };
 /** Raw answers from the experience interview, kept so the learner sees "before" vs "after". */
 export type CvRawExperience = { id: string; question: string; what: string; where: string; when: string; result: string };
-export type CvTrackerRow = { id: string; org: string; role: string; date: string; reference: string; status: string };
+/** One application in the tracker (shared by every course). `date` = date applied. */
+export type CvTrackerRow = {
+  id: string;
+  org: string;
+  role: string;
+  date: string;
+  reference: string;
+  status: string;
+  deadline: string;
+  documents: string;
+  followUp: string;
+};
+/** A professional networking profile (generic, no platform branding). */
+export type CvNetwork = { headline: string; about: string; skills: string[]; photo: boolean[] };
+/** Requirement → proof links chosen in an evidence exercise, per advert. */
+export type CvEvidence = { req: string; proof: string }[];
 
 export type CvSectionId = "profile" | "experience" | "education" | "skills" | "languages" | "interests";
 
@@ -36,6 +51,8 @@ export type CvData = {
   /** Tailored versions per advert id: profile text and skill order (skill ids). */
   tailored: Record<string, { profile: string; skills: string[] }>;
   tracker: CvTrackerRow[];
+  network: CvNetwork;
+  evidence: Record<string, CvEvidence>;
 };
 
 export const SKILL_LEVELS: SkillLevel[] = ["basic", "good", "veryGood", "expert"];
@@ -54,6 +71,8 @@ export function emptyCv(): CvData {
     layout: "fresher",
     tailored: {},
     tracker: [],
+    network: { headline: "", about: "", skills: [], photo: [false, false, false] },
+    evidence: {},
   };
 }
 
@@ -80,6 +99,13 @@ export function parseCv(input: unknown): CvData {
     if (!/^[a-z0-9-]{1,40}$/i.test(key) || !value || typeof value !== "object") continue;
     const v = value as Record<string, unknown>;
     tailored[key] = { profile: str(v.profile, 800), skills: (Array.isArray(v.skills) ? v.skills : []).slice(0, 30).map((s) => str(s, 16)) };
+  }
+  const n = (o.network && typeof o.network === "object" ? o.network : {}) as Record<string, unknown>;
+  const evidenceIn = (o.evidence && typeof o.evidence === "object" ? o.evidence : {}) as Record<string, unknown>;
+  const evidence: CvData["evidence"] = {};
+  for (const [key, value] of Object.entries(evidenceIn).slice(0, 10)) {
+    if (!/^[a-z0-9-]{1,40}$/i.test(key)) continue;
+    evidence[key] = list(value, 12, (x) => ({ req: str(x.req, 40), proof: str(x.proof, 260) }));
   }
   return {
     header: {
@@ -132,7 +158,17 @@ export function parseCv(input: unknown): CvData {
       date: str(x.date, 20),
       reference: str(x.reference, 40),
       status: str(x.status, 30),
+      deadline: str(x.deadline, 20),
+      documents: str(x.documents, 200),
+      followUp: str(x.followUp, 20),
     })),
+    network: {
+      headline: str(n.headline, 220),
+      about: str(n.about, 2000),
+      skills: (Array.isArray(n.skills) ? n.skills : []).slice(0, 20).map((k) => str(k, 50)),
+      photo: [0, 1, 2].map((i) => (Array.isArray(n.photo) ? n.photo[i] === true : false)),
+    },
+    evidence,
   };
 }
 

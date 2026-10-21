@@ -5,7 +5,8 @@ import { useT } from "./I18n";
 import { fmt } from "@/lib/i18n";
 import { Feedback } from "./tasks/Feedback";
 
-type MissionState = { gmail: string; status: "waiting" | "passed" | "failed"; feedback: string[] } | null;
+type Reply = { from: string; subject: string; body: string; instruction: string };
+type MissionState = { gmail: string; status: "waiting" | "passed" | "failed"; feedback: string[]; stage?: "application" | "reply"; reply?: Reply | null } | null;
 
 export function MissionPanel({
   courseId,
@@ -36,7 +37,7 @@ export function MissionPanel({
       const res = await fetch(`/api/mission?course=${courseId}`).catch(() => null);
       if (res?.ok) {
         const data = await res.json();
-        if (data.status) setMission({ gmail: data.gmail, status: data.status, feedback: data.feedback ?? [] });
+        if (data.status) setMission({ gmail: data.gmail, status: data.status, feedback: data.feedback ?? [], stage: data.stage, reply: data.reply });
       }
     }, 15_000);
     return () => clearInterval(timer);
@@ -106,10 +107,26 @@ export function MissionPanel({
     );
   }
 
-  const gmailHref = `mailto:${missionEmail}?subject=${encodeURIComponent(subjectExample)}`;
+  const reply = mission?.stage === "reply" ? mission.reply : null;
+  const gmailHref = `mailto:${missionEmail}?subject=${encodeURIComponent(reply ? `Re: ${reply.subject}` : subjectExample)}`;
   return (
     <div className="mt-6">
-      {advert && (
+      {reply && (
+        <section className="mb-4" aria-live="polite">
+          <Feedback kind="ok" title={t.mission.appPassed} />
+          <h2 className="mt-4 text-lg font-bold">{t.mission.replyTitle}</h2>
+          <article className="card mt-2 overflow-hidden">
+            <div className="border-b border-line bg-[#f2f6fc] px-4 py-2 text-sm">
+              <p className="font-semibold">{reply.from}</p>
+              <p>{reply.subject}</p>
+            </div>
+            <p className="whitespace-pre-line px-4 py-3 text-[0.95rem] leading-relaxed">{reply.body}</p>
+          </article>
+          <p className="mt-3 rounded-xl bg-warn-soft p-3 font-semibold">{reply.instruction}</p>
+          <p className="mt-2 text-sm text-muted">{t.mission.replyHelp}</p>
+        </section>
+      )}
+      {advert && !reply && (
         <details className="card mb-4 p-4" open>
           <summary className="cursor-pointer font-bold text-primary">
             {advert.title} · {advert.org}
@@ -129,7 +146,7 @@ export function MissionPanel({
         <p className="mt-1 text-sm text-muted">{mission?.gmail}</p>
       </div>
       <a href={gmailHref} className="btn btn-primary mt-4 w-full">
-        {t.mission.openGmail}
+        {reply ? t.mission.replyInGmail : t.mission.openGmail}
       </a>
 
       {mission?.status === "failed" && <Feedback kind="err" title={t.mission.failed} messages={mission.feedback} />}

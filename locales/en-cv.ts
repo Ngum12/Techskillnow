@@ -281,6 +281,11 @@ export const enCv = {
       fileRules: "Accepted: {types}. Maximum {mb} MB.",
       fromPhone: "Choose a file from my phone",
       applyFor: "Apply for: {role}",
+      session: "Session ends in {time}",
+      saveDraft: "Save draft",
+      draftSaved: "Draft saved. The session timer restarted.",
+      expiredLost: "Your session expired and unsaved answers were lost. Save a draft often on real portals.",
+      expiredRestored: "Your session expired. Your saved draft was restored.",
       pages: { personal: "Personal details", education: "Education", motivation: "Motivation", documents: "Documents", review: "Review and submit" },
       fillFromCv: "Fill in from my CV",
       fields: {

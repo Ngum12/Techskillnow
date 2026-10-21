@@ -5,6 +5,8 @@ import { env } from "@/lib/env";
 import { normalizeCode } from "@/lib/codes";
 import { checkMissionEmail } from "@/lib/mission-check";
 import { checkCvMission, type CheckedAttachment } from "@/lib/mission-cv-check";
+import { checkApplicationMission, checkReplyMission, pickReplyKind, type ReplyKind } from "@/lib/mission-app-check";
+import { learnerName, renderReply, type MissionReply } from "@/lib/mission-reply";
 import { json } from "@/lib/http";
 
 export const maxDuration = 30;
@@ -59,6 +61,8 @@ async function readPdf(a: InboundAttachment): Promise<Pick<CheckedAttachment, "p
  * Receives a mission email from an inbound-email forwarder (e.g. the Cloudflare Email Worker).
  * Body: { from, to, subject, text, attachments: [{ filename, contentType, content(base64) }] }, header x-inbound-secret.
  * Attachments are checked in memory and discarded immediately.
+ * For "application" missions, a passing application gets the recruiter's reply in the response
+ * ({ reply: { from, subject, text } }), which the worker sends back to the learner.
  */
 export async function POST(req: Request) {
   if (!secretOk(req.headers.get("x-inbound-secret"))) return json({ error: "unauthorized" }, 401);
@@ -78,10 +82,20 @@ export async function POST(req: Request) {
   // Find the learner: by the code in the recipient address, otherwise by the sender's Gmail.
   const supabase = db();
   const tagged = codeFromRecipients(body.to);
-  const query = supabase.from("missions").select("code, course_id, gmail, status").neq("status", "passed");
+  const query = supabase.from("missions").select("*").neq("status", "passed");
   const { data: missions } = tagged ? await query.eq("code", tagged) : await query.eq("gmail", from);
 
   let checked: CheckedAttachment[] | null = null;
+  const readAttachments = async () =>
+    (checked ??= await Promise.all(
+      rawAttachments.map(async (a) => {
+        const filename = String(a.filename ?? "");
+        const contentType = String(a.contentType ?? "");
+        const isPdf = contentType === "application/pdf" || filename.toLowerCase().endsWith(".pdf");
+        return { filename, contentType, ...(isPdf ? await readPdf(a) : {}) };
+      }),
+    ));
+  let reply: MissionReply | null = null;
   for (const m of missions ?? []) {
     const en = getCourse(m.course_id, "en");
     const fr = getCourse(m.course_id, "fr");
@@ -89,16 +103,30 @@ export async function POST(req: Request) {
     // The learner may use either language, so accept the subject words of both.
     const words = [...en.mission.subjectWords, ...(fr?.mission.subjectWords ?? [])];
     let issues: string[];
-    if (en.mission.kind === "cv") {
-      checked ??= await Promise.all(
-        rawAttachments.map(async (a) => {
-          const filename = String(a.filename ?? "");
-          const contentType = String(a.contentType ?? "");
-          const isPdf = contentType === "application/pdf" || filename.toLowerCase().endsWith(".pdf");
-          return { filename, contentType, ...(isPdf ? await readPdf(a) : {}) };
-        }),
-      );
-      issues = checkCvMission({ from, subject, text, attachments: checked }, m.gmail, words);
+    const now = new Date().toISOString();
+    if (en.mission.kind === "application") {
+      const email = { from, subject, text, attachments: await readAttachments() };
+      if (m.stage === "reply" && m.reply_kind) {
+        issues = checkReplyMission(m.reply_kind as ReplyKind, email, m.gmail);
+      } else {
+        const name = await learnerName(m.code);
+        const orgWords = [...(en.mission.orgWords ?? []), ...(fr?.mission.orgWords ?? [])];
+        issues = checkApplicationMission(email, { gmail: m.gmail, name, roleWords: words, orgWords });
+        if (!issues.length) {
+          // Application accepted: the recruiter now writes back, and the learner must answer.
+          const kind = pickReplyKind(m.code);
+          await supabase
+            .from("missions")
+            .update({ stage: "reply", reply_kind: kind, status: "waiting", feedback: [], received_at: now, updated_at: now })
+            .eq("code", m.code)
+            .eq("course_id", m.course_id);
+          const course = (m.locale === "fr" && fr) || en;
+          reply ??= renderReply(course, kind, m.code, name);
+          continue;
+        }
+      }
+    } else if (en.mission.kind === "cv") {
+      issues = checkCvMission({ from, subject, text, attachments: await readAttachments() }, m.gmail, words);
     } else {
       issues = checkMissionEmail(words, m.gmail, {
         from,
@@ -109,9 +137,16 @@ export async function POST(req: Request) {
     }
     await supabase
       .from("missions")
-      .update({ status: issues.length ? "failed" : "passed", feedback: issues, received_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+      .update({ status: issues.length ? "failed" : "passed", feedback: issues, received_at: now, updated_at: now })
       .eq("code", m.code)
       .eq("course_id", m.course_id);
   }
-  return json({ ok: true, matched: missions?.length ?? 0 });
+  return json({
+    ok: true,
+    matched: missions?.length ?? 0,
+    ...(reply ? { reply: { from: reply.from, subject: reply.subject, text: `${reply.body}
+
+—
+${reply.instruction}` } } : {}),
+  });
 }

@@ -1,4 +1,5 @@
 import { enCv } from "./en-cv";
+import { enApp } from "./en-app";
 
 const en = {
   appName: "TechSkillNow",
@@ -246,6 +247,10 @@ const en = {
     passed: "Mission passed! Your email was professional.",
     failed: "Almost! Fix these and send a new email:",
     changeAddress: "Use a different address",
+    appPassed: "Your application passed every check!",
+    replyTitle: "The recruiter replied",
+    replyHelp: "We also sent this email to your Gmail. Answer it there (tap Reply), from the same address. This page updates by itself.",
+    replyInGmail: "Reply in Gmail",
     back: "Back to my progress",
   },
   certificate: {
@@ -307,6 +312,7 @@ const en = {
     id: "Certificate ID",
   },
   ...enCv,
+  ...enApp,
   admin: {
     title: "Admin",
     loginTitle: "Admin sign in",
@@ -391,6 +397,7 @@ const en = {
     missionFrom: "From {gmail}",
     missionPass: "Passed",
     missionFail: "Needs fixing",
+    missionReplyStage: "Application passed. Now checking the answer to the recruiter's reply ({kind}). Pass = mission complete.",
     missionNote: "Feedback for the learner (if it needs fixing)",
     missionDisabled: "Missions are off. Set MISSION_EMAIL to turn them on.",
     errors: {

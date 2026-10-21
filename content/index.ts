@@ -5,10 +5,13 @@ import emailForWorkEn from "./email-for-work/en";
 import emailForWorkFr from "./email-for-work/fr";
 import cvEn from "./cv/en";
 import cvFr from "./cv/fr";
+import applicationsEn from "./applications/en";
+import applicationsFr from "./applications/fr";
 
 const courses: Record<string, Partial<Record<Locale, Course>>> = {
   "email-for-work": { en: emailForWorkEn, fr: emailForWorkFr },
   cv: { en: cvEn, fr: cvFr },
+  applications: { en: applicationsEn, fr: applicationsFr },
 };
 
 export const DEFAULT_COURSE_ID = "email-for-work";
@@ -36,6 +39,6 @@ export function stepFor(course: Course, n: number, code?: string): Step {
   const step = course.steps[n - 1];
   if (!code || !step.task || !step.variants?.length) return { ...step, variants: undefined };
   const tasks: Task[] = [step.task, ...step.variants];
-  const pick = createHash("sha256").update(`${code}:${course.id}:${n}`).digest()[0] % tasks.length;
+  const pick = createHash("sha256").update(`${code}:${course.id}:${step.variantGroup ?? n}`).digest()[0] % tasks.length;
   return { ...step, task: tasks[pick], variants: undefined };
 }

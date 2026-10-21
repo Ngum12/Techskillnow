@@ -179,7 +179,8 @@ export type TailorTask = { type: "tailor"; instruction: string; adverts: Keyword
 export type CoverLetterTask = {
   type: "coverLetter";
   instruction: string;
-  advert: { org: string; role: string; contact: string; text: string };
+  /** `id` links the advert to proofs chosen in an EvidenceMatcher step for the same advert. */
+  advert: { id?: string; org: string; role: string; contact: string; text: string };
   maxWords: number;
   success: string;
 };
@@ -195,6 +196,8 @@ export type PortalTask = {
   /** File extensions accepted for uploads, e.g. ["pdf"]. */
   allowedTypes: string[];
   refPrefix: string;
+  /** Simulated session timeout (seconds of real time). Unsaved answers are lost when it ends; "Save draft" keeps them. */
+  sessionSeconds?: number;
   /** Other emails already in the inbox when the confirmation arrives. */
   inbox: InboxEmail[];
   success: string;
@@ -209,8 +212,119 @@ export type InterviewTask = {
   success: string;
 };
 
-/** Display-only: the advert for the final mission, shown on the last lesson step. */
-export type MissionBriefTask = { type: "missionBrief"; advert: { org: string; title: string; text: string }; points: string[] };
+/** The advert for the final mission, shown on the last lesson step. With `track`, the learner first adds it to their tracker. */
+export type MissionBriefTask = {
+  type: "missionBrief";
+  advert: { org: string; title: string; text: string };
+  points: string[];
+  track?: { org: string; role: string; deadline: string; documents: string };
+};
+
+/* ---------- Course 3 ("Applications That Get Answers") simulations ---------- */
+
+export type SampleApplication = { label: string; from: string; subject: string; attachments: string[]; body: string; outcome: string };
+
+/** Two applications side by side, then questions about what made the difference. */
+export type CompareAppsTask = {
+  type: "compareApps";
+  instruction: string;
+  a: SampleApplication;
+  b: SampleApplication;
+  questions: { question: string; options: string[]; answer: number; explanation: string }[];
+  success: string;
+};
+
+export type Listing = {
+  id: string;
+  title: string;
+  org: string;
+  location: string;
+  field: string;
+  /** As shown on the board, e.g. "10 November". */
+  deadline: string;
+  contact: string;
+  details: string;
+  expired: boolean;
+  fake: boolean;
+  eligible: boolean;
+  /** Why it should be shortlisted or rejected. */
+  why: string;
+};
+
+export type OpportunityBoardTask = {
+  type: "opportunityBoard";
+  instruction: string;
+  /** Who the learner is playing, so eligibility can be judged. */
+  persona: string;
+  today: string;
+  listings: Listing[];
+  success: string;
+};
+
+export type TrackerTask = {
+  type: "tracker";
+  instruction: string;
+  suggestions: { org: string; role: string; deadline: string; documents: string }[];
+  required: number;
+  success: string;
+};
+
+export type EvidenceTask = {
+  type: "evidence";
+  instruction: string;
+  advert: { id: string; org: string; role: string; requirements: { id: string; text: string; keywords: string[] }[] };
+  minLinks: number;
+  success: string;
+};
+
+export type DossierTask = {
+  type: "dossier";
+  instruction: string;
+  advert: { org: string; title: string; text: string };
+  /** Required documents, in the order the advert asks for them. */
+  required: { id: string; copies: number }[];
+  /** Everything on the table: required items and distractors. */
+  pile: { id: string; label: string; detail?: string }[];
+  success: string;
+};
+
+export type WeekEventKind = "ack" | "missingDocument" | "interview" | "rejection" | "scam";
+
+export type InboxWeekTask = {
+  type: "inboxWeek";
+  instruction: string;
+  /** The two applications in the tracker (A and B). */
+  applications: { id: "A" | "B"; org: string; role: string }[];
+  events: { id: string; at: number; kind: WeekEventKind; application: "A" | "B" | null; deadlineHours?: number; email: InboxEmail }[];
+  /** Files on the learner's phone they can attach; `requiredFile` is the one asked for. */
+  files: string[];
+  requiredFile: string;
+  passPercent: number;
+  success: string;
+};
+
+export type NetworkProfileTask = {
+  type: "networkProfile";
+  instruction: string;
+  headlineExample: string;
+  aboutExample: string;
+  success: string;
+};
+
+export type FollowUpTask = {
+  type: "followUp";
+  instruction: string;
+  /** Day 0 = the day the application was sent; the deadline day is marked on the timeline. */
+  days: number;
+  deadlineDay: number;
+  window: [number, number];
+  feedback: { early: string; late: string; right: string };
+  compose: ComposeTask;
+  success: string;
+};
+
+/** Runs several tasks one after the other in one step. */
+export type SequenceTask = { type: "sequence"; tasks: Task[]; /** Optional illustration shown above each part (null = none). */ images?: (string | null)[] };
 
 export type Task =
   | MultipleChoiceTask
@@ -233,7 +347,16 @@ export type Task =
   | CoverLetterTask
   | PortalTask
   | InterviewTask
-  | MissionBriefTask;
+  | MissionBriefTask
+  | CompareAppsTask
+  | OpportunityBoardTask
+  | TrackerTask
+  | EvidenceTask
+  | DossierTask
+  | InboxWeekTask
+  | NetworkProfileTask
+  | FollowUpTask
+  | SequenceTask;
 
 /** Which part of the learner's CV a step fills (used by "My CV" to jump back to it). */
 export type CvSection = "experience" | "header" | "profile" | "bullets" | "education" | "export";
@@ -247,6 +370,10 @@ export type Step = {
   /** Alternative versions of the task. Each paid learner gets one, chosen from their code. */
   variants?: Task[];
   cvSection?: CvSection;
+  /** Paid learners without a CV yet are asked for a short basic CV on this step. */
+  cvSetup?: boolean;
+  /** Steps with the same group get the same variant index, e.g. an advert used in two steps. */
+  variantGroup?: string;
 };
 
 export type AssessmentQuestion = {
@@ -262,7 +389,7 @@ export type AssessmentQuestion = {
  * "email" checks a job application email (course 1); "cv" also opens and checks the attached CV.
  */
 export type Mission = {
-  kind: "email" | "cv";
+  kind: "email" | "cv" | "application";
   intro: string;
   steps: string[];
   /** Words the subject must contain (any of): "application" for email, the role for cv. */
@@ -271,6 +398,13 @@ export type Mission = {
   advert?: { org: string; title: string; text: string };
   /** Suggested subject line; {name} is replaced with the learner's name. */
   subjectExample?: string;
+  /** "application" missions: words that must name the organisation in the cover letter. */
+  orgWords?: string[];
+  /**
+   * "application" missions: the automatic reply sent after a correct application (one is picked per learner).
+   * {name}, {role}, {org} and {ref} are replaced.
+   */
+  replies?: Record<"missing_document" | "interview", { from: string; subject: string; body: string; instruction: string }>;
   /** Feedback per failed check, keyed by issue id. */
   messages: Record<string, string>;
 };
@@ -286,6 +420,8 @@ export type Course = {
   series?: string;
   /** Courses that build the learner's shared CV show "My CV" and save the draft. */
   usesCv?: boolean;
+  /** Certificate badge illustration (file name in /public/illustrations). */
+  badge?: string;
   /** Number of leading steps available without a code. */
   freeSteps: number;
   steps: Step[];

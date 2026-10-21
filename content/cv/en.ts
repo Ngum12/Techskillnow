@@ -824,6 +824,7 @@ const course: Course = {
   price: 1000,
   series: "Get the Job · 1 of 4",
   usesCv: true,
+  badge: "cv-certificate-badge",
   freeSteps: 1,
   steps: [
     // Section A: Understand the job

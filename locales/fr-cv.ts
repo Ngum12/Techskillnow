@@ -283,6 +283,11 @@ export const frCv: typeof enCv = {
       fileRules: "Acceptés : {types}. Maximum {mb} Mo.",
       fromPhone: "Choisir un fichier sur mon téléphone",
       applyFor: "Postuler : {role}",
+      session: "La session se termine dans {time}",
+      saveDraft: "Enregistrer le brouillon",
+      draftSaved: "Brouillon enregistré. Le minuteur de session a redémarré.",
+      expiredLost: "Votre session a expiré et les réponses non enregistrées sont perdues. Sur les vrais portails, enregistrez souvent un brouillon.",
+      expiredRestored: "Votre session a expiré. Votre brouillon enregistré a été restauré.",
       pages: { personal: "Informations personnelles", education: "Formation", motivation: "Motivation", documents: "Documents", review: "Vérifier et envoyer" },
       fillFromCv: "Remplir à partir de mon CV",
       fields: {

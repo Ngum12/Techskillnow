@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { InboxTask, PortalTask } from "@/content/types";
 import { useT } from "@/components/I18n";
 import { fmt } from "@/lib/i18n";
@@ -32,6 +32,11 @@ export function PortalSimulator({ task, passed, onPass }: { task: PortalTask; pa
   const { reportAttempt } = useLesson();
   const [stage, setStage] = useState<Stage>(passed ? "done" : "personal");
   const [v, setV] = useState<PortalValues>(emptyPortal);
+  // Optional session timeout: unsaved answers are lost when it ends, as on many real portals.
+  const [sessionLeft, setSessionLeft] = useState<number | null>(task.sessionSeconds ?? null);
+  const [draft, setDraft] = useState<{ values: PortalValues; stage: Stage } | null>(null);
+  const [expired, setExpired] = useState<"lost" | "restored" | null>(null);
+  const [savedNote, setSavedNote] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof PortalValues, string>>>({});
   const [reference, setReference] = useState("");
   const [refInput, setRefInput] = useState("");
@@ -101,7 +106,7 @@ export function PortalSimulator({ task, passed, onPass }: { task: PortalTask; pa
     }
     store?.update((cv) => ({
       ...cv,
-      tracker: [...cv.tracker, { id: newId(), org: task.org, role: task.role, date: new Date().toISOString().slice(0, 10), reference, status: s.submitted }],
+      tracker: [...cv.tracker, { id: newId(), org: task.org, role: task.role, date: new Date().toISOString().slice(0, 10), reference, status: "applied", deadline: "", documents: "", followUp: "" }],
     }));
     setStage("done");
     onPass();
@@ -182,6 +187,30 @@ export function PortalSimulator({ task, passed, onPass }: { task: PortalTask; pa
     </fieldset>
   );
 
+  const inForm = PORTAL_PAGES.includes(stage as PortalPage) || stage === "review";
+  useEffect(() => {
+    if (sessionLeft === null || !inForm) return;
+    if (sessionLeft <= 0) {
+      // Session over: go back to the last saved draft, or start again.
+      setV(draft?.values ?? emptyPortal());
+      setStage(draft?.stage ?? "personal");
+      setExpired(draft ? "restored" : "lost");
+      setSessionLeft(task.sessionSeconds ?? null);
+      return;
+    }
+    const id = setTimeout(() => setSessionLeft((x) => (x === null ? x : x - 1)), 1000);
+    return () => clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionLeft, inForm]);
+
+  function saveDraft() {
+    setDraft({ values: v, stage });
+    setSessionLeft(task.sessionSeconds ?? null);
+    setSavedNote(true);
+    setExpired(null);
+    setTimeout(() => setSavedNote(false), 2500);
+  }
+
   const step = PORTAL_PAGES.indexOf(stage as PortalPage);
   return (
     <div>
@@ -196,6 +225,16 @@ export function PortalSimulator({ task, passed, onPass }: { task: PortalTask; pa
               <span key={p} className={`h-1.5 flex-1 rounded-full ${i <= (stage === "review" ? 4 : step) ? "bg-[#1f3b57]" : "bg-line"}`} />
             ))}
           </div>
+          {sessionLeft !== null && (
+            <div className={`mx-4 mt-3 flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm ${sessionLeft <= 30 ? "bg-err-soft text-err" : "bg-[#eef2f6]"}`} aria-live="polite">
+              <span>{fmt(s.session, { time: `${Math.floor(sessionLeft / 60)}:${String(sessionLeft % 60).padStart(2, "0")}` })}</span>
+              <button type="button" className="min-h-11 font-semibold underline" onClick={saveDraft}>
+                {s.saveDraft}
+              </button>
+            </div>
+          )}
+          {savedNote && <p className="mx-4 mt-2 text-sm text-ok">✓ {s.draftSaved}</p>}
+          {expired && <p className="mx-4 mt-2 rounded-lg bg-warn-soft p-2 text-sm text-warn">{expired === "lost" ? s.expiredLost : s.expiredRestored}</p>}
           <div className="p-4">
             {stage === "personal" && (
               <>

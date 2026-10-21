@@ -2,6 +2,6 @@
   "name": "techskillnow-mission-inbox",
   "private": true,
   "scripts": { "deploy": "wrangler deploy" },
-  "dependencies": { "postal-mime": "^4.0.11" },
+  "dependencies": { "mimetext": "^3.0.28", "postal-mime": "^4.0.11" },
   "devDependencies": { "wrangler": "^4.151.3" }
 }

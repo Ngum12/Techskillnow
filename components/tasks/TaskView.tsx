@@ -25,6 +25,15 @@ const CoverLetterBuilder = dynamic(() => import("./CoverLetterBuilder").then((m)
 const PortalSimulator = dynamic(() => import("./PortalSimulator").then((m) => m.PortalSimulator), { loading });
 const InterviewCards = dynamic(() => import("./InterviewCards").then((m) => m.InterviewCards), { loading });
 const MissionBrief = dynamic(() => import("./MissionBrief").then((m) => m.MissionBrief), { loading });
+const CompareApps = dynamic(() => import("./CompareApps").then((m) => m.CompareApps), { loading });
+const OpportunityBoard = dynamic(() => import("./OpportunityBoard").then((m) => m.OpportunityBoard), { loading });
+const ApplicationTracker = dynamic(() => import("./ApplicationTracker").then((m) => m.ApplicationTracker), { loading });
+const EvidenceMatcher = dynamic(() => import("./EvidenceMatcher").then((m) => m.EvidenceMatcher), { loading });
+const DossierBuilder = dynamic(() => import("./DossierBuilder").then((m) => m.DossierBuilder), { loading });
+const InboxWeek = dynamic(() => import("./InboxWeek").then((m) => m.InboxWeek), { loading });
+const NetworkProfileBuilder = dynamic(() => import("./NetworkProfileBuilder").then((m) => m.NetworkProfileBuilder), { loading });
+const FollowUpTimeline = dynamic(() => import("./FollowUpTimeline").then((m) => m.FollowUpTimeline), { loading });
+const SequenceView = dynamic(() => import("./SequenceView").then((m) => m.SequenceView), { loading });
 
 export function TaskView({ task, passed, onPass }: { task: Task; passed: boolean; onPass: () => void }) {
   const props = { passed, onPass };
@@ -71,5 +80,23 @@ export function TaskView({ task, passed, onPass }: { task: Task; passed: boolean
       return <InterviewCards task={task} {...props} />;
     case "missionBrief":
       return <MissionBrief task={task} {...props} />;
+    case "compareApps":
+      return <CompareApps task={task} {...props} />;
+    case "opportunityBoard":
+      return <OpportunityBoard task={task} {...props} />;
+    case "tracker":
+      return <ApplicationTracker task={task} {...props} />;
+    case "evidence":
+      return <EvidenceMatcher task={task} {...props} />;
+    case "dossier":
+      return <DossierBuilder task={task} {...props} />;
+    case "inboxWeek":
+      return <InboxWeek task={task} {...props} />;
+    case "networkProfile":
+      return <NetworkProfileBuilder task={task} {...props} />;
+    case "followUp":
+      return <FollowUpTimeline task={task} {...props} />;
+    case "sequence":
+      return <SequenceView task={task} {...props} />;
   }
 }

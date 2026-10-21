@@ -8,6 +8,7 @@ TechSkillNow is a mobile-first Progressive Web App that teaches practical workpl
 |---|---|---|
 | **Email for Work** | Writes and sends professional emails, spots scams, and sends a real job application from Gmail | 850 FCFA |
 | **A CV That Gets Interviews** *(Get the Job · 1 of 4)* | Finishes with their own tailored, ATS-friendly CV as a PDF, checked by a real-email mission | 1 000 FCFA |
+| **Applications That Get Answers** *(Get the Job · 2 of 4)* | Leaves with a tailored cover letter, a networking profile and a real application sent, and handles every kind of reply | 1 000 FCFA |
 
 | | |
 |---|---|
@@ -367,8 +368,9 @@ When `MISSION_EMAIL` is set, learners must send a genuine email from their own G
 
 - **Email for Work:** a job application, checked for a professional address, a clear subject, a well-named PDF, greeting, closing, signature with phone number, and length.
 - **A CV That Gets Interviews:** their CV tailored to a provided advert. The server opens the PDF in memory and checks the sender, a subject naming the role, the file name (`Firstname_Lastname_CV.pdf`), at most 2 pages, an email address, a phone number and the core sections in the CV text, plus greeting, closing and signature in the message. Each failed check returns specific feedback and the learner can resend. Attachments are never stored.
+- **Applications That Get Answers:** a full application to a provided advert: a short email (greeting, the role, closing, phone signature) with two PDFs, `Firstname_Lastname_CV.pdf` (max 2 pages) and `Firstname_Lastname_Cover_Letter.pdf` (names the role and organisation, under 350 words, greeting, closing, signature). Once it passes, the recruiter replies automatically (a "missing document" request or an interview invitation, stable per learner), shown in the app and sent back by the email worker; the learner's answer is checked too.
 
-- **Manual review:** approve or return missions in **Admin → Missions**.
+- **Manual review:** approve or return missions in **Admin → Missions**. For course 3, the first "Passed" sends the learner the recruiter's reply in the app; the second completes the mission.
 - **Automatic review:** deploy `integrations/email-worker` as a Cloudflare Email Worker on the mission inbox's domain (`npm install && npx wrangler secret put INBOUND_SECRET && npm run deploy`, with `APP_URL` set in `wrangler.toml`).
 
 ---

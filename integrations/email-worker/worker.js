@@ -1,7 +1,10 @@
 // Cloudflare Email Worker: receives mission emails sent to MISSION_EMAIL (including mission+CODE@ addresses)
 // and posts them to the app for checking. PDFs up to 2 MB are sent so the CV can be checked; the app
-// reads them in memory and stores nothing.
+// reads them in memory and stores nothing. When the app returns a `reply` (course 3: the recruiter
+// answers a correct application), it is sent back to the learner as a reply to their email.
 import PostalMime from "postal-mime";
+import { EmailMessage } from "cloudflare:email";
+import { createMimeMessage } from "mimetext";
 
 const MAX_PDF = 2 * 1024 * 1024;
 
@@ -26,7 +29,7 @@ export default {
         content: isPdf && size > 0 && size <= MAX_PDF ? toBase64(a.content) : undefined,
       };
     });
-    await fetch(`${env.APP_URL}/api/mission/inbound`, {
+    const res = await fetch(`${env.APP_URL}/api/mission/inbound`, {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-inbound-secret": env.INBOUND_SECRET },
       body: JSON.stringify({
@@ -37,6 +40,25 @@ export default {
         attachments,
       }),
     });
+    const data = await res.json().catch(() => ({}));
+    if (data.reply) {
+      try {
+        const msg = createMimeMessage();
+        msg.setSender({ name: data.reply.from, addr: message.to });
+        msg.setRecipient(message.from);
+        msg.setSubject(data.reply.subject);
+        const id = message.headers.get("Message-ID");
+        if (id) {
+          msg.setHeader("In-Reply-To", id);
+          msg.setHeader("References", id);
+        }
+        msg.addMessage({ contentType: "text/plain", data: data.reply.text });
+        await message.reply(new EmailMessage(message.to, message.from, msg.asRaw()));
+      } catch (e) {
+        // The learner also sees the reply in the app, so a failed send is not fatal.
+        console.error("reply failed", e);
+      }
+    }
     // Optional: keep a copy in your own inbox.
     if (env.FORWARD_TO) await message.forward(env.FORWARD_TO);
   },

@@ -58,7 +58,7 @@ export default async function CertificatePage({ params }: PageProps<"/learn/[cou
 
       <section className="card mt-4 border-2 border-primary px-5 py-8 text-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/illustrations/certificate-badge.webp" alt="" width={120} height={120} className="mx-auto h-24 w-24" />
+        <img src={`/illustrations/${course.badge ?? "certificate-badge"}.webp`} alt="" width={120} height={120} className="mx-auto h-24 w-24" />
         <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-muted">{t.certificate.title}</p>
         <p className="mt-4">{t.certificate.awarded}</p>
         <p className="mt-1 text-2xl font-bold">{cert.name}</p>
@@ -86,6 +86,7 @@ export default async function CertificatePage({ params }: PageProps<"/learn/[cou
         missionLine={cert.mission ? t.certificate.missionDone : ""}
         id={id}
         qr={matrix}
+        badge={course.badge ?? "certificate-badge"}
       />
 
       <ReferralCard courseId={course.id} />
