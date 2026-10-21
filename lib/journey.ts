@@ -31,7 +31,7 @@ export async function getJourney(learner: Learner, course: Course): Promise<Jour
   ]);
   const pre = tests?.find((t) => t.kind === "pre") ?? null;
   const post = tests?.find((t) => t.kind === "post") ?? null;
-  const missionEnabled = !!env.missionEmail;
+  const missionEnabled = !!env.missionEmail && !!course.mission;
   const postPassed = !!post && post.score >= course.assessment.passMark;
   const missionPassed = !missionEnabled || mission?.status === "passed";
   const lessonsDone = !!progress?.completed_at;

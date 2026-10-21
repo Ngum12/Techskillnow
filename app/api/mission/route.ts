@@ -10,7 +10,7 @@ import { missionStage } from "@/lib/mission-reply";
 /** The learner's mission status (polled by the mission page). */
 export async function GET(req: Request) {
   const course = getCourse(new URL(req.url).searchParams.get("course") ?? "", await getLocale());
-  if (!course) return json({ error: "not_found" }, 404);
+  if (!course?.mission) return json({ error: "not_found" }, 404);
   const learner = await getLearner(course.id);
   if (!learner) return json({ error: "locked" }, 401);
   const [{ data }, { stage, reply }] = await Promise.all([
@@ -20,7 +20,7 @@ export async function GET(req: Request) {
   return json({
     gmail: data?.gmail ?? null,
     status: data?.status ?? null,
-    feedback: data ? missionFeedback(course.mission, data.feedback ?? []) : [],
+    feedback: data ? missionFeedback(course.mission!, data.feedback ?? []) : [],
     stage,
     reply,
   });
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
   if (!env.missionEmail) return json({ error: "disabled" }, 404);
   const body = await readJson<{ courseId: string; gmail: string }>(req);
   const course = getCourse(String(body.courseId ?? ""));
-  if (!course) return json({ error: "not_found" }, 404);
+  if (!course?.mission) return json({ error: "not_found" }, 404);
   const learner = await getLearner(course.id);
   if (!learner) return json({ error: "locked" }, 401);
   const gmail = String(body.gmail ?? "").trim().toLowerCase();
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
   const { data: existing } = await supabase.from("missions").select("status").match(key).maybeSingle();
   if (existing?.status === "passed") return json({ ok: true });
   // "application" missions also remember the language, for the recruiter's reply email.
-  const extra = course.mission.kind === "application" ? { locale: await getLocale() } : {};
+  const extra = course.mission!.kind === "application" ? { locale: await getLocale() } : {};
   await supabase.from("missions").upsert({ ...key, gmail, status: "waiting", feedback: [], updated_at: new Date().toISOString(), ...extra });
   return json({ ok: true });
 }

@@ -20,12 +20,12 @@ function refPrefix(org: string): string {
 
 /** The recruiter's automatic reply to a correct application ("application" missions). */
 export function renderReply(course: Course, kind: ReplyKind, code: string, name: string): MissionReply | null {
-  const r = course.mission.replies?.[kind];
+  const r = course.mission?.replies?.[kind];
   if (!r) return null;
-  const org = course.mission.advert?.org ?? "";
+  const org = course.mission?.advert?.org ?? "";
   const vars = {
     name: name.trim() || (course.locale === "fr" ? "candidat(e)" : "Candidate"),
-    role: course.mission.advert?.title ?? "",
+    role: course.mission?.advert?.title ?? "",
     org,
     ref: missionReference(refPrefix(org), code),
   };
@@ -44,7 +44,7 @@ export async function learnerName(code: string): Promise<string> {
 
 /** Stage of an "application" mission: the reply to answer, once the application has passed. */
 export async function missionStage(course: Course, code: string): Promise<{ stage: "application" | "reply"; reply: MissionReply | null }> {
-  if (course.mission.kind !== "application") return { stage: "application", reply: null };
+  if (course.mission?.kind !== "application") return { stage: "application", reply: null };
   const { data } = await db().from("missions").select("stage, reply_kind").eq("code", code).eq("course_id", course.id).maybeSingle();
   if (data?.stage !== "reply" || !data.reply_kind) return { stage: "application", reply: null };
   return { stage: "reply", reply: renderReply(course, data.reply_kind as ReplyKind, code, await learnerName(code)) };

@@ -1,3 +1,6 @@
+import type { ErrorData, Indicator, LabSettings, TitrationSystem } from "@/lib/chem/titration";
+import type { Checkpoint } from "@/lib/chem/marking";
+
 export type Locale = "en" | "fr";
 
 /** A rule checked against a piece of text the learner wrote. */
@@ -323,6 +326,64 @@ export type FollowUpTask = {
   success: string;
 };
 
+/* ---------- Chemistry practicals ---------- */
+
+/** Learn: hints on. Practise: new random values each attempt. Exam: timer, no hints. */
+export type ChemMode = "learn" | "practise" | "exam";
+export type Effect3 = "higher" | "lower" | "none";
+
+/** The editable chemistry data a lab step needs (from /content/chem). */
+export type ChemLabData = {
+  settings: LabSettings & { calculation: { relativeTolerance: number } };
+  systems: TitrationSystem[];
+  indicators: Indicator[];
+  errors: ErrorData;
+};
+
+export type ChemTourTask = {
+  type: "chemTour";
+  instruction: string;
+  items: { id: string; name: string; use: string }[];
+  tasks: { task: string; answer: string; why: string }[];
+  success: string;
+};
+
+export type BuretteReadTask = { type: "buretteRead"; instruction: string; rounds: number; required: number; parallax: ErrorData["parallax"]; success: string };
+
+export type ResultsTableTask = { type: "resultsTable"; instruction: string; success: string };
+
+export type TitrationLabTask = {
+  type: "titrationLab";
+  /** prepare = step 4, rough = step 5, accurate = step 6, exam = the timed mock (all of it, then calculations). */
+  phase: "prepare" | "rough" | "accurate" | "exam";
+  instruction: string;
+  lab: ChemLabData;
+  /** Notebook checkpoints asked after this stage (in order). */
+  notebook: Checkpoint[];
+  /** Every checkpoint, for the assembled method at the end of the mock. */
+  allCheckpoints?: Checkpoint[];
+  exam?: { minutes: number; titreMarks: { within: number; marks: number }[]; concordanceMarks: number; recordingMarks: number; calculationMarkPerBox: number; passPercent: number };
+  /** Label used in prompts, e.g. "the practical paper". */
+  paperLabel: string;
+  success: string;
+};
+
+export type ChemCalcTask = { type: "chemCalc"; instruction: string; lab: ChemLabData; success: string };
+
+export type ErrorCardsTask = {
+  type: "errorCards";
+  instruction: string;
+  scenarios: { id: string; situation: string; effect: Effect3; reasons: string[]; answer: number }[];
+  success: string;
+};
+
+export type MethodChallengeTask = {
+  type: "methodChallenge";
+  instruction: string;
+  challenges: { id: string; lines: string[]; faulty: number; fix: string; effect: Effect3; reasons: string[]; answer: number }[];
+  success: string;
+};
+
 /** Runs several tasks one after the other in one step. */
 export type SequenceTask = { type: "sequence"; tasks: Task[]; /** Optional illustration shown above each part (null = none). */ images?: (string | null)[] };
 
@@ -356,7 +417,14 @@ export type Task =
   | InboxWeekTask
   | NetworkProfileTask
   | FollowUpTask
-  | SequenceTask;
+  | SequenceTask
+  | ChemTourTask
+  | BuretteReadTask
+  | ResultsTableTask
+  | TitrationLabTask
+  | ChemCalcTask
+  | ErrorCardsTask
+  | MethodChallengeTask;
 
 /** Which part of the learner's CV a step fills (used by "My CV" to jump back to it). */
 export type CvSection = "experience" | "header" | "profile" | "bullets" | "education" | "export";
@@ -427,5 +495,6 @@ export type Course = {
   steps: Step[];
   /** Final test questions; `warmup` picks the few (by index) used in the optional warm-up at the start. */
   assessment: { passMark: number; warmup: number[]; questions: AssessmentQuestion[] };
-  mission: Mission;
+  /** The real-world mission; courses without one (lab practicals) finish with the lessons and the final test. */
+  mission?: Mission;
 };

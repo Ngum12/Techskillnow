@@ -1,0 +1,150 @@
+{
+  "rinse": {
+    "burette": [
+      { "id": "acid", "label": "The acid it will hold", "effect": {}, "correct": true, "explain": "Rinsing the burette with the acid it will hold leaves only that acid on the walls, so its concentration does not change." },
+      { "id": "water", "label": "Distilled water", "effect": { "buretteConcFactor": 0.97 }, "explain": "Water left in the burette diluted the acid. You needed more of the weaker acid, so your titre was too high." },
+      { "id": "alkali", "label": "The alkali", "effect": { "buretteConcFactor": 0.96 }, "explain": "Alkali left in the burette neutralised some of the acid. The acid was effectively weaker, so your titre was too high." }
+    ],
+    "pipette": [
+      { "id": "alkali", "label": "The alkali it will measure", "effect": {}, "correct": true, "explain": "Rinsing the pipette with the alkali it will measure keeps the 25.0 cm³ at the right concentration." },
+      { "id": "water", "label": "Distilled water", "effect": { "flaskMolesFactor": 0.97 }, "explain": "Water left in the pipette diluted the alkali, so fewer moles reached the flask. Less acid was needed: titre too low." },
+      { "id": "acid", "label": "The acid", "effect": { "flaskMolesFactor": 0.96 }, "explain": "Acid left in the pipette neutralised some alkali before the titration, so fewer moles were in the flask: titre too low." }
+    ],
+    "flask": [
+      { "id": "water", "label": "Distilled water", "effect": {}, "correct": true, "explain": "Water in the conical flask does not change the number of moles of alkali delivered by the pipette, so it has no effect on the titre." },
+      { "id": "alkali", "label": "The alkali", "effect": { "flaskMolesFactor": 1.04 }, "explain": "Alkali left in the flask added extra moles on top of the 25.0 cm³, so more acid was needed: titre too high." },
+      { "id": "acid", "label": "The acid", "effect": { "flaskMolesFactor": 0.96 }, "explain": "Acid left in the flask neutralised some of the alkali, so less acid was needed from the burette: titre too low." }
+    ]
+  },
+  "setup": {
+    "funnel": {
+      "label": "Remove the funnel from the burette before titrating",
+      "ifNot": { "readingOffset": -0.15 },
+      "explain": "Drops left in the funnel ran into the burette during the titration, so the level fell by less than the volume you added. Your titre read too low and was inaccurate."
+    },
+    "jet": {
+      "label": "Run a little acid through the tap so the jet below the tap is full (no air bubble)",
+      "ifNot": { "readingOffset": 0.2 },
+      "explain": "The air bubble in the jet filled with acid during the titration. The level fell by more than the volume that reached the flask, so your titre read too high."
+    }
+  },
+  "parallax": {
+    "above": { "offset": -0.1, "explain": "With your eye above the meniscus, the burette reads lower than the true value (the numbers increase downwards)." },
+    "below": { "offset": 0.1, "explain": "With your eye below the meniscus, the burette reads higher than the true value." }
+  },
+  "scenarios": [
+    {
+      "id": "buretteWater",
+      "situation": "A student rinsed the burette with distilled water only, then filled it with the acid.",
+      "effect": "higher",
+      "reasons": ["The acid was diluted, so more acid was needed to neutralise the alkali", "Water reacts with the alkali", "The flask contained more alkali", "Water makes the indicator change colour early"],
+      "answer": 0
+    },
+    {
+      "id": "pipetteWater",
+      "situation": "The pipette was rinsed with distilled water just before measuring the alkali.",
+      "effect": "lower",
+      "reasons": ["The alkali in the pipette was diluted, so fewer moles reached the flask", "The acid was diluted", "Water adds extra moles of alkali", "The pipette delivers more than 25.0 cm³"],
+      "answer": 0
+    },
+    {
+      "id": "flaskAlkali",
+      "situation": "The conical flask was rinsed with the alkali before the 25.0 cm³ was added.",
+      "effect": "higher",
+      "reasons": ["Alkali left on the walls added extra moles, so more acid was needed", "The alkali became more dilute", "The acid became more concentrated", "The indicator was diluted"],
+      "answer": 0
+    },
+    {
+      "id": "flaskWater",
+      "situation": "The conical flask was still wet with distilled water when the alkali was pipetted in.",
+      "effect": "none",
+      "reasons": ["The number of moles of alkali in the flask is unchanged; only its volume changes", "The alkali is diluted, so less acid is needed", "Water reacts with the acid", "Water hides the colour change"],
+      "answer": 0
+    },
+    {
+      "id": "washSides",
+      "situation": "Near the end point, the student washed the inside of the flask with a little distilled water.",
+      "effect": "none",
+      "reasons": ["No moles of acid or alkali are added or removed", "The alkali is diluted, so less acid is needed", "More acid is needed because the volume increases", "The indicator stops working"],
+      "answer": 0
+    },
+    {
+      "id": "bubble",
+      "situation": "An air bubble was trapped in the burette jet below the tap and disappeared during the titration.",
+      "effect": "higher",
+      "reasons": ["The burette level fell by more than the volume that reached the flask", "The bubble added extra acid to the flask", "The bubble neutralised some alkali", "Air reacts with the indicator"],
+      "answer": 0
+    },
+    {
+      "id": "overshoot",
+      "situation": "The student added acid quickly near the end point and the colour changed sharply after a large volume.",
+      "effect": "higher",
+      "reasons": ["More acid was added than needed to reach the end point", "The indicator was used up", "The alkali was diluted", "Fast flow makes the acid stronger"],
+      "answer": 0
+    },
+    {
+      "id": "finalAbove",
+      "situation": "The final burette reading was taken with the eye above the level of the meniscus.",
+      "effect": "lower",
+      "reasons": ["The final reading was read too low, so final minus initial was too small", "Less acid was added", "The meniscus moves when you look at it", "The initial reading was too high"],
+      "answer": 0
+    },
+    {
+      "id": "initialAbove",
+      "situation": "The initial burette reading was taken with the eye above the level of the meniscus; the final reading was correct.",
+      "effect": "higher",
+      "reasons": ["The initial reading was too low, so final minus initial was too large", "The final reading was too high", "More acid was added", "The acid was diluted"],
+      "answer": 0
+    }
+  ],
+  "methodChallenges": [
+    {
+      "id": "pipetteRinse",
+      "lines": [
+        "Rinse the burette with the acid, then fill it with the acid using a funnel.",
+        "Remove the funnel and run a little acid through the tap to fill the jet.",
+        "Rinse the pipette with distilled water, then use it with a filler to transfer 25.0 cm³ of the alkali into a conical flask.",
+        "Add 2–3 drops of phenolphthalein and place the flask on a white tile.",
+        "Add acid from the burette while swirling, dropwise near the end point, until the pink colour just disappears.",
+        "Record the initial and final readings to 2 decimal places and repeat until two titres agree within 0.10 cm³."
+      ],
+      "faulty": 2,
+      "fix": "The pipette must be rinsed with the alkali it will measure, not with water.",
+      "effect": "lower",
+      "reasons": ["Water left in the pipette dilutes the alkali, so fewer moles are titrated", "Water dilutes the acid", "Water adds extra moles", "It has no effect"],
+      "answer": 0
+    },
+    {
+      "id": "funnelLeft",
+      "lines": [
+        "Rinse the burette with the acid, then fill it with the acid using a funnel.",
+        "Leave the funnel in the burette and record the initial reading.",
+        "Rinse the pipette with the alkali and transfer 25.0 cm³ into a conical flask using a pipette filler.",
+        "Add 2–3 drops of methyl orange and place the flask on a white tile.",
+        "Titrate with swirling until the colour changes from yellow to orange.",
+        "Repeat until two titres are concordant and average them."
+      ],
+      "faulty": 1,
+      "fix": "The funnel must be removed before reading and titrating.",
+      "effect": "lower",
+      "reasons": ["Drops from the funnel enter the burette, so the level falls by less than the volume added", "The funnel adds acid to the flask", "The funnel dilutes the acid", "It has no effect"],
+      "answer": 0
+    },
+    {
+      "id": "flaskRinse",
+      "lines": [
+        "Rinse the burette with the acid and fill it, removing the funnel and filling the jet.",
+        "Rinse the conical flask with the alkali.",
+        "Rinse the pipette with the alkali and transfer 25.0 cm³ into the conical flask.",
+        "Add 2–3 drops of phenolphthalein; stand the flask on a white tile.",
+        "Add acid with swirling, dropwise near the end point, until the solution just turns colourless.",
+        "Read the burette at eye level and repeat to concordance."
+      ],
+      "faulty": 1,
+      "fix": "The conical flask should be rinsed with distilled water only.",
+      "effect": "higher",
+      "reasons": ["Alkali left in the flask adds extra moles, so more acid is needed", "The alkali is diluted", "The acid is diluted", "It has no effect"],
+      "answer": 0
+    }
+  ]
+}

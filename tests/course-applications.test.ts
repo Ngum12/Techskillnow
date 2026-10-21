@@ -37,9 +37,9 @@ test("course 3: English and French have the same shape", () => {
     assert.equal(fr.assessment.questions[i].step, q.step, `question ${i + 1} step`);
     assert.ok(q.answer >= 0 && q.answer < q.options.length && q.step >= 1 && q.step <= 15, q.question);
   });
-  assert.equal(en.mission.kind, "application");
-  assert.equal(fr.mission.kind, "application");
-  assert.deepEqual(Object.keys(fr.mission.messages).sort(), Object.keys(en.mission.messages).sort());
+  assert.equal(en.mission!.kind, "application");
+  assert.equal(fr.mission!.kind, "application");
+  assert.deepEqual(Object.keys(fr.mission!.messages).sort(), Object.keys(en.mission!.messages).sort());
 });
 
 test("course 3: series, price, badge, a free first step that asks for a basic CV", () => {
@@ -182,8 +182,8 @@ test("course 3: network examples reach the headline and about checks", () => {
 });
 
 test("course 3: the mission accepts a letter in either language and fills every reply template", () => {
-  const roleWords = [...en.mission.subjectWords, ...fr.mission.subjectWords];
-  const orgWords = [...(en.mission.orgWords ?? []), ...(fr.mission.orgWords ?? [])];
+  const roleWords = [...en.mission!.subjectWords, ...fr.mission!.subjectWords];
+  const orgWords = [...(en.mission!.orgWords ?? []), ...(fr.mission!.orgWords ?? [])];
   const cv = { filename: "Awa_Bello_CV.pdf", contentType: "application/pdf", pages: 1, text: "Awa Bello\nFormation\nCompétences" };
   const letter = {
     filename: "Awa_Bello_Lettre_de_motivation.pdf",
@@ -202,11 +202,11 @@ test("course 3: the mission accepts a letter in either language and fills every 
   );
   assert.deepEqual(issues, []);
   for (const course of [en, fr]) {
-    for (const r of Object.values(course.mission.replies ?? {})) {
+    for (const r of Object.values(course.mission!.replies ?? {})) {
       for (const text of [r.subject, r.body]) {
         assert.doesNotMatch(fillTemplate(text, { name: "Awa", role: "R", org: "O", ref: "NYF-12345" }), /\{\w+\}/);
       }
     }
-    assert.ok(course.mission.replies?.missing_document && course.mission.replies.interview);
+    assert.ok(course.mission!.replies?.missing_document && course.mission!.replies.interview);
   }
 });

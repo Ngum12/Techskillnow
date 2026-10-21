@@ -7,11 +7,14 @@ import cvEn from "./cv/en";
 import cvFr from "./cv/fr";
 import applicationsEn from "./applications/en";
 import applicationsFr from "./applications/fr";
+import chemTitrationEn from "./chem/en";
 
 const courses: Record<string, Partial<Record<Locale, Course>>> = {
   "email-for-work": { en: emailForWorkEn, fr: emailForWorkFr },
   cv: { en: cvEn, fr: cvFr },
   applications: { en: applicationsEn, fr: applicationsFr },
+  // GCE A Level is taught in English: no French version.
+  "chem-titration": { en: chemTitrationEn },
 };
 
 export const DEFAULT_COURSE_ID = "email-for-work";

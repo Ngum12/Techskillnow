@@ -1,5 +1,6 @@
 import { enCv } from "./en-cv";
 import { enApp } from "./en-app";
+import { enChem } from "./en-chem";
 
 const en = {
   appName: "TechSkillNow",
@@ -313,6 +314,7 @@ const en = {
   },
   ...enCv,
   ...enApp,
+  ...enChem,
   admin: {
     title: "Admin",
     loginTitle: "Admin sign in",

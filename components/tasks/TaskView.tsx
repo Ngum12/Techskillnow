@@ -34,6 +34,13 @@ const InboxWeek = dynamic(() => import("./InboxWeek").then((m) => m.InboxWeek), 
 const NetworkProfileBuilder = dynamic(() => import("./NetworkProfileBuilder").then((m) => m.NetworkProfileBuilder), { loading });
 const FollowUpTimeline = dynamic(() => import("./FollowUpTimeline").then((m) => m.FollowUpTimeline), { loading });
 const SequenceView = dynamic(() => import("./SequenceView").then((m) => m.SequenceView), { loading });
+const ChemTour = dynamic(() => import("@/components/chem/ChemTour").then((m) => m.ChemTour), { loading });
+const BuretteRead = dynamic(() => import("@/components/chem/BuretteRead").then((m) => m.BuretteRead), { loading });
+const ResultsTable = dynamic(() => import("@/components/chem/ResultsTable").then((m) => m.ResultsTable), { loading });
+const TitrationLab = dynamic(() => import("@/components/chem/TitrationLab").then((m) => m.TitrationLab), { loading });
+const ChemCalc = dynamic(() => import("@/components/chem/ChemCalc").then((m) => m.ChemCalc), { loading });
+const ErrorCards = dynamic(() => import("@/components/chem/ErrorCards").then((m) => m.ErrorCards), { loading });
+const MethodChallenge = dynamic(() => import("@/components/chem/ErrorCards").then((m) => m.MethodChallenge), { loading });
 
 export function TaskView({ task, passed, onPass }: { task: Task; passed: boolean; onPass: () => void }) {
   const props = { passed, onPass };
@@ -98,5 +105,19 @@ export function TaskView({ task, passed, onPass }: { task: Task; passed: boolean
       return <FollowUpTimeline task={task} {...props} />;
     case "sequence":
       return <SequenceView task={task} {...props} />;
+    case "chemTour":
+      return <ChemTour task={task} {...props} />;
+    case "buretteRead":
+      return <BuretteRead task={task} {...props} />;
+    case "resultsTable":
+      return <ResultsTable task={task} {...props} />;
+    case "titrationLab":
+      return <TitrationLab task={task} {...props} />;
+    case "chemCalc":
+      return <ChemCalc task={task} {...props} />;
+    case "errorCards":
+      return <ErrorCards task={task} {...props} />;
+    case "methodChallenge":
+      return <MethodChallenge task={task} {...props} />;
   }
 }

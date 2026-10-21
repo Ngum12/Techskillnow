@@ -20,8 +20,8 @@ test("course 2: English and French have the same shape", () => {
   });
   assert.deepEqual(fr.assessment.warmup, en.assessment.warmup);
   en.assessment.questions.forEach((q, i) => assert.equal(fr.assessment.questions[i].answer, q.answer, `question ${i + 1}`));
-  assert.equal(en.mission.kind, "cv");
-  assert.deepEqual(Object.keys(fr.mission.messages).sort(), Object.keys(en.mission.messages).sort());
+  assert.equal(en.mission!.kind, "cv");
+  assert.deepEqual(Object.keys(fr.mission!.messages).sort(), Object.keys(en.mission!.messages).sort());
 });
 
 test("course 2: pricing, CV flag and a free first lesson", () => {

@@ -1,0 +1,41 @@
+{
+  "labels": {
+    "practicalPaper": "the practical paper",
+    "describeAnswer": "a “describe the method” answer"
+  },
+  "apparatus": {
+    "buretteCapacity": 50.0,
+    "pipetteVolume": 25.0,
+    "dropVolume": 0.05,
+    "fastFlowPerSecond": 1.2,
+    "readingStep": 0.05
+  },
+  "realism": {
+    "runJitter": 0.05,
+    "initialLevelRange": [0.0, 2.0]
+  },
+  "endPoint": {
+    "flashWindow": 1.0,
+    "slowDownWarning": 2.0,
+    "excessAcidAfter": 0.1
+  },
+  "concordance": {
+    "tolerance": 0.1,
+    "minimum": 2
+  },
+  "calculation": {
+    "relativeTolerance": 0.01
+  },
+  "exam": {
+    "minutes": 25,
+    "titreMarks": [
+      { "within": 0.2, "marks": 3 },
+      { "within": 0.4, "marks": 2 },
+      { "within": 0.8, "marks": 1 }
+    ],
+    "concordanceMarks": 2,
+    "recordingMarks": 2,
+    "calculationMarkPerBox": 1,
+    "passPercent": 50
+  }
+}

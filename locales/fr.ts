@@ -1,6 +1,7 @@
 import en, { type Dict } from "./en";
 import { frCv } from "./fr-cv";
 import { frApp } from "./fr-app";
+import { frChem } from "./fr-chem";
 
 const fr: Dict = {
   appName: "TechSkillNow",
@@ -314,6 +315,7 @@ const fr: Dict = {
   },
   ...frCv,
   ...frApp,
+  ...frChem,
   // The admin area is used by the owner only and stays in English.
   admin: en.admin,
   watermark: "{name} · {phone}",

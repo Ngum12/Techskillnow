@@ -1,0 +1,144 @@
+{
+  "_help": "Each checkpoint is one part of the written method. 'sentences' is the model answer (also used for the ordering exercise). 'cloze' is the same text with [[answer|other accepted answer]] gaps. A marking point is met when ONE sentence of the learner's text contains a word from EVERY group in 'keywords'. Words match at the start of a word, so 'rins' matches rinse, rinsed, rinsing.",
+  "checkpoints": [
+    {
+      "id": "prepare",
+      "title": "Preparing the burette",
+      "prompt": "Describe how you prepared and filled the burette.",
+      "maxWords": 120,
+      "sentences": [
+        "Rinse the burette with distilled water, then with a little of the acid.",
+        "Clamp the burette vertically and fill it with the acid using a funnel.",
+        "Remove the funnel.",
+        "Open the tap to run some acid through so the jet is full and has no air bubbles.",
+        "Read the initial level at eye level, at the bottom of the meniscus."
+      ],
+      "cloze": [
+        "Rinse the burette with distilled water, then with a little of the [[acid|hydrochloric acid|sulfuric acid]].",
+        "Clamp the burette [[vertically|upright]] and fill it with the acid using a funnel.",
+        "[[Remove|Take out]] the funnel.",
+        "Open the tap to run some acid through so the [[jet|tip]] is full and has no air bubbles.",
+        "Read the initial level at [[eye level|eye-level]], at the bottom of the meniscus."
+      ],
+      "points": [
+        { "id": "rinseAcid", "text": "Rinse the burette with the acid", "keywords": [["rins", "wash"], ["burette"], ["acid", "hcl", "h2so4", "h₂so₄"]] },
+        { "id": "vertical", "text": "Clamp the burette vertically", "keywords": [["vertical", "upright", "straight"]] },
+        { "id": "fillFunnel", "text": "Fill the burette using a funnel", "keywords": [["fill", "pour"], ["funnel"]] },
+        { "id": "removeFunnel", "text": "Remove the funnel", "keywords": [["remov", "take out", "took out", "taken out", "take away", "took away", "lift out", "lifted out"], ["funnel"]] },
+        { "id": "jet", "text": "Fill the jet so there are no air bubbles", "keywords": [["jet", "tip", "bubble", "below the tap"], ["fill", "full", "run", "remov", "no ", "free", "expel"]] },
+        { "id": "initialReading", "text": "Record the initial reading", "keywords": [["initial", "first", "start"], ["read", "record", "level"]] }
+      ]
+    },
+    {
+      "id": "pipette",
+      "title": "Measuring the alkali",
+      "prompt": "Describe how you measured exactly 25.0 cm³ of the alkali into the flask.",
+      "maxWords": 110,
+      "sentences": [
+        "Rinse the pipette with a little of the alkali.",
+        "Using a pipette filler, draw the alkali up until the bottom of the meniscus is on the mark.",
+        "Transfer 25.0 cm³ of the alkali into a conical flask that has been rinsed with distilled water.",
+        "Let the pipette drain and touch the tip on the surface; do not blow out the last drop."
+      ],
+      "cloze": [
+        "Rinse the pipette with a little of the [[alkali|sodium hydroxide|sodium carbonate]].",
+        "Using a pipette [[filler|bulb]], draw the alkali up until the bottom of the meniscus is on the [[mark|line]].",
+        "Transfer [[25.0|25]] cm³ of the alkali into a conical flask that has been rinsed with [[distilled water|water]].",
+        "Let the pipette drain and touch the tip on the surface; do not [[blow]] out the last drop."
+      ],
+      "points": [
+        { "id": "rinseAlkali", "text": "Rinse the pipette with the alkali", "keywords": [["rins", "wash"], ["pipette"], ["alkali", "naoh", "hydroxide", "carbonate", "na2co3", "na₂co₃", "base"]] },
+        { "id": "filler", "text": "Use a pipette filler", "keywords": [["filler", "bulb", "pump"]] },
+        { "id": "mark", "text": "Fill to the mark (bottom of the meniscus)", "keywords": [["mark", "line", "graduation"]] },
+        { "id": "volume", "text": "Transfer 25.0 cm³ into a conical flask", "keywords": [["25"], ["flask", "conical"]] },
+        { "id": "flaskWater", "text": "The flask is rinsed with distilled water only", "keywords": [["flask"], ["water"], ["rins", "wash", "clean"]] }
+      ]
+    },
+    {
+      "id": "indicator",
+      "title": "Adding the indicator",
+      "prompt": "Describe how you added the indicator and set up the flask.",
+      "maxWords": 70,
+      "sentences": [
+        "Add two or three drops of a suitable indicator, such as phenolphthalein, to the alkali in the flask.",
+        "Place the flask on a white tile so the colour change is easy to see."
+      ],
+      "cloze": [
+        "Add two or three [[drops|drop]] of a suitable indicator, such as [[phenolphthalein|methyl orange]], to the alkali in the flask.",
+        "Place the flask on a [[white tile|white paper|tile]] so the colour change is easy to see."
+      ],
+      "points": [
+        { "id": "drops", "text": "Add a few drops of indicator", "keywords": [["drop", "few", "2", "3", "two", "three"], ["indicator", "phenolphthalein", "methyl orange"]] },
+        { "id": "named", "text": "Name a suitable indicator", "keywords": [["phenolphthalein", "methyl orange"]] },
+        { "id": "tile", "text": "Stand the flask on a white tile", "keywords": [["tile", "white paper", "white surface", "white background"]] }
+      ]
+    },
+    {
+      "id": "titrate",
+      "title": "Titrating",
+      "prompt": "Describe how you carried out the titration.",
+      "maxWords": 100,
+      "sentences": [
+        "Add the acid from the burette to the flask while swirling the flask.",
+        "Near the end point, add the acid drop by drop.",
+        "Stop when the indicator just changes colour permanently, for example pink to colourless for phenolphthalein."
+      ],
+      "cloze": [
+        "Add the acid from the burette to the flask while [[swirling|shaking|mixing]] the flask.",
+        "Near the [[end point|end-point]], add the acid drop by drop.",
+        "Stop when the indicator just changes colour [[permanently|for good]], for example pink to colourless for phenolphthalein."
+      ],
+      "points": [
+        { "id": "addAcid", "text": "Add acid from the burette", "keywords": [["add", "run", "titrat", "release"], ["acid", "burette"]] },
+        { "id": "swirl", "text": "Swirl the flask", "keywords": [["swirl", "shake", "mix"]] },
+        { "id": "dropwise", "text": "Add dropwise near the end point", "keywords": [["drop"], ["end", "near", "close", "slow"]] },
+        { "id": "endPoint", "text": "Stop at the first permanent colour change", "keywords": [["permanent", "just", "first", "for good"], ["colour", "color", "colourless", "pink", "orange"]] }
+      ]
+    },
+    {
+      "id": "record",
+      "title": "Reading and recording",
+      "prompt": "Describe how you read the burette and recorded your results.",
+      "maxWords": 90,
+      "sentences": [
+        "Read the burette at eye level, at the bottom of the meniscus.",
+        "Record the initial and final readings to two decimal places, to the nearest 0.05 cm³.",
+        "The titre is the final reading minus the initial reading."
+      ],
+      "cloze": [
+        "Read the burette at [[eye level|eye-level]], at the [[bottom|base]] of the meniscus.",
+        "Record the initial and final readings to [[two|2]] decimal places, to the nearest [[0.05]] cm³.",
+        "The titre is the final reading [[minus|subtract]] the initial reading."
+      ],
+      "points": [
+        { "id": "eyeLevel", "text": "Read at eye level", "keywords": [["eye"], ["level", "read"]] },
+        { "id": "meniscus", "text": "Read the bottom of the meniscus", "keywords": [["bottom", "lower", "base"], ["meniscus"]] },
+        { "id": "both", "text": "Record initial and final readings", "keywords": [["initial", "start"], ["final", "end"]] },
+        { "id": "dp", "text": "Record to 2 decimal places (nearest 0.05 cm³)", "keywords": [["2 decimal", "two decimal", "2 d.p", "2dp", "0.05"]] },
+        { "id": "subtract", "text": "Titre = final − initial", "keywords": [["final"], ["minus", "−", "- ", "subtract", "less"], ["initial"]] }
+      ]
+    },
+    {
+      "id": "concordance",
+      "title": "Repeating to concordance",
+      "prompt": "Describe how you made sure your result was reliable.",
+      "maxWords": 90,
+      "sentences": [
+        "Do a rough titration first to find the approximate end point.",
+        "Repeat the titration accurately until at least two titres are concordant, agreeing within 0.10 cm³.",
+        "Calculate the mean of the concordant titres only."
+      ],
+      "cloze": [
+        "Do a [[rough|trial]] titration first to find the approximate end point.",
+        "Repeat the titration accurately until at least two titres are [[concordant|consistent]], agreeing within [[0.10|0.1]] cm³.",
+        "Calculate the [[mean|average]] of the concordant titres only."
+      ],
+      "points": [
+        { "id": "rough", "text": "Do a rough titration first", "keywords": [["rough", "trial", "approximate"]] },
+        { "id": "repeat", "text": "Repeat the titration", "keywords": [["repeat", "again", "more titrations", "further titrations"]] },
+        { "id": "concordant", "text": "Until titres agree within 0.10 cm³", "keywords": [["concordant", "agree", "within 0.1", "within 0.10"]] },
+        { "id": "mean", "text": "Average the concordant titres only", "keywords": [["mean", "average"], ["concordant", "agree", "close", "only"]] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "indicators": [
+    {
+      "id": "phenolphthalein",
+      "name": "Phenolphthalein",
+      "colours": { "alkali": "#e0368a", "endPoint": "#f6f2f4", "excessAcid": "#f6f2f4" },
+      "words": { "alkali": "pink", "endPoint": "colourless", "excessAcid": "colourless" }
+    },
+    {
+      "id": "methylOrange",
+      "name": "Methyl orange",
+      "colours": { "alkali": "#f2c21b", "endPoint": "#f08a24", "excessAcid": "#d62828" },
+      "words": { "alkali": "yellow", "endPoint": "orange", "excessAcid": "red" }
+    }
+  ],
+  "systems": [
+    {
+      "id": "hcl-naoh",
+      "title": "Hydrochloric acid and sodium hydroxide",
+      "equation": "HCl + NaOH → NaCl + H₂O",
+      "burette": { "name": "hydrochloric acid", "formula": "HCl", "molarMass": 36.5, "conc": 0.1 },
+      "flask": { "name": "sodium hydroxide", "formula": "NaOH", "molarMass": 40.0, "concRange": [0.08, 0.12] },
+      "ratio": { "burette": 1, "flask": 1 },
+      "indicator": "phenolphthalein"
+    },
+    {
+      "id": "h2so4-naoh",
+      "title": "Sulfuric acid and sodium hydroxide",
+      "equation": "H₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O",
+      "burette": { "name": "sulfuric acid", "formula": "H₂SO₄", "molarMass": 98.1, "conc": 0.05 },
+      "flask": { "name": "sodium hydroxide", "formula": "NaOH", "molarMass": 40.0, "concRange": [0.08, 0.12] },
+      "ratio": { "burette": 1, "flask": 2 },
+      "indicator": "phenolphthalein"
+    },
+    {
+      "id": "hcl-na2co3",
+      "title": "Hydrochloric acid and sodium carbonate",
+      "equation": "Na₂CO₃ + 2HCl → 2NaCl + H₂O + CO₂",
+      "burette": { "name": "hydrochloric acid", "formula": "HCl", "molarMass": 36.5, "conc": 0.1 },
+      "flask": { "name": "sodium carbonate", "formula": "Na₂CO₃", "molarMass": 106.0, "concRange": [0.04, 0.06] },
+      "ratio": { "burette": 2, "flask": 1 },
+      "indicator": "methylOrange"
+    }
+  ]
+}

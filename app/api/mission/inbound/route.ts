@@ -99,18 +99,19 @@ export async function POST(req: Request) {
   for (const m of missions ?? []) {
     const en = getCourse(m.course_id, "en");
     const fr = getCourse(m.course_id, "fr");
-    if (!en) continue;
+    const em = en?.mission;
+    if (!en || !em) continue;
     // The learner may use either language, so accept the subject words of both.
-    const words = [...en.mission.subjectWords, ...(fr?.mission.subjectWords ?? [])];
+    const words = [...em.subjectWords, ...(fr?.mission?.subjectWords ?? [])];
     let issues: string[];
     const now = new Date().toISOString();
-    if (en.mission.kind === "application") {
+    if (em.kind === "application") {
       const email = { from, subject, text, attachments: await readAttachments() };
       if (m.stage === "reply" && m.reply_kind) {
         issues = checkReplyMission(m.reply_kind as ReplyKind, email, m.gmail);
       } else {
         const name = await learnerName(m.code);
-        const orgWords = [...(en.mission.orgWords ?? []), ...(fr?.mission.orgWords ?? [])];
+        const orgWords = [...(em.orgWords ?? []), ...(fr?.mission?.orgWords ?? [])];
         issues = checkApplicationMission(email, { gmail: m.gmail, name, roleWords: words, orgWords });
         if (!issues.length) {
           // Application accepted: the recruiter now writes back, and the learner must answer.
@@ -125,7 +126,7 @@ export async function POST(req: Request) {
           continue;
         }
       }
-    } else if (en.mission.kind === "cv") {
+    } else if (em.kind === "cv") {
       issues = checkCvMission({ from, subject, text, attachments: await readAttachments() }, m.gmail, words);
     } else {
       issues = checkMissionEmail(words, m.gmail, {

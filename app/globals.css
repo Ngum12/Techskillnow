@@ -104,3 +104,30 @@ body {
     border-radius: 14px;
   }
 }
+
+/* Chemistry bench: swirling flask, fading end-point flash and falling drops. */
+@keyframes chem-swirl {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
+}
+.chem-swirl {
+  animation: chem-swirl 0.5s ease-in-out 2;
+}
+@keyframes chem-flash {
+  from { opacity: 0.95; }
+  to { opacity: 0.55; }
+}
+.chem-flash {
+  animation: chem-flash 1.2s ease-out forwards;
+}
+@keyframes chem-drop {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(44px); opacity: 0.2; }
+}
+.chem-drop {
+  animation: chem-drop 0.35s ease-in forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chem-swirl, .chem-flash, .chem-drop { animation: none; }
+}

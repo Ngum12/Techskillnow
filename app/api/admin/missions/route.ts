@@ -16,7 +16,7 @@ export async function POST(req: Request) {
   const now = new Date().toISOString();
 
   // "application" missions have two stages: passing the application sends the learner the recruiter's reply.
-  if (body.action === "pass" && getCourse(courseId)?.mission.kind === "application") {
+  if (body.action === "pass" && getCourse(courseId)?.mission?.kind === "application") {
     const { data: row } = await db().from("missions").select("stage").eq("code", code).eq("course_id", courseId).maybeSingle();
     if (row && row.stage !== "reply") {
       const { error } = await db()

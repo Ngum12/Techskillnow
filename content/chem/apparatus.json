@@ -1,0 +1,22 @@
+{
+  "items": [
+    { "id": "burette", "name": "Burette", "use": "Delivers a variable, accurately measured volume of solution (here, the acid). Read to the nearest 0.05 cm³." },
+    { "id": "pipette", "name": "Pipette (25.0 cm³) with filler", "use": "Measures exactly 25.0 cm³ of a solution. Always use a pipette filler, never your mouth." },
+    { "id": "flask", "name": "Conical flask", "use": "Holds the solution being titrated. Its shape lets you swirl without spilling." },
+    { "id": "tile", "name": "White tile", "use": "Placed under the flask so the colour change is easy to see." },
+    { "id": "funnel", "name": "Funnel", "use": "Used to fill the burette, then removed before titrating." },
+    { "id": "washBottle", "name": "Wash bottle", "use": "Contains distilled water for rinsing apparatus and washing the sides of the flask." },
+    { "id": "acidBeaker", "name": "Beaker of acid", "use": "Holds the acid used to rinse and fill the burette." },
+    { "id": "alkaliBeaker", "name": "Beaker of alkali", "use": "Holds the alkali that the pipette measures." },
+    { "id": "indicator", "name": "Indicator bottle", "use": "A few drops show the end point by a sharp colour change." }
+  ],
+  "tasks": [
+    { "task": "Measure exactly 25.0 cm³ of alkali into the flask.", "answer": "pipette", "why": "Only the pipette measures a fixed volume this accurately." },
+    { "task": "Add acid gradually and measure how much was added.", "answer": "burette", "why": "The burette delivers a variable volume that you can read to 0.05 cm³." },
+    { "task": "Make the colour change easy to see.", "answer": "tile", "why": "A white tile under the flask shows the colour clearly." },
+    { "task": "Fill the burette without spilling.", "answer": "funnel", "why": "Use a funnel to fill, then remove it before titrating." },
+    { "task": "Rinse the conical flask before use.", "answer": "washBottle", "why": "The flask is rinsed with distilled water only." },
+    { "task": "Hold the solution while you swirl it during the titration.", "answer": "flask", "why": "A conical flask lets you swirl without splashing." },
+    { "task": "Show the end point of the reaction.", "answer": "indicator", "why": "Two or three drops of indicator change colour at the end point." }
+  ]
+}

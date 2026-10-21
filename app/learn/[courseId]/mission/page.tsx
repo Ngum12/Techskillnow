@@ -21,7 +21,8 @@ export default async function MissionPage({ params }: PageProps<"/learn/[courseI
   if (!course) notFound();
   const learner = await getLearner(course.id);
   if (!learner) redirect("/redeem");
-  if (!env.missionEmail) redirect(`/learn/${course.id}/finish`);
+  const mission = course.mission;
+  if (!env.missionEmail || !mission) redirect(`/learn/${course.id}/finish`);
   const t = getDict(locale);
   const j = await getJourney(learner, course);
   if (!j.lessonsDone) redirect(`/learn/${course.id}/finish`);
@@ -33,18 +34,18 @@ export default async function MissionPage({ params }: PageProps<"/learn/[courseI
         ← {t.mission.back}
       </Link>
       <h1 className="mt-4 text-2xl font-bold">{t.mission.title}</h1>
-      <p className="mt-2">{course.mission.intro}</p>
+      <p className="mt-2">{mission.intro}</p>
       <ol className="mt-4 list-decimal space-y-2 pl-6">
-        {course.mission.steps.map((s) => (
+        {mission.steps.map((s) => (
           <li key={s}>{s}</li>
         ))}
       </ol>
       <MissionPanel
         courseId={course.id}
         missionEmail={missionAddress(learner.code)}
-        subjectExample={fmt(course.mission.subjectExample ?? t.mission.subjectExample, { name: learner.buyerName })}
-        advert={course.mission.advert}
-        initial={j.mission ? { ...j.mission, feedback: missionFeedback(course.mission, j.mission.feedback), stage, reply } : null}
+        subjectExample={fmt(mission.subjectExample ?? t.mission.subjectExample, { name: learner.buyerName })}
+        advert={mission.advert}
+        initial={j.mission ? { ...j.mission, feedback: missionFeedback(mission, j.mission.feedback), stage, reply } : null}
       />
       <Watermark name={learner.buyerName} phoneLast4={learner.phoneLast4} />
     </main>
