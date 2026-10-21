@@ -31,10 +31,10 @@ export const env = {
     return positiveInt(process.env.MAX_DEVICES_PER_CODE, 2);
   },
   get coursePrice() {
-    return positiveInt(process.env.COURSE_PRICE_XAF, 5000);
+    return positiveInt(process.env.COURSE_PRICE_XAF, 850);
   },
   get referralDiscount() {
-    return positiveInt(process.env.REFERRAL_DISCOUNT_XAF, 500);
+    return positiveInt(process.env.REFERRAL_DISCOUNT_XAF, 100);
   },
   /** Fapshi Mobile Money. Null until FAPSHI_API_USER and FAPSHI_API_KEY are set. */
   get fapshi() {

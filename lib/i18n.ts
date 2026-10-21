@@ -15,7 +15,7 @@ export function fmt(template: string, vars: Record<string, string | number>): st
   return template.replace(/\{(\w+)\}/g, (_, k) => (k in vars ? String(vars[k]) : `{${k}}`));
 }
 
-/** 5000 -> "5 000" (FCFA amounts). */
+/** 25000 -> "25 000" (FCFA amounts). */
 export function money(n: number): string {
   return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
