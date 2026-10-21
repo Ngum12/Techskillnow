@@ -4,15 +4,14 @@ import { getCourse } from "@/content";
 import { getLearner } from "@/lib/session";
 import { getLocale } from "@/lib/locale";
 import { getJourney, issueCertificate } from "@/lib/journey";
-import { ensureReferralId } from "@/lib/access";
 import { env } from "@/lib/env";
-import { getDict, fmt, money } from "@/lib/i18n";
-import { waLink } from "@/lib/whatsapp";
+import { getDict, fmt } from "@/lib/i18n";
 import { qrMatrix, qrPath } from "@/lib/qr";
 import { db } from "@/lib/supabase-admin";
 import { percent } from "@/lib/assessment";
 import { Watermark } from "@/components/Watermark";
 import { ShareCertificate } from "@/components/ShareCertificate";
+import { ReferralCard } from "@/components/ReferralCard";
 
 export const dynamic = "force-dynamic";
 
@@ -49,9 +48,6 @@ export default async function CertificatePage({ params }: PageProps<"/learn/[cou
       ? fmt(t.certificate.scores, { pre: cert.pre_score, post: percent(cert.post_score, cert.total) })
       : fmt(t.certificate.finalScore, { post: cert.post_score, total: cert.total });
 
-  const referralId = await ensureReferralId(learner.code);
-  const inviteUrl = referralId && env.fapshi ? `${env.appUrl}/buy?course=${course.id}&ref=${referralId}` : null;
-  const discount = money(env.referralDiscount);
 
   return (
     <main className="mx-auto max-w-xl px-5 pb-10 pt-6">
@@ -92,21 +88,7 @@ export default async function CertificatePage({ params }: PageProps<"/learn/[cou
         qr={matrix}
       />
 
-      {inviteUrl && (
-        <section className="card mt-8 p-4">
-          <h2 className="text-lg font-bold">{t.certificate.inviteTitle}</h2>
-          <p className="mt-1">{fmt(t.certificate.inviteText, { n: discount })}</p>
-          <p className="mt-2 break-all rounded-lg bg-bg p-2 font-mono text-sm">{inviteUrl}</p>
-          <a
-            href={waLink("", fmt(t.certificate.inviteMessage, { n: discount, url: inviteUrl }))}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-secondary mt-3 w-full"
-          >
-            {t.certificate.inviteShare}
-          </a>
-        </section>
-      )}
+      <ReferralCard courseId={course.id} />
       <Watermark name={learner.buyerName} phoneLast4={learner.phoneLast4} />
     </main>
   );

@@ -6,6 +6,7 @@ import { useT } from "./I18n";
 import { fmt } from "@/lib/i18n";
 import { Illustration } from "./Illustration";
 import { LanguageSwitch } from "./LanguageSwitch";
+import { ReferralCard } from "./ReferralCard";
 
 /** First screen after unlocking a course: a warm welcome, one main action, and an optional warm-up. */
 export function Welcome({ courseId, courseTitle, name, totalSteps }: { courseId: string; courseTitle: string; name: string; totalSteps: number }) {
@@ -56,6 +57,8 @@ export function Welcome({ courseId, courseTitle, name, totalSteps }: { courseId:
           {t.welcome.warmupButton}
         </Link>
       </section>
+
+      <ReferralCard courseId={courseId} />
     </main>
   );
 }

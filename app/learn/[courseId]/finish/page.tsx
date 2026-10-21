@@ -6,6 +6,7 @@ import { getLocale } from "@/lib/locale";
 import { getJourney } from "@/lib/journey";
 import { getDict, fmt } from "@/lib/i18n";
 import { Watermark } from "@/components/Watermark";
+import { ReferralCard } from "@/components/ReferralCard";
 
 export const dynamic = "force-dynamic";
 
@@ -85,6 +86,7 @@ export default async function FinishPage({ params }: PageProps<"/learn/[courseId
           {t.finish.certificate}
         </button>
       )}
+      <ReferralCard courseId={course.id} />
       <Watermark name={learner.buyerName} phoneLast4={learner.phoneLast4} />
     </main>
   );

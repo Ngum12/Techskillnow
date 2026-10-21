@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getDict } from "@/lib/i18n";
 
-export function AdminHeader({ active, email }: { active: "codes" | "stats" | "missions"; email: string }) {
+export function AdminHeader({ active, email }: { active: "codes" | "stats" | "missions" | "referrals"; email: string }) {
   const t = getDict();
-  const tab = (key: "codes" | "stats" | "missions", href: string, label: string) => (
+  const tab = (key: "codes" | "stats" | "missions" | "referrals", href: string, label: string) => (
     <Link
       href={href}
       aria-current={active === key ? "page" : undefined}
@@ -28,6 +28,7 @@ export function AdminHeader({ active, email }: { active: "codes" | "stats" | "mi
         {tab("codes", "/admin", t.admin.codesTab)}
         {tab("stats", "/admin/stats", t.admin.statsTab)}
         {tab("missions", "/admin/missions", t.admin.missionsTab)}
+        {tab("referrals", "/admin/referrals", t.admin.referralsTab)}
       </nav>
     </header>
   );

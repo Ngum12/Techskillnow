@@ -33,6 +33,10 @@ export const env = {
   get referralDiscount() {
     return positiveInt(process.env.REFERRAL_DISCOUNT_XAF, 100);
   },
+  /** Friends who must buy with a learner's link to earn one free course. */
+  get referralFriendsPerCourse() {
+    return positiveInt(process.env.REFERRAL_FRIENDS_PER_COURSE, 3);
+  },
   /** Fapshi Mobile Money. Null until FAPSHI_API_USER and FAPSHI_API_KEY are set. */
   get fapshi() {
     const user = process.env.FAPSHI_API_USER;
