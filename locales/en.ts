@@ -317,6 +317,8 @@ const en = {
     revoke: "Revoke",
     revokeConfirm: "Revoke code {code}? The learner will lose access.",
     resetDevices: "Reset devices",
+    delete: "Delete",
+    deleteConfirm: "Delete {code} and everything linked to it (progress, test scores, certificate, mission, payment record, CV)? Use this for test codes. It cannot be undone.",
     resetConfirm: "Remove all devices from {code}? The learner will need to enter the code again.",
     statsTitle: "Course stats",
     learners: "Learners",

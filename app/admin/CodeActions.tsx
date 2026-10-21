@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation";
 import { useT } from "@/components/I18n";
 import { fmt } from "@/lib/i18n";
 
-export function CodeActions({ code, hasDevices }: { code: string; hasDevices: boolean }) {
+type Action = "revoke" | "reset" | "delete";
+
+export function CodeActions({ code, hasDevices, revoked }: { code: string; hasDevices: boolean; revoked: boolean }) {
   const t = useT();
   const router = useRouter();
   const [busy, setBusy] = useState(false);
 
-  async function run(action: "revoke" | "reset", confirmText: string) {
+  async function run(action: Action, confirmText: string) {
     if (!window.confirm(fmt(confirmText, { code }))) return;
     setBusy(true);
     const res = await fetch(`/api/admin/codes/${code}`, {
@@ -24,13 +26,18 @@ export function CodeActions({ code, hasDevices }: { code: string; hasDevices: bo
 
   return (
     <div className="mt-3 flex flex-wrap gap-2">
-      {hasDevices && (
+      {!revoked && hasDevices && (
         <button type="button" className="btn btn-secondary min-h-11 py-2 text-sm" disabled={busy} onClick={() => run("reset", t.admin.resetConfirm)}>
           {t.admin.resetDevices}
         </button>
       )}
-      <button type="button" className="btn btn-danger min-h-11 py-2 text-sm" disabled={busy} onClick={() => run("revoke", t.admin.revokeConfirm)}>
-        {t.admin.revoke}
+      {!revoked && (
+        <button type="button" className="btn btn-danger min-h-11 py-2 text-sm" disabled={busy} onClick={() => run("revoke", t.admin.revokeConfirm)}>
+          {t.admin.revoke}
+        </button>
+      )}
+      <button type="button" className="btn btn-ghost min-h-11 py-2 text-sm text-err" disabled={busy} onClick={() => run("delete", t.admin.deleteConfirm)}>
+        {t.admin.delete}
       </button>
     </div>
   );

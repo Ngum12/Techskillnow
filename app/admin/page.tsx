@@ -89,7 +89,7 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
                     {prog && (prog.completed_at ? ` · ${t.admin.completed}` : ` · ${fmt(t.admin.stepReached, { n: prog.step })}`)}
                   </p>
                   {r.note && <p className="mt-1 text-sm">{r.note}</p>}
-                  {r.status !== "revoked" && <CodeActions code={r.code} hasDevices={used > 0} />}
+                  <CodeActions code={r.code} hasDevices={used > 0} revoked={r.status === "revoked"} />
                 </li>
               );
             })}
