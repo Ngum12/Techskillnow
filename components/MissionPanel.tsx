@@ -12,11 +12,13 @@ export function MissionPanel({
   missionEmail,
   subjectExample,
   initial,
+  advert,
 }: {
   courseId: string;
   missionEmail: string;
   subjectExample: string;
   initial: MissionState;
+  advert?: { org: string; title: string; text: string };
 }) {
   const t = useT();
   const [mission, setMission] = useState<MissionState>(initial);
@@ -107,6 +109,14 @@ export function MissionPanel({
   const gmailHref = `mailto:${missionEmail}?subject=${encodeURIComponent(subjectExample)}`;
   return (
     <div className="mt-6">
+      {advert && (
+        <details className="card mb-4 p-4" open>
+          <summary className="cursor-pointer font-bold text-primary">
+            {advert.title} · {advert.org}
+          </summary>
+          <p className="mt-2 whitespace-pre-line">{advert.text}</p>
+        </details>
+      )}
       <div className="card p-4">
         <p className="text-sm text-muted">{t.mission.sendTo}</p>
         <div className="mt-1 flex flex-wrap items-center gap-3">

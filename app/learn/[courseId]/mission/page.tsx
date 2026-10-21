@@ -7,6 +7,7 @@ import { getJourney } from "@/lib/journey";
 import { env } from "@/lib/env";
 import { getDict, fmt } from "@/lib/i18n";
 import { missionFeedback } from "@/lib/mission-check";
+import { missionAddress } from "@/lib/mission-address";
 import { Watermark } from "@/components/Watermark";
 import { MissionPanel } from "@/components/MissionPanel";
 
@@ -38,8 +39,9 @@ export default async function MissionPage({ params }: PageProps<"/learn/[courseI
       </ol>
       <MissionPanel
         courseId={course.id}
-        missionEmail={env.missionEmail}
-        subjectExample={fmt(t.mission.subjectExample, { name: learner.buyerName })}
+        missionEmail={missionAddress(learner.code)}
+        subjectExample={fmt(course.mission.subjectExample ?? t.mission.subjectExample, { name: learner.buyerName })}
+        advert={course.mission.advert}
         initial={j.mission ? { ...j.mission, feedback: missionFeedback(course.mission, j.mission.feedback) } : null}
       />
       <Watermark name={learner.buyerName} phoneLast4={learner.phoneLast4} />

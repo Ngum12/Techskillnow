@@ -30,9 +30,6 @@ export const env = {
   get maxDevices() {
     return positiveInt(process.env.MAX_DEVICES_PER_CODE, 2);
   },
-  get coursePrice() {
-    return positiveInt(process.env.COURSE_PRICE_XAF, 850);
-  },
   get referralDiscount() {
     return positiveInt(process.env.REFERRAL_DISCOUNT_XAF, 100);
   },

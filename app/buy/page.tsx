@@ -6,6 +6,7 @@ import { env } from "@/lib/env";
 import { validReferral } from "@/lib/access";
 import { getDict, fmt, money } from "@/lib/i18n";
 import { waLink } from "@/lib/whatsapp";
+import { priceFor } from "@/lib/buy";
 import { BuyForm } from "./BuyForm";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +21,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   if (!env.fapshi) redirect(whatsapp);
 
   const referral = await validReferral(typeof ref === "string" ? ref : null);
-  const price = Math.max(100, env.coursePrice - (referral ? env.referralDiscount : 0));
+  const price = priceFor(course, !!referral);
 
   return (
     <main className="mx-auto max-w-xl px-5 pb-10 pt-6">

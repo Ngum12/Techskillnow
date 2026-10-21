@@ -1,4 +1,5 @@
 import en, { type Dict } from "./en";
+import { frCv } from "./fr-cv";
 
 const fr: Dict = {
   appName: "TechSkillNow",
@@ -31,6 +32,7 @@ const fr: Dict = {
     buyMessage: "Bonjour, je souhaite acheter l'accès au cours TechSkillNow « {course} ».",
     courseLabel: "Cours",
     steps: "{n} étapes courtes",
+    coursesTitle: "Cours",
     howTitle: "Comment ça marche",
     how: [
       "Essayez la première leçon gratuitement.",
@@ -280,6 +282,7 @@ const fr: Dict = {
     mission: "A envoyé une vraie candidature par e-mail qui a passé nos vérifications",
     id: "N° d'attestation",
   },
+  ...frCv,
   // The admin area is used by the owner only and stays in English.
   admin: en.admin,
   watermark: "{name} · {phone}",

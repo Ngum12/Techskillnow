@@ -50,7 +50,7 @@ export default async function CertificatePage({ params }: PageProps<"/learn/[cou
       : fmt(t.certificate.finalScore, { post: cert.post_score, total: cert.total });
 
   const referralId = await ensureReferralId(learner.code);
-  const inviteUrl = referralId && env.fapshi ? `${env.appUrl}/buy?ref=${referralId}` : null;
+  const inviteUrl = referralId && env.fapshi ? `${env.appUrl}/buy?course=${course.id}&ref=${referralId}` : null;
   const discount = money(env.referralDiscount);
 
   return (

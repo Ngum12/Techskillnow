@@ -5,6 +5,7 @@ const course: Course = {
   locale: "fr",
   title: "L'e-mail au travail",
   promise: "Écrivez et envoyez des e-mails professionnels en toute confiance, depuis votre téléphone.",
+  price: 850,
   freeSteps: 1,
   steps: [
     // 1
@@ -405,6 +406,7 @@ const course: Course = {
     ],
   },
   mission: {
+    kind: "email",
     intro: "Dernière étape : prouvez que vous savez le faire pour de vrai. Envoyez une candidature depuis votre propre Gmail à notre recruteur test.",
     steps: [
       "Écrivez l'adresse Gmail que vous allez utiliser.",

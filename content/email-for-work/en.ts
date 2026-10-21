@@ -5,6 +5,7 @@ const course: Course = {
   locale: "en",
   title: "Email for Work",
   promise: "Write and send professional emails with confidence, right from your phone.",
+  price: 850,
   freeSteps: 1,
   steps: [
     // 1
@@ -405,6 +406,7 @@ const course: Course = {
     ],
   },
   mission: {
+    kind: "email",
     intro: "Last step: prove you can do it for real. Send a job application from your own Gmail to our test recruiter.",
     steps: [
       "Write the Gmail address you will send from.",

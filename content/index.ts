@@ -3,9 +3,12 @@ import { createHash } from "node:crypto";
 import type { Course, Locale, Step, Task } from "./types";
 import emailForWorkEn from "./email-for-work/en";
 import emailForWorkFr from "./email-for-work/fr";
+import cvEn from "./cv/en";
+import cvFr from "./cv/fr";
 
 const courses: Record<string, Partial<Record<Locale, Course>>> = {
   "email-for-work": { en: emailForWorkEn, fr: emailForWorkFr },
+  cv: { en: cvEn, fr: cvFr },
 };
 
 export const DEFAULT_COURSE_ID = "email-for-work";
@@ -16,11 +19,13 @@ export function getCourse(id: string, locale: Locale = "en"): Course | null {
   return byLocale[locale] ?? byLocale.en ?? null;
 }
 
-export function listCourses(locale: Locale = "en"): { id: string; title: string; totalSteps: number }[] {
+export type CourseSummary = { id: string; title: string; promise: string; series?: string; price: number; totalSteps: number };
+
+export function listCourses(locale: Locale = "en"): CourseSummary[] {
   return Object.keys(courses)
     .map((id) => getCourse(id, locale))
     .filter((c): c is Course => c !== null)
-    .map((c) => ({ id: c.id, title: c.title, totalSteps: c.steps.length }));
+    .map((c) => ({ id: c.id, title: c.title, promise: c.promise, series: c.series, price: c.price, totalSteps: c.steps.length }));
 }
 
 /**

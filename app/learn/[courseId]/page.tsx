@@ -46,7 +46,8 @@ export default async function LearnPage({ params, searchParams }: PageProps<"/le
   const requested = Number.parseInt(typeof step === "string" ? step : "", 10);
   if (requested >= 1 && requested <= total && (learner || requested <= course.freeSteps + 1)) initialStep = requested;
 
-  const buy = buyTarget(t, course.id, course.title);
+  const buy = buyTarget(t, course);
+  const sectionSteps = Object.fromEntries(course.steps.flatMap((s, i) => (s.cvSection ? [[s.cvSection, i + 1]] : [])));
   return (
     <>
       <LessonPlayer
@@ -58,6 +59,8 @@ export default async function LearnPage({ params, searchParams }: PageProps<"/le
         buyHref={buy.href}
         buyLabel={buy.label}
         tutorEnabled={!!env.anthropicKey}
+        usesCv={!!course.usesCv}
+        sectionSteps={sectionSteps}
       />
       {learner && <Watermark name={learner.buyerName} phoneLast4={learner.phoneLast4} />}
     </>

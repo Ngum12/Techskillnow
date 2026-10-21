@@ -1,3 +1,5 @@
+import { enCv } from "./en-cv";
+
 const en = {
   appName: "TechSkillNow",
   lang: { label: "Language", en: "English", fr: "Français" },
@@ -29,6 +31,7 @@ const en = {
     buyMessage: "Hello, I would like to buy access to the TechSkillNow course “{course}”.",
     courseLabel: "Course",
     steps: "{n} short steps",
+    coursesTitle: "Courses",
     howTitle: "How it works",
     how: [
       "Try the first lesson for free.",
@@ -278,6 +281,7 @@ const en = {
     mission: "Sent a real job application email that passed our checks",
     id: "Certificate ID",
   },
+  ...enCv,
   admin: {
     title: "Admin",
     loginTitle: "Admin sign in",

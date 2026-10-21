@@ -2,7 +2,12 @@
 
 **Professional digital skills for Cameroonian learners — taught step by step, on the phone they already own.**
 
-TechSkillNow is a mobile-first Progressive Web App that teaches practical workplace skills (starting with *Email for Work*) through short lessons and realistic, interactive simulations. Learners study entirely in the browser, in English or French, on low-cost Android phones and slow networks. Access is sold per course for **850 FCFA**, paid by MTN MoMo or Orange Money, and unlocked with a one-time access code.
+TechSkillNow is a mobile-first Progressive Web App that teaches practical workplace skills through short lessons and realistic, interactive simulations. Learners study entirely in the browser, in English or French, on low-cost Android phones and slow networks. Each course is sold once, paid by MTN MoMo or Orange Money, and unlocked with a one-time access code.
+
+| Course | Outcome | Price |
+|---|---|---|
+| **Email for Work** | Writes and sends professional emails, spots scams, and sends a real job application from Gmail | 850 FCFA |
+| **A CV That Gets Interviews** *(Get the Job · 1 of 4)* | Finishes with their own tailored, ATS-friendly CV as a PDF, checked by a real-email mission | 1 000 FCFA |
 
 | | |
 |---|---|
@@ -12,7 +17,7 @@ TechSkillNow is a mobile-first Progressive Web App that teaches practical workpl
 | **Certificate verification** | `https://<domain>/verify/TSN-XXXX-XXXX` |
 | **Repository** | [github.com/Ngum12/Techskillnow](https://github.com/Ngum12/Techskillnow) |
 | **Hosting** | Vercel (auto-deploys on every push to `main`) |
-| **Launch price** | 850 FCFA per course, one-time (configurable) |
+| **Prices** | Set per course in `/content` (850 FCFA and 1 000 FCFA at launch) |
 
 ---
 
@@ -68,6 +73,15 @@ Most job applications in Cameroon now arrive by email, yet many capable candidat
 - **Mobile Money checkout** — pay, receive the code instantly, and start learning in one tap.
 - **Referral links** — a friend gets a discount; referral sales are tracked.
 - **Installable PWA** with offline access to opened lessons.
+
+### Get the Job series: the learner's CV
+- **One CV that grows through the course.** Steps 4–11 of *A CV That Gets Interviews* each fill one part of a persistent CV, autosaved on every change (offline-tolerant) and resumed on any device.
+- **Shared learner profile.** The CV belongs to the learner, not the course: later courses (Applications, Interviews, Scholarships) open with it already there. A learner who buys a later course with a new code links it once, by entering the earlier code or with one tap on the same phone.
+- **"My CV"** is always one tap away: live A4 preview, what is still missing (with a jump to the right step), fresher/experienced layout, PDF export, linking, and *delete my CV data*.
+- **ATS-friendly PDF**: single column, real text, `Firstname_Lastname_CV.pdf`, with a warning above 2 pages. The PDF library loads only when the learner exports.
+- **Simulations, not quizzes:** `RecruiterScan` (7-second recruiter view), `JobAdvertHighlighter`, `ExperienceMiner` (a scripted interview that proves "I have no experience" wrong), `SectionOrder` (touch drag), `BulletBuilder` (duties to achievements), `RedPenCV`, `CVBuilder`, `KeywordMatcher` (deterministic stemming and synonyms, no AI) and `TailorChallenge` (both scores must rise).
+- **Built for courses 3 and 4:** `CoverLetterBuilder` (structured, checked, PDF export), `PortalSimulator` (multi-page portal with validation, uploads, a confirmation email in the inbox and an application tracker) and `InterviewCards` (90-second answers, voice recorded on the device only, STAR self-check).
+- **Anti-copying:** every simulation has at least three scenario variants (adverts, bad CVs, personas), assigned per learner.
 
 ### For the administrator
 - **Passwordless admin** (Supabase magic link), restricted server-side to a single `ADMIN_EMAIL`.
@@ -175,9 +189,10 @@ The order is fulfilled by whichever arrives first — the webhook or the buyer's
 | Payments | **Fapshi** hosted checkout + webhooks | MTN MoMo and Orange Money in Cameroon; no company registration required to start. |
 | AI | **Anthropic SDK**, Claude Haiku 5.5 with structured JSON output | Fast, low-cost, kind feedback in English and French. |
 | Certificates | `qrcode-generator` (server-side) + Canvas | QR rendered on the server; image composed on the device — no extra client libraries. |
+| CV documents | **jsPDF** (client, lazy-loaded on export) and **unpdf** (server) | Learners create real-text PDFs on the phone; the mission checker reads page count and text in memory. |
 | Hosting | **Vercel** | Zero-config Next.js hosting and automatic deploys from GitHub. |
 
-Runtime dependencies are deliberately limited to the eight listed in `package.json`; the AI SDK, Supabase clients and QR generator are server-only and add nothing to what a learner downloads.
+Runtime dependencies are deliberately few (ten in `package.json`). The AI SDK, Supabase clients, QR generator and PDF reader are server-only; jsPDF and each simulation are separate chunks loaded only when a learner reaches them, so a lesson page stays around 190 KB of compressed JavaScript, mostly the framework itself.
 
 ---
 
@@ -225,8 +240,10 @@ proxy.ts                       Refreshes the admin's Supabase session cookies
 | `certificates` | Issued certificates (public ID, name, scores, mission flag). |
 | `orders` | Mobile Money orders, Fapshi transaction ID and resulting code. |
 | `redeem_attempts` | Failed code attempts per hashed IP, for rate limiting. |
+| `learner_profiles` | One per person; access codes point to a profile so the CV follows the learner across courses. |
+| `cv_drafts` | The learner's CV (validated JSON), saved on every change. |
 
-Database functions: `redeem_code` (atomic device binding), `save_progress` (keeps the furthest step), `mark_order_paid` (exactly-once fulfilment).
+Database functions: `redeem_code` (atomic device binding), `save_progress` (keeps the furthest step), `mark_order_paid` (exactly-once fulfilment), `ensure_profile` (creates a code's profile safely under concurrency).
 
 ---
 
@@ -285,17 +302,16 @@ npm run admin-link -- https://techskillnow.vercel.app
 | `APP_URL` | ✅ | Public base URL, e.g. `https://techskillnow.com` (used in certificate QR codes and messages) |
 | `WHATSAPP_NUMBER` | ✅ | Support/sales number, digits only with country code (e.g. `2376XXXXXXXX`) |
 | `MAX_DEVICES_PER_CODE` | | Devices per access code (default `2`) |
-| `COURSE_PRICE_XAF` | | Course price in FCFA (default `850`) |
 | `REFERRAL_DISCOUNT_XAF` | | Discount for a friend's referral link (default `100`) |
 | `FAPSHI_API_USER` / `FAPSHI_API_KEY` | | Fapshi service credentials; without them, “Buy” falls back to WhatsApp |
 | `FAPSHI_ENV` | | `sandbox` or `live` (default `sandbox`) |
 | `FAPSHI_WEBHOOK_SECRET` | | Must match the webhook secret set on the Fapshi service |
 | `ANTHROPIC_API_KEY` | | Enables the writing tutor |
 | `TUTOR_LIMIT` | | Tutor requests per access code (default `30`) |
-| `MISSION_EMAIL` | | Inbox for real-world missions; missions are off when empty |
+| `MISSION_EMAIL` | | Inbox for real-world missions; missions are off when empty. With automatic checking, each learner gets `local+CODE@domain` |
 | `INBOUND_SECRET` | | Shared secret for the inbound-email worker |
 
-Optional features switch themselves on when their variables are present — no code changes required.
+Optional features switch themselves on when their variables are present — no code changes required. Course prices live in each course's content file (`price`), not in the environment.
 
 ---
 
@@ -308,7 +324,7 @@ content/<course-id>/en.ts
 content/<course-id>/fr.ts
 ```
 
-Register the course in `content/index.ts`. Each `Course` declares `freeSteps`, `steps`, an `assessment` (questions, pass mark, warm-up subset) and a `mission`. Each `Step` has a title, optional illustration (file name in `public/illustrations`, WebP), 1–3 short paragraphs, an optional *Common mistake*, and an optional `task`:
+Register the course in `content/index.ts`. Each `Course` declares its `price`, `freeSteps`, `steps`, an `assessment` (questions, pass mark, warm-up subset) and a `mission` (`"email"` or `"cv"`). Set `usesCv: true` for courses that build the shared CV, and `cvSection` on steps that fill a part of it. Each `Step` has a title, optional illustration (file name in `public/illustrations`, WebP), 1–3 short paragraphs, an optional *Common mistake*, and an optional `task`:
 
 ```ts
 {
@@ -330,7 +346,7 @@ Register the course in `content/index.ts`. Each `Course` declares `freeSteps`, `
 }
 ```
 
-Task types: `multipleChoice`, `fixText`, `compose`, `inbox`, `signup`. Rules include `notEmpty`, `includesAny`, `excludesAll`, `minWords`, `maxWords`, `changed`, `regex`, and for emails `validEmail`, `equals`, `attachment`, `noAttachment`, `greeting`, `closing`. Missing illustrations fall back to a neutral placeholder. All interface text lives in `locales/`.
+Task types: `multipleChoice`, `fixText`, `compose`, `inbox`, `signup`, `recruiterScan`, `advertHighlight`, `experienceMiner`, `sectionOrder`, `cvHeader`, `cvProfile`, `bulletBuilder`, `cvEducationSkills`, `redPen`, `cvExport`, `keywordMatch`, `tailor`, `coverLetter`, `portal`, `interview` and `missionBrief`. Give a step `variants` (same task type) to assign different scenarios per learner. Rules include `notEmpty`, `includesAny`, `excludesAll`, `minWords`, `maxWords`, `changed`, `regex`, and for emails `validEmail`, `equals`, `attachment`, `noAttachment`, `greeting`, `closing`. Missing illustrations fall back to a neutral placeholder. All interface text lives in `locales/`.
 
 ---
 
@@ -347,7 +363,10 @@ Fapshi charges 3% per successful collection, with no setup, monthly or withdrawa
 
 ## Real-world mission
 
-When `MISSION_EMAIL` is set, learners must send a genuine application email from their own Gmail before receiving a certificate. Emails are checked for a professional address, a clear subject, a well-named PDF attachment, greeting, closing, signature with phone number, and length.
+When `MISSION_EMAIL` is set, learners must send a genuine email from their own Gmail before receiving a certificate.
+
+- **Email for Work:** a job application, checked for a professional address, a clear subject, a well-named PDF, greeting, closing, signature with phone number, and length.
+- **A CV That Gets Interviews:** their CV tailored to a provided advert. The server opens the PDF in memory and checks the sender, a subject naming the role, the file name (`Firstname_Lastname_CV.pdf`), at most 2 pages, an email address, a phone number and the core sections in the CV text, plus greeting, closing and signature in the message. Each failed check returns specific feedback and the learner can resend. Attachments are never stored.
 
 - **Manual review:** approve or return missions in **Admin → Missions**.
 - **Automatic review:** deploy `integrations/email-worker` as a Cloudflare Email Worker on the mission inbox's domain (`npm install && npx wrangler secret put INBOUND_SECRET && npm run deploy`, with `APP_URL` set in `wrangler.toml`).
@@ -373,7 +392,8 @@ When `MISSION_EMAIL` is set, learners must send a genuine application email from
 ## Testing and quality
 
 ```bash
-npm test          # 17 unit tests: rules engine (EN/FR), code generation, scoring, missions, content parity
+npm test          # 42 tests: rules engine (EN/FR), codes, scoring, bullet rules, keyword matching,
+                  # portal validation, cover letter, CV mission checks and course content integrity
 npm run typecheck
 npm run build
 ```
@@ -394,7 +414,8 @@ Tests run on Node's built-in test runner with a small resolver hook (`tests/reso
 
 ## Roadmap
 
-- Additional courses: CVs in Google Docs, spreadsheets basics, online job search, digital safety.
+- **Get the Job** series: 3 · Applications (cover letters, online portals, referees), 4 · Interviews, 5 · Scholarships. The components are built and the learner's CV is already shared.
+- Further courses: spreadsheets basics, online job search, digital safety.
 - Bulk licences for schools and training centres.
 - Automatic WhatsApp code delivery after payment.
 - Audio narration option for learners with lower reading confidence.

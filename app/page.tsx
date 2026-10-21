@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { getDict, fmt } from "@/lib/i18n";
+import { getDict, fmt, money } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale";
-import { listCourses, DEFAULT_COURSE_ID } from "@/content";
+import { listCourses } from "@/content";
 import { env } from "@/lib/env";
 import { buyTarget } from "@/lib/buy";
 import { waLink } from "@/lib/whatsapp";
@@ -12,9 +12,8 @@ export default async function Home() {
   const locale = await getLocale();
   const t = getDict(locale);
   const courses = listCourses(locale);
-  const course = courses.find((c) => c.id === DEFAULT_COURSE_ID) ?? courses[0];
-  const buy = buyTarget(t, course.id, course.title);
-  const help = waLink(env.whatsappNumber, fmt(t.landing.buyMessage, { course: course.title }));
+  const online = !!env.fapshi;
+  const help = waLink(env.whatsappNumber, t.redeem.supportMessage);
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-xl flex-col px-5 pb-10 pt-6">
@@ -28,38 +27,47 @@ export default async function Home() {
         <Illustration name="hero" priority />
       </div>
 
-      <div className="card mt-6 p-4">
-        <p className="text-sm font-semibold uppercase tracking-wide text-muted">{t.landing.courseLabel}</p>
-        <p className="text-xl font-bold">{course.title}</p>
-        <p className="text-muted">{fmt(t.landing.steps, { n: course.totalSteps })}</p>
-      </div>
+      <h2 className="mt-8 text-lg font-bold">{t.landing.coursesTitle}</h2>
+      <ul className="mt-3 flex flex-col gap-4">
+        {courses.map((course) => {
+          const buy = buyTarget(t, course);
+          return (
+            <li key={course.id} className="card p-4">
+              {course.series && <p className="text-sm font-semibold uppercase tracking-wide text-primary">{course.series}</p>}
+              <h3 className="mt-1 text-xl font-bold">{course.title}</h3>
+              <p className="mt-1">{course.promise}</p>
+              <p className="mt-2 text-muted">
+                {fmt(t.landing.steps, { n: course.totalSteps })} · <span className="font-semibold text-ink">{money(course.price)} FCFA</span>
+              </p>
+              <div className="mt-4 flex flex-col gap-2">
+                <Link href={`/learn/${course.id}`} className="btn btn-primary w-full">
+                  {t.landing.tryFree}
+                </Link>
+                <a href={buy.href} className="btn btn-secondary w-full" {...(buy.online ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
+                  {buy.label}
+                </a>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
 
-      <div className="mt-6 flex flex-col gap-3">
-        <Link href={`/learn/${course.id}`} className="btn btn-primary w-full">
-          {t.landing.tryFree}
-        </Link>
-        <a href={buy.href} className="btn btn-secondary w-full" {...(buy.online ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
-          {buy.label}
-        </a>
-        <Link href="/redeem" className="btn btn-ghost w-full">
-          {t.landing.haveCode}
-        </Link>
-      </div>
+      <Link href="/redeem" className="btn btn-ghost mt-4 w-full">
+        {t.landing.haveCode}
+      </Link>
 
       <section className="mt-8">
         <h2 className="text-lg font-bold">{t.landing.howTitle}</h2>
         <ol className="mt-2 list-decimal space-y-1 pl-6">
-          {(buy.online ? t.landing.how : t.landing.howWhatsApp).map((line) => (
+          {(online ? t.landing.how : t.landing.howWhatsApp).map((line) => (
             <li key={line}>{line}</li>
           ))}
         </ol>
       </section>
 
-      {buy.online && (
-        <a href={help} target="_blank" rel="noopener noreferrer" className="mt-8 text-center text-primary underline underline-offset-4">
-          {t.landing.help}
-        </a>
-      )}
+      <a href={help} target="_blank" rel="noopener noreferrer" className="mt-8 text-center text-primary underline underline-offset-4">
+        {t.landing.help}
+      </a>
     </main>
   );
 }

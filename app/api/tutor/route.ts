@@ -5,10 +5,20 @@ import { getLocale } from "@/lib/locale";
 import { db } from "@/lib/supabase-admin";
 import { env } from "@/lib/env";
 import { failedComposeRules, failedTextRules, type ComposeValues } from "@/lib/rules";
+import { checkBullet, type BulletIssue } from "@/lib/cv/bullet";
 import { json, readJson } from "@/lib/http";
 
 const MODEL = "claude-haiku-5-5";
 const MAX_INPUT = 3000;
+
+const BULLET_ISSUES: Record<BulletIssue, string> = {
+  empty: "The line is empty.",
+  weakOpening: "Starts with a duty phrase (e.g. 'Responsible for') instead of an action verb.",
+  firstPerson: "Starts with 'I' or 'My' instead of an action verb.",
+  noNumber: "No number or measurable result.",
+  tooShort: "Too short to show what was achieved.",
+  tooLong: "Longer than two lines on a CV.",
+};
 
 const SCHEMA = {
   type: "object",
@@ -67,6 +77,18 @@ export async function POST(req: Request) {
     failed = failedComposeRules(task.rules, values);
     instruction = [task.instruction, task.context].filter(Boolean).join("\n");
     learnerText = `To: ${values.to}\nCc: ${values.cc}\nSubject: ${values.subject}\nAttachments: ${values.attachments.join(", ") || "(none)"}\n\n${values.body}`;
+  } else if (task?.type === "cvProfile") {
+    learnerText = String(body.text ?? "").slice(0, MAX_INPUT);
+    failed = failedTextRules(task.own.rules, learnerText);
+    instruction = `${task.own.instruction}\n(This is the short profile at the top of the learner's CV.)`;
+  } else if (task?.type === "bulletBuilder") {
+    learnerText = String(body.text ?? "").slice(0, 400);
+    failed = checkBullet(learnerText).map((issue) => BULLET_ISSUES[issue]);
+    instruction = `${task.instruction}\n(This is one achievement line on the learner's CV.)`;
+  } else if (task?.type === "coverLetter") {
+    learnerText = String(body.text ?? "").slice(0, MAX_INPUT);
+    failed = [];
+    instruction = `${task.instruction}\nRole: ${task.advert.role} at ${task.advert.org}. Maximum ${task.maxWords} words.`;
   } else {
     return json({ error: "no_writing_task" }, 400);
   }

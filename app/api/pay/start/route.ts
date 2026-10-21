@@ -5,6 +5,7 @@ import { db } from "@/lib/supabase-admin";
 import { env } from "@/lib/env";
 import { initiatePay } from "@/lib/fapshi";
 import { validReferral } from "@/lib/access";
+import { priceFor } from "@/lib/buy";
 import { json, readJson } from "@/lib/http";
 
 const ORDER_COOKIE = "tsn_order";
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
   if (!course || name.length < 3 || phone.replace(/\D/g, "").length < 9) return json({ error: "missing" }, 400);
 
   const referralId = await validReferral(body.ref);
-  const amount = Math.max(100, env.coursePrice - (referralId ? env.referralDiscount : 0));
+  const amount = priceFor(course, !!referralId);
   const viewToken = randomBytes(24).toString("hex");
 
   const supabase = db();

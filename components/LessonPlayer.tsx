@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { Step } from "@/content/types";
+import type { CvSection, Step } from "@/content/types";
 import { useLocale, useT } from "./I18n";
 import { fmt } from "@/lib/i18n";
 import { Illustration } from "./Illustration";
@@ -10,6 +10,8 @@ import { LanguageSwitch } from "./LanguageSwitch";
 import { LessonProvider } from "./LessonContext";
 import { ReviewCard } from "./ReviewCard";
 import { TaskView } from "./tasks/TaskView";
+import { CvProvider } from "./cv/CvContext";
+import { MyCvPanel } from "./cv/MyCvPanel";
 
 type Props = {
   courseId: string;
@@ -20,6 +22,10 @@ type Props = {
   buyHref: string;
   buyLabel: string;
   tutorEnabled: boolean;
+  /** Courses that build the learner's CV: "My CV" in the header, autosaved draft. */
+  usesCv?: boolean;
+  /** Which step fills each part of the CV, so "My CV" can jump back to it. */
+  sectionSteps?: Partial<Record<CvSection, number>>;
 };
 
 type Status = "loading" | "ready" | "error" | "locked";
@@ -39,7 +45,18 @@ function writeLocal(key: string, value: unknown) {
   } catch {}
 }
 
-export function LessonPlayer({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLabel, tutorEnabled }: Props) {
+export function LessonPlayer(props: Props) {
+  if (props.usesCv && props.paid) {
+    return (
+      <CvProvider courseId={props.courseId}>
+        <Player {...props} cvEnabled />
+      </CvProvider>
+    );
+  }
+  return <Player {...props} cvEnabled={false} />;
+}
+
+function Player({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLabel, tutorEnabled, sectionSteps = {}, cvEnabled }: Props & { cvEnabled: boolean }) {
   const t = useT();
   const locale = useLocale();
   const router = useRouter();
@@ -51,6 +68,7 @@ export function LessonPlayer({ courseId, total, freeSteps, paid, initialStep, bu
   const [finishing, setFinishing] = useState(false);
   const [finishError, setFinishError] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [showCv, setShowCv] = useState(false);
 
   const passedKey = `tsn_passed_${courseId}`;
   const pendingKey = `tsn_pending_${courseId}`;
@@ -189,7 +207,14 @@ export function LessonPlayer({ courseId, total, freeSteps, paid, initialStep, bu
           <Link href="/" className="font-bold text-primary">
             {t.appName}
           </Link>
-          <LanguageSwitch />
+          <div className="flex items-center gap-2">
+            {cvEnabled && (
+              <button type="button" className="btn btn-secondary min-h-11 px-3 py-1.5 text-sm" onClick={() => setShowCv(true)}>
+                📄 {t.cv.myCv}
+              </button>
+            )}
+            <LanguageSwitch />
+          </div>
         </div>
         <div className="mt-2 flex items-center gap-3">
           <div className="h-2 flex-1 overflow-hidden rounded-full bg-line" role="progressbar" aria-valuemin={1} aria-valuemax={total} aria-valuenow={n}>
@@ -289,6 +314,16 @@ export function LessonPlayer({ courseId, total, freeSteps, paid, initialStep, bu
             )}
           </div>
         </nav>
+      )}
+      {showCv && (
+        <MyCvPanel
+          onClose={() => setShowCv(false)}
+          sectionSteps={sectionSteps}
+          goTo={(step) => {
+            setShowCv(false);
+            setN(step);
+          }}
+        />
       )}
     </div>
   );
