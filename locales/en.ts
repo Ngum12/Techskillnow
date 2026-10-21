@@ -271,6 +271,7 @@ const en = {
   },
   referral: {
     title: "Invite friends, earn a free course",
+    button: "Invite friends",
     how: "Your friends get {n} FCFA off with your link. Every {per} friends who buy = 1 free course for you.",
     progress: "{n} of {per} friends towards your next free course",
     total: "{n} friends in total",

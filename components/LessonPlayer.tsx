@@ -12,6 +12,7 @@ import { ReviewCard } from "./ReviewCard";
 import { TaskView } from "./tasks/TaskView";
 import { CvProvider } from "./cv/CvContext";
 import { MyCvPanel } from "./cv/MyCvPanel";
+import { InvitePanel } from "./InvitePanel";
 
 type Props = {
   courseId: string;
@@ -26,6 +27,8 @@ type Props = {
   usesCv?: boolean;
   /** Which step fills each part of the CV, so "My CV" can jump back to it. */
   sectionSteps?: Partial<Record<CvSection, number>>;
+  /** Show the "Invite friends" button (paid learners, when online payment is on). */
+  inviteEnabled?: boolean;
 };
 
 type Status = "loading" | "ready" | "error" | "locked";
@@ -56,7 +59,7 @@ export function LessonPlayer(props: Props) {
   return <Player {...props} cvEnabled={false} />;
 }
 
-function Player({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLabel, tutorEnabled, sectionSteps = {}, cvEnabled }: Props & { cvEnabled: boolean }) {
+function Player({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLabel, tutorEnabled, sectionSteps = {}, inviteEnabled, cvEnabled }: Props & { cvEnabled: boolean }) {
   const t = useT();
   const locale = useLocale();
   const router = useRouter();
@@ -69,6 +72,7 @@ function Player({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLab
   const [finishError, setFinishError] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [showCv, setShowCv] = useState(false);
+  const [showInvite, setShowInvite] = useState(false);
 
   const passedKey = `tsn_passed_${courseId}`;
   const pendingKey = `tsn_pending_${courseId}`;
@@ -206,16 +210,27 @@ function Player({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLab
     <div className="mx-auto flex min-h-dvh max-w-xl flex-col">
       <header className="sticky top-0 z-10 border-b border-line bg-bg px-5 pb-3 pt-3">
         <div className="flex items-center justify-between gap-3">
-          <Link href="/" className="font-bold text-primary">
+          <Link href="/" className="min-w-0 truncate font-bold text-primary">
             {t.appName}
           </Link>
-          <div className="flex items-center gap-2">
-            {cvEnabled && (
-              <button type="button" className="btn btn-secondary min-h-11 px-3 py-1.5 text-sm" onClick={() => setShowCv(true)}>
-                📄 {t.cv.myCv}
+          <div className="flex shrink-0 items-center gap-2">
+            {paid && inviteEnabled && (
+              <button
+                type="button"
+                className="btn btn-secondary min-h-11 min-w-11 px-2 py-1.5 text-lg"
+                onClick={() => setShowInvite(true)}
+                aria-label={t.referral.title}
+                title={t.referral.title}
+              >
+                🎁
               </button>
             )}
-            <LanguageSwitch />
+            {cvEnabled && (
+              <button type="button" className="btn btn-secondary min-h-11 min-w-11 px-2 py-1.5 text-sm" onClick={() => setShowCv(true)} aria-label={t.cv.myCv}>
+                📄<span className="hidden min-[380px]:inline"> {t.cv.myCv}</span>
+              </button>
+            )}
+            <LanguageSwitch compact />
           </div>
         </div>
         <div className="mt-2 flex items-center gap-3">
@@ -317,6 +332,7 @@ function Player({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLab
           </div>
         </nav>
       )}
+      {showInvite && <InvitePanel courseId={courseId} onClose={() => setShowInvite(false)} />}
       {showCv && (
         <MyCvPanel
           onClose={() => setShowCv(false)}

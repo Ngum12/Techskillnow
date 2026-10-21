@@ -60,6 +60,7 @@ export default async function LearnPage({ params, searchParams }: PageProps<"/le
         buyLabel={buy.label}
         tutorEnabled={!!env.anthropicKey}
         usesCv={!!course.usesCv}
+        inviteEnabled={!!env.fapshi}
         sectionSteps={sectionSteps}
       />
       {learner && <Watermark name={learner.buyerName} phoneLast4={learner.phoneLast4} />}

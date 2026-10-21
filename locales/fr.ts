@@ -272,6 +272,7 @@ const fr: Dict = {
   },
   referral: {
     title: "Invitez vos amis, gagnez un cours gratuit",
+    button: "Inviter des amis",
     how: "Vos amis ont {n} FCFA de réduction avec votre lien. Tous les {per} amis qui achètent = 1 cours gratuit pour vous.",
     progress: "{n} amis sur {per} vers votre prochain cours gratuit",
     total: "{n} amis au total",
