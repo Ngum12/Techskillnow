@@ -8,4 +8,5 @@ type TopicModule = { generators: Generator[]; examGenerators: ExamGenerator[] };
 
 export const topics: Record<string, () => Promise<TopicModule>> = {
   algebra: () => import("./algebra/generators"),
+  functions: () => import("./functions/generators"),
 };

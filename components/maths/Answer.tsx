@@ -10,6 +10,7 @@ import { previewLatex } from "@/lib/maths/expr";
 import type { AnswerSpec, MisconceptionRule, Question, SolutionLine } from "@/lib/maths/types";
 import { MathField } from "./MathInput";
 import { MathText, Tex } from "./Tex";
+import { Graph } from "./Graph";
 
 /* ---------- Misconception hints (from the topic's misconceptions.json) ---------- */
 
@@ -47,7 +48,7 @@ export function ModelLine({ line, n }: { line: SolutionLine; n?: number }) {
 
 /* ---------- Answer boxes ---------- */
 
-function reasonText(t: ReturnType<typeof useT>, r: AnswerResult, spec: AnswerSpec): string {
+function reasonText(t: ReturnType<typeof useT>, r: Pick<AnswerResult, "reason">, spec: AnswerSpec): string {
   const s = t.maths.answer;
   if (r.reason === "unreadable") return s.unreadable;
   if (r.reason === "form") {
@@ -70,14 +71,16 @@ export function AnswerSet({ q, onResult, locked = false }: { q: Question; onResu
   const s = t.maths.answer;
   const hint = useHint();
   const [values, setValues] = useState<string[]>(() => q.answers.map(() => ""));
-  const [results, setResults] = useState<(AnswerResult & { mis?: string | null })[] | null>(null);
+  const [results, setResults] = useState<(Omit<AnswerResult, "mis"> & { mis?: string | null })[] | null>(null);
   const [showWorking, setShowWorking] = useState(false);
   const allOk = !!results && results.every((r) => r.ok);
 
   function check() {
     const res = q.answers.map((a, i) => {
+      // An empty box can itself be the mistake (e.g. no domain given for an inverse).
+      if (!values[i].trim() && a.emptyHint) return { ok: false, reason: "unreadable" as const, mis: a.emptyHint };
       const r = checkAnswer(a.spec, values[i]);
-      return { ...r, mis: r.ok ? null : detectMisconception(q, values[i], i) };
+      return { ...r, mis: r.ok ? null : (r.mis ?? detectMisconception(q, values[i], i)) };
     });
     setResults(res);
     onResult(res.every((r) => r.ok));
@@ -96,6 +99,11 @@ export function AnswerSet({ q, onResult, locked = false }: { q: Question; onResu
                   const mark = results && chosen ? (results[i].ok ? "border-ok bg-ok-soft" : "border-err bg-err-soft") : chosen ? "border-primary bg-primary-soft" : "border-line bg-surface";
                   return (
                     <button key={oi} type="button" disabled={locked || allOk} onClick={() => (setValues(values.map((v, j) => (j === i ? String(oi) : v))), setResults(null))} className={`min-h-12 rounded-xl border-2 px-3 py-2 text-left ${mark}`}>
+                      {q.optionGraphs?.[oi] && (
+                        <span className="mb-1 block">
+                          <Graph spec={q.optionGraphs[oi]} mini />
+                        </span>
+                      )}
                       <MathText text={o} />
                     </button>
                   );

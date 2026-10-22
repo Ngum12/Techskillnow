@@ -88,6 +88,27 @@ export function CourseMotif({ id }: { id: string }) {
       </svg>
     );
   }
+  if (id === "maths-functions") {
+    // A curve, its inverse and the mirror line y = x.
+    return (
+      <svg viewBox="0 0 300 200" className="aspect-[3/2] w-full rounded-xl bg-[#eef3f0]" aria-hidden="true">
+        <line x1="40" x2="270" y1="170" y2="170" stroke="#6b7a82" strokeWidth="1.5" />
+        <line x1="60" x2="60" y1="16" y2="186" stroke="#6b7a82" strokeWidth="1.5" />
+        <line x1="60" y1="170" x2="214" y2="16" stroke="#9aa6ad" strokeWidth="2" strokeDasharray="6 5" />
+        <path d="M60 150 C 110 146, 150 120, 190 24" fill="none" stroke="#2f5d9c" strokeWidth="4" strokeLinecap="round" />
+        <path d="M80 170 C 84 120, 110 80, 206 40" fill="none" stroke="#b8452b" strokeWidth="4" strokeLinecap="round" />
+        <circle cx="128" cy="136" r="5" fill="#fff" stroke="#2f5d9c" strokeWidth="2.5" />
+        <circle cx="94" cy="102" r="5" fill="#fff" stroke="#b8452b" strokeWidth="2.5" />
+        <text x="200" y="64" fontSize="20" fontStyle="italic" fill="#1f2a30" fontFamily="Georgia, serif">
+          f⁻¹
+        </text>
+        <rect x="212" y="120" width="64" height="34" rx="6" fill="#fff" stroke="#1f2a30" strokeWidth="2" />
+        <text x="244" y="143" textAnchor="middle" fontSize="16" fill="#1f2a30" fontFamily="Georgia, serif">
+          fg(x)
+        </text>
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 300 200" className="aspect-[3/2] w-full rounded-xl bg-[#eef0f7]" aria-hidden="true">
       {[40, 80, 120, 160, 200, 240].map((x) => (

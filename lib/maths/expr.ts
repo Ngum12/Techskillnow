@@ -14,7 +14,7 @@ export type Expr =
   | { t: "abs"; a: Expr };
 
 export type FnName = "sqrt" | "sin" | "cos" | "tan" | "ln" | "log" | "exp";
-export type RelOp = "=" | "<" | ">" | "<=" | ">=";
+export type RelOp = "=" | "<" | ">" | "<=" | ">=" | "!=";
 /** a < b <= c … */
 export type Chain = { parts: Expr[]; ops: RelOp[] };
 /** Chains joined by "or" (a single chain, or a single expression with no relation, is the usual case). */
@@ -34,6 +34,7 @@ function tokenize(src: string): Tok[] {
     .replace(/÷/g, "/")
     .replace(/≤|=</g, "<=")
     .replace(/≥|=>/g, ">=")
+    .replace(/≠/g, "!=")
     .replace(/π/g, "pi")
     .replace(/√/g, "sqrt");
   const out: Tok[] = [];
@@ -62,7 +63,7 @@ function tokenize(src: string): Tok[] {
       continue;
     }
     const two = s.slice(i, i + 2);
-    if (two === "<=" || two === ">=" || two === "**") {
+    if (two === "<=" || two === ">=" || two === "**" || two === "!=") {
       out.push({ k: "op", v: two === "**" ? "^" : two });
       i += 2;
       continue;
@@ -120,7 +121,7 @@ class Parser {
     const ops: RelOp[] = [];
     for (;;) {
       const t = this.peek();
-      if (t && t.k === "op" && ["=", "<", ">", "<=", ">="].includes(t.v)) {
+      if (t && t.k === "op" && ["=", "<", ">", "<=", ">=", "!="].includes(t.v)) {
         this.next();
         ops.push(t.v as RelOp);
         parts.push(this.expr());
@@ -323,6 +324,8 @@ export function holds(c: Chain, env: Env, eps = 1e-9): boolean {
         return a <= b + tol;
       case ">=":
         return a >= b - tol;
+      case "!=":
+        return Math.abs(a - b) > tol;
     }
   });
 }
@@ -414,7 +417,7 @@ export function toLatex(e: Expr): string {
   }
 }
 
-const REL_TEX: Record<RelOp, string> = { "=": "=", "<": "<", ">": ">", "<=": "\\le", ">=": "\\ge" };
+const REL_TEX: Record<RelOp, string> = { "=": "=", "<": "<", ">": ">", "<=": "\\le", ">=": "\\ge", "!=": "\\ne" };
 
 export function statementLatex(s: Statement): string {
   return s.or.map((c) => c.parts.map((p, i) => (i ? ` ${REL_TEX[c.ops[i - 1]]} ` : "") + toLatex(p)).join("")).join("\\quad\\text{or}\\quad ");
@@ -422,6 +425,36 @@ export function statementLatex(s: Statement): string {
 
 /** LaTeX for whatever the learner has typed so far (falls back to plain text while incomplete). */
 export function previewLatex(src: string): string | null {
-  const s = tryParse(src);
+  const s = tryParse(normaliseAnswer(src));
   return s ? statementLatex(s) : null;
+}
+
+const INF = /^[+]?(∞|inf|infinity)$/i;
+const NEG_INF = /^(-|−)(∞|inf|infinity)$/i;
+
+/** One interval such as [2, ∞), (−∞, 3] or (1, 4] as an inequality in `v`. */
+function intervalToRelation(open: string, a: string, b: string, close: string, v: string): string {
+  const lo = NEG_INF.test(a.trim()) ? null : a.trim();
+  const hi = INF.test(b.trim()) ? null : b.trim();
+  const l = open === "[" ? "<=" : "<";
+  const r = close === "]" ? "<=" : "<";
+  if (lo === null && hi === null) return `${v} = ${v}`;
+  if (lo === null) return `${v} ${r} ${hi}`;
+  if (hi === null) return `${v} ${l === "<=" ? ">=" : ">"} ${lo}`;
+  return `${lo} ${l} ${v} ${r} ${hi}`;
+}
+
+/**
+ * What learners type for answers about functions, made readable by the parser:
+ * f(x), g(x), f⁻¹(x), fg(x) → y (for ranges); interval notation and ∪ → inequalities joined by "or";
+ * "x ∈ …" is dropped before an interval.
+ */
+export function normaliseAnswer(text: string, variable = "x"): string {
+  let s = text.replace(/\b([a-z]{1,2})\s*(\^\s*\(?\s*[-−]\s*1\s*\)?|⁻¹)?\s*\(\s*x\s*\)/gi, (m, name: string) => (["x", "e", "ln"].includes(name.toLowerCase()) ? m : "y"));
+  if (/[[\]∞∪]/.test(s)) {
+    s = s.replace(/[a-z]\s*∈\s*/gi, "");
+    s = s.replace(/([[(])\s*([^,[\]()]+?)\s*,\s*([^,[\]()]+?)\s*([\])])/g, (_m, o: string, a: string, b: string, c: string) => intervalToRelation(o, a, b, c, variable));
+    s = s.replace(/∪/g, " or ");
+  }
+  return s;
 }

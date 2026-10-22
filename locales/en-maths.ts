@@ -2,7 +2,41 @@
 export const enMaths = {
   maths: {
     keypad: { label: "Maths keypad", close: "Close" },
-    graph: { label: "Interactive graph", zoomIn: "Zoom in", zoomOut: "Zoom out" },
+    graph: { label: "Interactive graph", zoomIn: "Zoom in", zoomOut: "Zoom out", verticalHits: "Points where the vertical line meets the graph:", horizontalHits: "Points where the horizontal line meets the graph:" },
+    machine: {
+      input: "Input",
+      output: "Output",
+      inputPlaceholder: "Type an input, e.g. 3",
+      outputPlaceholder: "Type an output",
+      run: "Run",
+      startInput: "goes in",
+      startOutput: "comes out (we work backwards)",
+      machine: "Machine {n}",
+      result: "In: {input} → out: {output}",
+      resultBack: "Output {input} came from input {output}",
+    },
+    transform: {
+      describe: "Describe fully",
+      none: "Move a slider to transform the graph.",
+      labels: {
+        shiftY: "$f(x) + a$: a = {v}",
+        shiftX: "$f(x + a)$: a = {v}",
+        stretchY: "$a f(x)$: a = {v}",
+        stretchX: "$f(ax)$: a = {v}",
+        reflectX: "$-f(x)$ (reflect in the x-axis)",
+        reflectY: "$f(-x)$ (reflect in the y-axis)",
+      },
+    },
+    sketch: {
+      title: "Sketch it in your book",
+      instruction: "Draw axes and sketch the graph. Mark where it crosses the axes, any turning points and any asymptotes. Then reveal the answer.",
+      reveal: "I have sketched it: show me",
+      checklist: "Tick each feature your sketch shows:",
+      check: "Now check the key values:",
+      score: "Your sketch had {n} of {total} key features.",
+      another: "Sketch another",
+    },
+
     visuals: { areaCheck: "Check with x = {x}: the whole rectangle has area {total}.", signFactor: "Factor", signEmpty: "empty" },
     answer: {
       answer: "Your answer",

@@ -66,7 +66,7 @@ export const REWRITES: Record<string, Rewrite> = {
   },
 };
 
-const FLIP: Record<RelOp, RelOp> = { "=": "=", "<": ">", ">": "<", "<=": ">=", ">=": "<=" };
+const FLIP: Record<RelOp, RelOp> = { "=": "=", "<": ">", ">": "<", "<=": ">=", ">=": "<=", "!=": "!=" };
 const flipped = (s: Statement): Statement => ({ or: s.or.map((c): Chain => ({ parts: c.parts, ops: c.ops.map((o) => FLIP[o]) })) });
 
 /**
@@ -79,7 +79,11 @@ export function detectMisconception(q: Question, input: string, answerIndex?: nu
     if (answerIndex !== undefined && (bug.answer ?? 0) !== answerIndex) continue;
     const spec = q.answers[bug.answer ?? 0]?.spec;
     if (!spec) continue;
-    const probe = spec.kind === "solutions" || spec.kind === "relation" ? { ...spec, ...(spec.kind === "solutions" ? { values: bug.value.split(";") } : { value: bug.value }) } : { ...spec, value: bug.value };
+    if (spec.kind === "choice") {
+      if (input.trim() === bug.value) return bug.misconception;
+      continue;
+    }
+    const probe = spec.kind === "solutions" ? { ...spec, values: bug.value.split(";") } : { ...spec, value: bug.value };
     if (checkAnswer(probe as typeof spec, input).ok) return bug.misconception;
   }
   const line = tryParse(input.replace(/^\s*=/, ""));

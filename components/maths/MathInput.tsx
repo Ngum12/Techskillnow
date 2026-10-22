@@ -43,8 +43,9 @@ const PAGE_MAIN: Key[] = [
 const PAGE_MORE: Key[] = [
   { label: "sin", insert: "sin()", back: 1 }, { label: "cos", insert: "cos()", back: 1 }, { label: "tan", insert: "tan()", back: 1 }, { label: "ln", insert: "ln()", back: 1 }, { label: "e" }, { label: "π", insert: "pi" },
   { label: "a" }, { label: "b" }, { label: "k" }, { label: "p" }, { label: "q" }, { label: "n" },
-  { label: "≤", insert: " <= " }, { label: "≥", insert: " >= " }, { label: "or", insert: " or " }, { label: ",", insert: ", " }, { label: "t" }, { label: "⌫", action: "del", aria: "delete" },
-  { label: "◀", action: "left", aria: "cursor left" }, { label: "▶", action: "right", aria: "cursor right" }, { label: "Clear", action: "clear", wide: true },
+  { label: "≤", insert: " <= " }, { label: "≥", insert: " >= " }, { label: "≠", insert: " != " }, { label: "or", insert: " or " }, { label: ",", insert: ", " }, { label: "⌫", action: "del", aria: "delete" },
+  { label: "[" }, { label: "]" }, { label: "∞", aria: "infinity" }, { label: "∪", insert: " ∪ ", aria: "union" }, { label: "f(x)" }, { label: "g(x)" },
+  { label: "◀", action: "left", aria: "cursor left" }, { label: "▶", action: "right", aria: "cursor right" }, { label: "t" }, { label: "Clear", action: "clear", wide: true },
 ];
 
 function Keypad({ editor, onClose }: { editor: React.RefObject<Editor | null>; onClose: () => void }) {
@@ -141,7 +142,7 @@ export function MathField({
       const c = Math.min(cursorRef.current, v.length);
       if (c === 0) return;
       // Delete whole words (sqrt, sin, " or ") in one press.
-      const m = v.slice(0, c).match(/(sqrt\(|sin\(|cos\(|tan\(|ln\(|pi| or | <= | >= | = | < | > | \+ )$/);
+      const m = v.slice(0, c).match(/(sqrt\(|sin\(|cos\(|tan\(|ln\(|pi|f\(x\)|g\(x\)| or | <= | >= | != | ∪ | = | < | > | \+ )$/);
       const n = m ? m[0].length : 1;
       changeRef.current(v.slice(0, c - n) + v.slice(c));
       setCursor(c - n);

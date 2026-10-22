@@ -1,9 +1,10 @@
 /** Final-answer checking: any equivalent form, unless the question asks for a specific form. */
-import { evaluate, isRelation, parseExpr, tryParse, type Expr, type Statement } from "./expr";
+import { evaluate, isRelation, normaliseAnswer, parseExpr, statementVariables, tryParse, type Expr, type Statement } from "./expr";
 import { exprEquivalent, sameSolutionSet } from "./equiv";
 import type { AnswerSpec } from "./types";
 
-export type AnswerResult = { ok: boolean; reason?: "unreadable" | "form" | "wrong" | "notSolved" };
+/** `mis`: a misconception recognised from the form of the answer (e.g. a range written with x). */
+export type AnswerResult = { ok: boolean; reason?: "unreadable" | "form" | "wrong" | "notSolved"; mis?: string };
 
 /** A number typed by the learner: "3", "-3/4", "0.75", "2^3"… (any constant expression). */
 export function numberValue(input: string): number | null {
@@ -163,8 +164,8 @@ export function checkAnswer(spec: AnswerSpec, input: string): AnswerResult {
       return closeNum(v, numberValue(spec.value)!) ? { ok: true } : { ok: false, reason: "wrong" };
     }
     case "expr": {
-      // "x = …" is fine when making x the subject.
-      const s = tryParse(text.replace(/^\s*([a-z]\s*)?=/i, ""));
+      // "x = …", "f(x) = …", "fg(x) = …", "f⁻¹(x) = …" in front of the answer are all fine.
+      const s = tryParse(normaliseAnswer(text).replace(/^\s*([a-z]\s*)?=/i, ""));
       if (!s || isRelation(s)) return { ok: false, reason: "unreadable" };
       const e = s.or[0].parts[0];
       if (!exprEquivalent(e, parseExpr(spec.value))) return { ok: false, reason: "wrong" };
@@ -194,8 +195,20 @@ export function checkAnswer(spec: AnswerSpec, input: string): AnswerResult {
       if (!sameSolutionSet(s, want)) return { ok: false, reason: "wrong" };
       return isSolvedForm(s, v) ? { ok: true } : { ok: false, reason: "notSolved" };
     }
+    case "range": {
+      // A range is about the outputs: f(x) ≥ 2 (or y ≥ 2), not x ≥ 2.
+      const n = normaliseAnswer(text, "y");
+      const s = tryParse(n);
+      if (!s) return { ok: false, reason: "unreadable" };
+      const vars = statementVariables(s);
+      const want = tryParse(spec.value.replace(/y/g, "x"))!;
+      const asX = tryParse(n.replace(/y/g, "x"))!;
+      if (!sameSolutionSet(asX, want)) return { ok: false, reason: "wrong" };
+      if (vars.has("x") && !vars.has("y")) return { ok: false, reason: "wrong", mis: "rangeInX" };
+      return isSolvedForm(asX, "x") ? { ok: true } : { ok: false, reason: "notSolved" };
+    }
     case "relation": {
-      const s = tryParse(text);
+      const s = tryParse(normaliseAnswer(text));
       if (!s) return { ok: false, reason: "unreadable" };
       if (!sameSolutionSet(s, tryParse(spec.value)!)) return { ok: false, reason: "wrong" };
       return isSolvedForm(s, "x") ? { ok: true } : { ok: false, reason: "notSolved" };

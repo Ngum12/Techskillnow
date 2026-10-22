@@ -9,6 +9,7 @@ import applicationsEn from "./applications/en";
 import applicationsFr from "./applications/fr";
 import chemTitrationEn from "./chem/en";
 import mathsAlgebraEn from "./maths/algebra/en";
+import mathsFunctionsEn from "./maths/functions/en";
 
 const courses: Record<string, Partial<Record<Locale, Course>>> = {
   "email-for-work": { en: emailForWorkEn, fr: emailForWorkFr },
@@ -17,6 +18,7 @@ const courses: Record<string, Partial<Record<Locale, Course>>> = {
   // GCE A Level is taught in English: no French version.
   "chem-titration": { en: chemTitrationEn },
   "maths-algebra": { en: mathsAlgebraEn },
+  "maths-functions": { en: mathsFunctionsEn },
 };
 
 export const DEFAULT_COURSE_ID = "email-for-work";

@@ -12,6 +12,8 @@ export type AnswerSpec =
   | { kind: "number"; value: string }
   | { kind: "solutions"; values: string[]; variable?: string }
   | { kind: "relation"; value: string }
+  /** A range, written in terms of the output: "y >= 2" (the learner may write f(x) ≥ 2). */
+  | { kind: "range"; value: string }
   | { kind: "choice"; options: string[]; answer: number };
 
 /** One line of working. `value` (linear syntax) lets the app check a learner's version of this line. */
@@ -44,7 +46,8 @@ export type Question = {
   prompt: string;
   /** Line-by-line working, checked against this starting expression or statement. */
   work?: { mode: "expr" | "equation" | "relation"; start: string };
-  answers: { label?: string; spec: AnswerSpec }[];
+  /** `emptyHint`: the misconception to name if this box is left empty (e.g. forgetting the domain). */
+  answers: { label?: string; spec: AnswerSpec; emptyHint?: string }[];
   solution: SolutionLine[];
   /** Known wrong answers produced by a specific misconception (answer index → value). */
   bugs?: { misconception: string; answer?: number; value: string }[];
@@ -52,6 +55,16 @@ export type Question = {
   table?: FillTable;
   /** A sign diagram to fill: critical values, each factor's sign on each interval, and the result. */
   signs?: SignDiagram;
+  /** A graph shown with the question (it may be interactive, e.g. a line test). */
+  graph?: GraphSpec;
+  /** A mapping diagram: inputs on the left, outputs on the right, arrows i → j. */
+  mapping?: { left: string[]; right: string[]; arrows: [number, number][] };
+  /** Function machines; `order` is the order they act in (fg → ["g", "f"]). */
+  machine?: { machines: { name: string; expr: string; inverse?: string }[]; order: string[]; input?: number; backwards?: boolean };
+  /** Sketch-and-compare: the correct sketch and the features to tick. */
+  sketch?: { graph: GraphSpec; features: string[] };
+  /** For choice answers: a small graph for each option. */
+  optionGraphs?: GraphSpec[];
   /** Area (grid) model for a product: the terms of each factor, in linear syntax. */
   grid?: { rows: string[]; cols: string[] };
 };
@@ -98,8 +111,22 @@ export type KeyIdea = { id: string; text: string; keywords: string[][] };
 export type GraphSpec = {
   x: [number, number];
   y: [number, number];
-  /** Curves to draw; params are written as single letters (a, b, n…). */
-  curves: { expr: string; colour?: string; label?: string }[];
+  /** Curves to draw; params are written as single letters (a, b, n…). `param` draws x(t), y(t) instead (e.g. a circle). */
+  curves: { expr: string; colour?: string; label?: string; param?: { x: string; y: string; t: [number, number] }; faint?: boolean }[];
+  /** Labelled points (intercepts, turning points…). */
+  points?: { x: number; y: number; label?: string }[];
+  /** Dashed asymptote lines x = …, y = …. */
+  asymptotes?: { x?: number; y?: number }[];
+  /** A line the learner drags (by this parameter) to test "function?" (vertical) or "one-to-one?" (horizontal). */
+  lineTest?: { param: string; dir: "vertical" | "horizontal" };
+  /** With dragPoint: show the reflection in y = x and trace the inverse graph. */
+  mirror?: boolean;
+  /** Two parameters bounding a restricted domain: the matching range is shown on the y-axis. */
+  domainRange?: { from: string; to: string };
+  /** The lesson part draws its own controls for the parameters. */
+  hideSliders?: boolean;
+  /** Transformation playground: curve 0 is f; params A, B, C, D give y = A·f(Bx + C) + D; these points are tracked. */
+  transform?: { points: { label: string; x: number }[] };
   params?: { name: string; label: string; min: number; max: number; step: number; value: number }[];
   /** Pick the curve by an integer parameter, e.g. degree n → its own expression. */
   select?: { param: string; exprs: Record<string, string> };
@@ -124,6 +151,19 @@ export type LessonPart =
   | { kind: "table"; title: string; generator: string; question: { prompt: string; options: string[]; answer: number; explain: string } }
   | { kind: "grid"; title: string; generator: string }
   | { kind: "signs"; title: string; generator: string }
+  | { kind: "machine"; title: string; text: string; machines: { name: string; expr: string; inverse?: string }[]; order: string[]; backwards?: boolean; questions: { prompt: string; options: string[]; answer: number; explain: string }[] }
+  | {
+      kind: "transform";
+      title: string;
+      text: string;
+      base: string;
+      x: [number, number];
+      y: [number, number];
+      points: { label: string; x: number }[];
+      sliders: ("shiftY" | "shiftX" | "stretchY" | "stretchX" | "reflectX" | "reflectY")[];
+      questions: { prompt: string; options: string[]; answer: number; explain: string }[];
+    }
+  | { kind: "sketch"; title: string; generator: string }
   | { kind: "practice"; title: string; generators: string[]; count: number }
   | { kind: "traps"; title: string; cards: TrapCard[] }
   | { kind: "exam"; title: string; generator: string }

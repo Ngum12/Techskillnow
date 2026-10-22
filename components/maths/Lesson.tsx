@@ -11,6 +11,7 @@ import type { ExamGenerator, Generator } from "@/lib/maths/types";
 import { savePart, savedPart, skillLevel, skillRecords } from "@/lib/maths/mastery";
 import { topics } from "@/content/maths/registry";
 import { MathInputProvider } from "./MathInput";
+import { MachinePart, SketchPart, TransformPart } from "./FunctionParts";
 import { HintsContext, Note } from "./Answer";
 import {
   DiagnosticPart,
@@ -150,6 +151,12 @@ export function MathsLesson({ task, passed, onPass }: { task: MathsLessonTask; p
         return <GridPart part={part} {...props} />;
       case "signs":
         return <SignsPart part={part} {...props} />;
+      case "machine":
+        return <MachinePart part={part} {...props} />;
+      case "transform":
+        return <TransformPart part={part} {...props} />;
+      case "sketch":
+        return <SketchPart part={part} {...props} />;
       case "practice":
         return <PracticePart part={part} {...props} />;
       case "traps":

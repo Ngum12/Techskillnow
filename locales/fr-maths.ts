@@ -4,7 +4,41 @@ import type { enMaths } from "./en-maths";
 export const frMaths: typeof enMaths = {
   maths: {
     keypad: { label: "Clavier mathématique", close: "Fermer" },
-    graph: { label: "Graphique interactif", zoomIn: "Zoom avant", zoomOut: "Zoom arrière" },
+    graph: { label: "Graphique interactif", zoomIn: "Zoom avant", zoomOut: "Zoom arrière", verticalHits: "Points où la droite verticale coupe la courbe :", horizontalHits: "Points où la droite horizontale coupe la courbe :" },
+    machine: {
+      input: "Entrée",
+      output: "Sortie",
+      inputPlaceholder: "Écrivez une entrée, ex. 3",
+      outputPlaceholder: "Écrivez une sortie",
+      run: "Lancer",
+      startInput: "entre",
+      startOutput: "sort (on remonte)",
+      machine: "Machine {n}",
+      result: "Entrée : {input} → sortie : {output}",
+      resultBack: "La sortie {input} vient de l'entrée {output}",
+    },
+    transform: {
+      describe: "Décrire complètement",
+      none: "Déplacez un curseur pour transformer la courbe.",
+      labels: {
+        shiftY: "$f(x) + a$ : a = {v}",
+        shiftX: "$f(x + a)$ : a = {v}",
+        stretchY: "$a f(x)$ : a = {v}",
+        stretchX: "$f(ax)$ : a = {v}",
+        reflectX: "$-f(x)$ (symétrie par rapport à l'axe des x)",
+        reflectY: "$f(-x)$ (symétrie par rapport à l'axe des y)",
+      },
+    },
+    sketch: {
+      title: "Esquissez-la dans votre cahier",
+      instruction: "Tracez les axes et esquissez la courbe. Marquez les points d'intersection avec les axes, les extremums et les asymptotes. Puis affichez la réponse.",
+      reveal: "J'ai fait l'esquisse : montrez-moi",
+      checklist: "Cochez chaque élément présent sur votre esquisse :",
+      check: "Vérifiez maintenant les valeurs clés :",
+      score: "Votre esquisse avait {n} éléments clés sur {total}.",
+      another: "Esquisser une autre courbe",
+    },
+
     visuals: { areaCheck: "Vérifiez avec x = {x} : le grand rectangle a une aire de {total}.", signFactor: "Facteur", signEmpty: "vide" },
     answer: {
       answer: "Votre réponse",

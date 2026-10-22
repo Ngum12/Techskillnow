@@ -17,6 +17,7 @@ import { MathText, Tex } from "./Tex";
 import { AnswerSet, ModelLine, Note, PaperMoment, StepWork } from "./Answer";
 import { Graph } from "./Graph";
 import { AreaModel, DivisionView, SignTable } from "./Visuals";
+import { QuestionVisual } from "./FunctionVisuals";
 import type { Sign } from "@/lib/maths/types";
 
 type Gens = { gen: (id: string) => Generator | undefined; exam: (id: string) => ExamGenerator | undefined };
@@ -144,6 +145,7 @@ export function WorkedPart({ part, onDone }: PartProps<"worked">) {
           <DivisionView layout={q.division} upto={Math.min(shown - 1, q.division.stages.length - 1)} />
         </div>
       )}
+      {q && <QuestionVisual q={q} />}
       <div className="mt-3 space-y-2">
         {lines.slice(0, shown).map((l, i) => (
           <ModelLine key={i} line={l} n={i + 1} />
@@ -188,6 +190,7 @@ export function GapsPart({ part, onDone, skill }: PartProps<"gaps">) {
       <p className="font-semibold">
         <MathText text={q.prompt} />
       </p>
+      <QuestionVisual q={q} />
       <p className="mt-1 text-sm text-muted">{s.fillHelp}</p>
       <div className="mt-3 space-y-2">
         {q.solution.map((l, i) =>
@@ -564,6 +567,7 @@ export function PracticePart({ part, onDone }: PartProps<"practice">) {
       <p className="mt-1 text-[1.05rem] font-semibold">
         <MathText text={q.prompt} />
       </p>
+      <QuestionVisual q={q} />
       <p className="mt-2 rounded-lg bg-[#fffdf5] p-2 text-sm">✏️ {q.work ? s.paperFirstLines : s.paperFirst}</p>
       {q.division && <p className="mt-1 text-sm text-muted">{s.divisionOnPaper}</p>}
       <div className="mt-3">
@@ -911,6 +915,7 @@ export function MasteryPart({ part, onDone }: PartProps<"mastery">) {
       <p className="mt-1 text-[1.05rem] font-semibold">
         <MathText text={q.prompt} />
       </p>
+      <QuestionVisual q={q} />
       <div className="mt-3">
         <AnswerSet
           key={`${round}-${i}`}
@@ -963,6 +968,7 @@ export function DiagnosticPart({ part, onDone }: PartProps<"diagnostic">) {
         <p className="mt-1 text-[1.05rem] font-semibold">
           <MathText text={q.prompt} />
         </p>
+        <QuestionVisual q={q} />
         <div className="mt-3">
           <AnswerSet
             key={i}
@@ -1029,6 +1035,7 @@ export function DiagnosticPart({ part, onDone }: PartProps<"diagnostic">) {
           <p className="mt-1 font-semibold">
             <MathText text={rq.prompt} />
           </p>
+          <QuestionVisual q={rq} />
           <div className="mt-2">
             <AnswerSet
               key={repairSeed}

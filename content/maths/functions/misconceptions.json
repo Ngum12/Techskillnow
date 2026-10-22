@@ -1,0 +1,142 @@
+[
+  {
+    "id": "inverseReciprocal",
+    "title": "f⁻¹ is not 1/f",
+    "hint": "$f^{-1}(x)$ means the INVERSE function (the machine run backwards), not $\\frac{1}{f(x)}$. Write $y = f(x)$, make x the subject, then swap the letters."
+  },
+  {
+    "id": "compositeOrder",
+    "title": "The order of fg",
+    "hint": "$fg(x)$ means $f(g(x))$: the function next to x acts FIRST. So for $fg$, do $g$ first, then put the answer into $f$."
+  },
+  {
+    "id": "translateDirection",
+    "title": "Inside the bracket moves the opposite way",
+    "hint": "$f(x + a)$ moves the graph LEFT by $a$, not right: the new graph reaches each output $a$ earlier. Its vector is $\\begin{pmatrix} -a \\\\ 0 \\end{pmatrix}$."
+  },
+  {
+    "id": "stretchFactor",
+    "title": "f(ax) divides x by a",
+    "hint": "$f(ax)$ is a stretch parallel to the x-axis with scale factor $\\frac{1}{a}$: every x-coordinate is DIVIDED by $a$. Changes inside the bracket work the opposite way to what you expect."
+  },
+  {
+    "id": "inverseDomain",
+    "title": "The domain of the inverse",
+    "hint": "Always state the domain of $f^{-1}$. It is the RANGE of $f$, not the domain of $f$: reflecting in $y = x$ swaps the x-values and the y-values."
+  },
+  {
+    "id": "rangeInX",
+    "title": "Range is about outputs",
+    "hint": "The range is the set of OUTPUTS, so write it with $f(x)$ (or y), for example $f(x) \\ge 2$. Writing $x \\ge 2$ describes inputs, which is a domain."
+  },
+  {
+    "id": "modulusDelete",
+    "title": "Reflect, do not delete",
+    "hint": "For $y = |f(x)|$, the part of the graph below the x-axis is REFLECTED up in the x-axis. It does not disappear."
+  },
+  {
+    "id": "modulusReflect",
+    "title": "Modulus makes outputs positive",
+    "hint": "$|f(x)|$ is never negative. Any point below the x-axis, like $(2, -3)$, goes to $(2, 3)$ on $y = |f(x)|$."
+  },
+  {
+    "id": "modulusMix",
+    "title": "|f(x)| or f(|x|)?",
+    "hint": "$|f(x)|$: the modulus is outside, so the OUTPUTS are made positive (reflect the bits below the x-axis). $f(|x|)$: the modulus is inside, so keep the right half ($x \\ge 0$) and reflect it in the y-axis."
+  },
+  {
+    "id": "wrongAxis",
+    "title": "Inside or outside?",
+    "hint": "A change OUTSIDE f, like $f(x) + a$ or $af(x)$, acts on y (up/down). A change INSIDE the bracket, like $f(x + a)$ or $f(ax)$, acts on x (left/right)."
+  },
+  {
+    "id": "reflectAxis",
+    "title": "Which axis?",
+    "hint": "$-f(x)$ changes the sign of every y-value: a reflection in the x-axis. $f(-x)$ changes the sign of every x-value: a reflection in the y-axis."
+  },
+  {
+    "id": "transformOrder",
+    "title": "The order of transformations",
+    "hint": "Outside f, follow the order of operations: for $2f(x) + 3$, multiply the y-values by 2 FIRST, then add 3. Doing it the other way gives $2(f(x) + 3)$, a different curve."
+  },
+  {
+    "id": "oneToManyFunction",
+    "title": "One input, two outputs",
+    "hint": "A function gives EXACTLY one output for each input. If one input has two arrows (or a vertical line meets the graph twice), it is not a function."
+  },
+  {
+    "id": "manyToOneNotFunction",
+    "title": "Many-to-one is still a function",
+    "hint": "Two inputs CAN share an output: $x^2$ sends both 3 and −3 to 9, and it is a function. What is not allowed is one input with two outputs."
+  },
+  {
+    "id": "horizontalLine",
+    "title": "The horizontal line test",
+    "hint": "If a horizontal line meets the graph more than once, two inputs give the same output: the function is many-to-one, not one-to-one."
+  },
+  {
+    "id": "notOneToOne",
+    "title": "Only one-to-one functions have inverses",
+    "hint": "A function has an inverse only if it is one-to-one. $x^2$ on all real numbers sends 3 and −3 to 9, so the inverse would not know which to give back. Restrict the domain, for example to $x \\ge 0$."
+  },
+  {
+    "id": "inverseOrder",
+    "title": "Undo in reverse order",
+    "hint": "To reverse a machine, undo the steps in the opposite order: for $2x + 3$, first subtract 3, then divide by 2. That gives $\\frac{x - 3}{2}$, not $\\frac{x}{2} - 3$."
+  },
+  {
+    "id": "inverseSqrtSign",
+    "title": "Which square root?",
+    "hint": "When you take a square root to find an inverse, check the domain of f. If $x \\ge p$, then $x - p \\ge 0$, so you need the POSITIVE root."
+  },
+  {
+    "id": "checkDomain",
+    "title": "Check against the domain",
+    "hint": "After solving, check each answer is in the domain. If $x \\ge 0$, a negative solution must be rejected."
+  },
+  {
+    "id": "plusMinus",
+    "title": "Two square roots",
+    "hint": "$x^2 = 9$ has two solutions: $x = 3$ and $x = -3$. Always write $\\pm$ when you take a square root, unless the domain rules one out."
+  },
+  {
+    "id": "domainBoundary",
+    "title": "Finding the domain",
+    "hint": "For $\\sqrt{\\;}$, the inside must be $\\ge 0$ (zero is allowed). For a fraction, the bottom must not be 0: find the x that makes it zero and exclude it. Watch the sign: $x - 3 = 0$ gives $x = 3$."
+  },
+  {
+    "id": "rangeVertexX",
+    "title": "The least value is the y-coordinate",
+    "hint": "For $(x - p)^2 + q$, the least value is $q$ (when $x = p$). The range uses that OUTPUT $q$, not the input $p$."
+  },
+  {
+    "id": "rangeEndpoints",
+    "title": "Check the turning point",
+    "hint": "On a restricted domain, the least (or greatest) value of a quadratic may be at its turning point, not at an end. Sketch it: if the turning point is inside the domain, use it."
+  },
+  {
+    "id": "graphShape",
+    "title": "Key features of the graph",
+    "hint": "Check the key features: $\\frac{1}{x}$ has branches in opposite quadrants but $\\frac{1}{x^2}$ is always positive; $x^2$ is a smooth U but $|x|$ is a sharp V; $x^3$ is an S shape."
+  },
+  {
+    "id": "asymptoteSign",
+    "title": "Asymptotes and signs",
+    "hint": "For $y = \\frac{a}{x - p} + q$, the vertical asymptote is where the bottom is zero, $x = p$ (so $x + 2$ gives $x = -2$). The horizontal asymptote is $y = q$, the number added on."
+  },
+  {
+    "id": "moveTermSign",
+    "title": "Changing sides changes the sign",
+    "hint": "When a term moves to the other side of the equation, do the opposite operation: $2x + 5 = 11$ gives $2x = 11 - 5$, not $11 + 5$."
+  },
+  {
+    "id": "swapCoordinates",
+    "title": "x first, then y",
+    "hint": "In $(x, y)$ the x-coordinate (input, across) comes first and the y-coordinate (output, up) second. To find f(a), start at a on the x-axis and read the y-value."
+  },
+  {
+    "id": "intervalBracket",
+    "title": "Square or round bracket?",
+    "hint": "A square bracket $[\\;]$ includes the end value ($\\le$ or $\\ge$); a round bracket $(\\;)$ leaves it out ($<$ or $>$). Infinity always gets a round bracket."
+  }
+]

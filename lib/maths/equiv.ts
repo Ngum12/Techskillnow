@@ -16,10 +16,14 @@ function envs(vars: string[]): Env[] {
 const close = (a: number, b: number) => Math.abs(a - b) <= 1e-7 * Math.max(1, Math.abs(a), Math.abs(b));
 
 /** True if two expressions agree wherever both are defined (at least 6 test points). */
+/** Extra points used when too few of the usual ones are in the domain (e.g. √(x − 7)). */
+const WIDE = [6.17, 7.33, 8.91, 10.47, 12.29, 15.83, 19.11, 27.3, -6.29, -8.73, -11.9, -17.3];
+
 export function exprEquivalent(a: Expr, b: Expr): boolean {
   const vars = [...variables(a, variables(b))];
   let ok = 0;
-  for (const env of envs(vars)) {
+  const wide = WIDE.map((v, i) => Object.fromEntries(vars.map((n, j) => [n, WIDE[(i + j * 5) % WIDE.length] + j * 0.173 + (v - v)])));
+  for (const env of [...envs(vars), ...wide]) {
     const x = evaluate(a, env);
     const y = evaluate(b, env);
     if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
