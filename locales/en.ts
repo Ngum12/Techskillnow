@@ -1,6 +1,7 @@
 import { enCv } from "./en-cv";
 import { enApp } from "./en-app";
 import { enChem } from "./en-chem";
+import { enMaths } from "./en-maths";
 
 const en = {
   appName: "TechSkillNow",
@@ -24,7 +25,7 @@ const en = {
     home: "Go to home page",
   },
   landing: {
-    promise: "Learn the digital skills employers expect, step by step, on your phone.",
+    promise: "Job skills and GCE exam practice, step by step, on your phone.",
     tryFree: "Try lesson 1 free",
     haveCode: "I have a code",
     buy: "Buy access on WhatsApp",
@@ -38,13 +39,60 @@ const en = {
     how: [
       "Try the first lesson for free.",
       "Pay with Mobile Money and receive your access code.",
-      "Learn at your own pace, practise on real-looking screens, and earn a certificate employers can check.",
+      "Learn at your own pace, practise for real, and earn a certificate employers and schools can check.",
     ],
     howWhatsApp: [
       "Try the first lesson for free.",
       "Pay on WhatsApp and receive your access code.",
-      "Learn at your own pace, practise on real-looking screens, and earn a certificate employers can check.",
+      "Learn at your own pace, practise for real, and earn a certificate employers and schools can check.",
     ],
+    nav: { courses: "Courses", how: "How it works", faq: "Questions" },
+    eyebrow: "Job skills · GCE exam prep · Made for Cameroon",
+    heroTitle: "Learn by doing, right on your phone.",
+    heroText: "Every course here is chosen for one reason: it changes what you can do. You practise it for real, step by step, and finish with something to show for it.",
+    ctaFind: "Find my course",
+    ctaFree: "Try a free lesson",
+    trust: ["First lesson free, no sign-up", "Pay with Mobile Money", "Works on any phone, light on data", "Certificate with a QR check"],
+    pathsTitle: "What do you want to achieve?",
+    paths: {
+      career: { title: "Get the job", who: "Graduates and job seekers", text: "Write like a professional, build a CV that gets read, and send applications that get answers.", cta: "See the job courses" },
+      exam: { title: "Pass the GCE", who: "Lower and Upper Sixth students", text: "Practise the practicals you rarely get lab time for, and master A Level maths step by step.", cta: "See the GCE courses" },
+    },
+    careerIntro: "Start with professional email, then follow the Get the Job path: each course builds on the one before.",
+    examIntro: "Exam-style practice, marked the way examiners mark. All questions are original, never copied past papers.",
+    leaveWith: "You leave with",
+    pathMetaOne: "1 course · {price} FCFA",
+    pathMeta: "{n} courses · from {price} FCFA",
+    lessons: "{n} lessons",
+    freeOne: "First lesson free",
+    freeMany: "First {n} lessons free",
+    start: "Start free",
+    codeShort: "Enter code",
+    buyNow: "Buy now",
+    buyWhatsApp: "Buy on WhatsApp",
+    whyTitle: "How you learn here",
+    features: [
+      { icon: "screen", title: "Practise on real-looking screens", text: "Inboxes, job portals, application trackers: you practise the real thing before you do it for real." },
+      { icon: "lab", title: "A lab and a maths desk in your hand", text: "A virtual chemistry bench, and a maths keypad that checks your working one line at a time." },
+      { icon: "hint", title: "Feedback that explains", text: "When something is wrong you see why, with a hint for the exact mistake you made." },
+      { icon: "phone", title: "Built for your phone", text: "Short steps and small downloads. Lessons you have opened keep working when the network drops." },
+      { icon: "send", title: "Real-world proof", text: "Job courses end with a real email or application that we check, so you know you can do it." },
+      { icon: "badge", title: "A certificate anyone can check", text: "Each certificate has an ID and a QR code that employers and schools can verify." },
+    ],
+    howNote: "Pay once per course. No subscription.",
+    referral: "Invite friends: for every 3 friends who buy a course, you get a course free.",
+    faqTitle: "Questions",
+    faq: [
+      { q: "Do I need a computer?", a: "No. Everything works on a smartphone, including Android phones with little memory. A computer works too." },
+      { q: "Can I try before paying?", a: "Yes. The first lesson of every course is free, with no account and no payment." },
+      { q: "How much data does it use?", a: "Very little. Lessons are short and pictures are compressed. Lessons you have already opened keep working without network." },
+      { q: "How do I pay?", a: "With Mobile Money. You receive your access code straight away and can start at once." },
+      { q: "What is the certificate worth?", a: "It shows that you finished the course and passed the final test (and, for job courses, a real-world task). Anyone can check it with its QR code. It is not a government diploma." },
+      { q: "Is it in French?", a: "The job courses are in English and French. The GCE courses are in English, like the exam." },
+      { q: "I lost my code. What do I do?", a: "Chat with us on WhatsApp with the phone number you paid from, and we will help you." },
+    ],
+    finalTitle: "Start today. The first lesson is free.",
+    footer: "Practical skills for work and exams, made for Cameroon.",
   },
   buy: {
     title: "Get full access",
@@ -315,6 +363,7 @@ const en = {
   ...enCv,
   ...enApp,
   ...enChem,
+  ...enMaths,
   admin: {
     title: "Admin",
     loginTitle: "Admin sign in",

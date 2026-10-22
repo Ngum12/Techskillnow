@@ -40,6 +40,7 @@ const ResultsTable = dynamic(() => import("@/components/chem/ResultsTable").then
 const TitrationLab = dynamic(() => import("@/components/chem/TitrationLab").then((m) => m.TitrationLab), { loading });
 const ChemCalc = dynamic(() => import("@/components/chem/ChemCalc").then((m) => m.ChemCalc), { loading });
 const ErrorCards = dynamic(() => import("@/components/chem/ErrorCards").then((m) => m.ErrorCards), { loading });
+const MathsLesson = dynamic(() => import("@/components/maths/Lesson").then((m) => m.MathsLesson), { loading });
 const MethodChallenge = dynamic(() => import("@/components/chem/ErrorCards").then((m) => m.MethodChallenge), { loading });
 
 export function TaskView({ task, passed, onPass }: { task: Task; passed: boolean; onPass: () => void }) {
@@ -119,5 +120,7 @@ export function TaskView({ task, passed, onPass }: { task: Task; passed: boolean
       return <ErrorCards task={task} {...props} />;
     case "methodChallenge":
       return <MethodChallenge task={task} {...props} />;
+    case "mathsLesson":
+      return <MathsLesson task={task} {...props} />;
   }
 }

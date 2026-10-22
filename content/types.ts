@@ -1,5 +1,8 @@
 import type { ErrorData, Indicator, LabSettings, TitrationSystem } from "@/lib/chem/titration";
 import type { Checkpoint } from "@/lib/chem/marking";
+import type { MathsLessonTask } from "@/lib/maths/types";
+
+export type { MathsLessonTask };
 
 export type Locale = "en" | "fr";
 
@@ -424,7 +427,8 @@ export type Task =
   | TitrationLabTask
   | ChemCalcTask
   | ErrorCardsTask
-  | MethodChallengeTask;
+  | MethodChallengeTask
+  | MathsLessonTask;
 
 /** Which part of the learner's CV a step fills (used by "My CV" to jump back to it). */
 export type CvSection = "experience" | "header" | "profile" | "bullets" | "education" | "export";
@@ -488,6 +492,14 @@ export type Course = {
   series?: string;
   /** Courses that build the learner's shared CV show "My CV" and save the draft. */
   usesCv?: boolean;
+  /** Home page: which learner path the course belongs to. */
+  track?: "career" | "exam";
+  /** Home page: who the course is for, in one short line. */
+  audience?: string;
+  /** Home page: what the learner leaves with (3 short points). */
+  outcomes?: string[];
+  /** Home page: card picture (file name in /public/illustrations); a drawn motif is used when absent. */
+  cover?: string;
   /** Certificate badge illustration (file name in /public/illustrations). */
   badge?: string;
   /** Number of leading steps available without a code. */

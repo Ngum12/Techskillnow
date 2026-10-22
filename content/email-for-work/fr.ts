@@ -6,6 +6,10 @@ const course: Course = {
   title: "L'e-mail au travail",
   promise: "Écrivez et envoyez des e-mails professionnels en toute confiance, depuis votre téléphone.",
   price: 850,
+  track: "career",
+  audience: "Pour tous ceux qui commencent à travailler ou cherchent un emploi",
+  cover: "email-15-success",
+  outcomes: ["Une adresse Gmail professionnelle, créée et sécurisée", "Des e-mails avec objet clair, salutations et pièces jointes", "Un vrai e-mail de candidature, envoyé et vérifié"],
   freeSteps: 1,
   steps: [
     // 1

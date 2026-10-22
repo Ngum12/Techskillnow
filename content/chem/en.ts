@@ -18,6 +18,9 @@ const course: Course = {
   title: "Chemistry Practicals: Titration and Salt Analysis",
   promise: "Practise acid–base titration on a virtual bench, write the method the way examiners mark it, and calculate concentrations with confidence. Salt analysis is coming next.",
   price: 1000,
+  track: "exam",
+  audience: "For Lower and Upper Sixth science students",
+  outcomes: ["Titrations on a virtual bench, to concordant results", "A written method that matches the mark scheme", "Concentration calculations, step by step"],
   series: "GCE Practicals · Chemistry",
   freeSteps: 1,
   steps: [

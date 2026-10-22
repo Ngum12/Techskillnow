@@ -2,6 +2,7 @@ import en, { type Dict } from "./en";
 import { frCv } from "./fr-cv";
 import { frApp } from "./fr-app";
 import { frChem } from "./fr-chem";
+import { frMaths } from "./fr-maths";
 
 const fr: Dict = {
   appName: "TechSkillNow",
@@ -25,7 +26,7 @@ const fr: Dict = {
     home: "Aller à l'accueil",
   },
   landing: {
-    promise: "Apprenez les compétences numériques attendues par les employeurs, pas à pas, sur votre téléphone.",
+    promise: "Compétences professionnelles et préparation au GCE, pas à pas, sur votre téléphone.",
     tryFree: "Essayer la leçon 1 gratuitement",
     haveCode: "J'ai un code",
     buy: "Acheter l'accès sur WhatsApp",
@@ -39,13 +40,60 @@ const fr: Dict = {
     how: [
       "Essayez la première leçon gratuitement.",
       "Payez par Mobile Money et recevez votre code d'accès.",
-      "Apprenez à votre rythme, pratiquez sur des écrans réalistes et obtenez une attestation vérifiable par les employeurs.",
+      "Apprenez à votre rythme, pratiquez pour de vrai et obtenez une attestation vérifiable par les employeurs et les écoles.",
     ],
     howWhatsApp: [
       "Essayez la première leçon gratuitement.",
       "Payez sur WhatsApp et recevez votre code d'accès.",
-      "Apprenez à votre rythme, pratiquez sur des écrans réalistes et obtenez une attestation vérifiable par les employeurs.",
+      "Apprenez à votre rythme, pratiquez pour de vrai et obtenez une attestation vérifiable par les employeurs et les écoles.",
     ],
+    nav: { courses: "Cours", how: "Comment ça marche", faq: "Questions" },
+    eyebrow: "Compétences pro · Préparation au GCE · Pensé pour le Cameroun",
+    heroTitle: "Apprendre en pratiquant, sur votre téléphone.",
+    heroText: "Chaque cours est choisi pour une seule raison : il change ce que vous savez faire. Vous pratiquez pour de vrai, pas à pas, et vous terminez avec un résultat concret à montrer.",
+    ctaFind: "Trouver mon cours",
+    ctaFree: "Essayer une leçon gratuite",
+    trust: ["Première leçon gratuite, sans inscription", "Paiement par Mobile Money", "Fonctionne sur tout téléphone, peu de données", "Attestation vérifiable par QR code"],
+    pathsTitle: "Quel est votre objectif ?",
+    paths: {
+      career: { title: "Décrocher un emploi", who: "Diplômés et chercheurs d'emploi", text: "Écrivez comme un professionnel, créez un CV qui se fait lire et envoyez des candidatures qui obtiennent des réponses.", cta: "Voir les cours emploi" },
+      exam: { title: "Réussir le GCE", who: "Élèves de Lower et Upper Sixth", text: "Entraînez-vous aux travaux pratiques que vous faites rarement en laboratoire, et maîtrisez les maths A Level pas à pas.", cta: "Voir les cours GCE" },
+    },
+    careerIntro: "Commencez par l'e-mail professionnel, puis suivez le parcours « Décrocher un emploi » : chaque cours s'appuie sur le précédent.",
+    examIntro: "Des exercices type examen, corrigés comme le font les examinateurs. Toutes les questions sont originales, jamais copiées d'anciens sujets.",
+    leaveWith: "Vous repartez avec",
+    pathMetaOne: "1 cours · {price} FCFA",
+    pathMeta: "{n} cours · à partir de {price} FCFA",
+    lessons: "{n} leçons",
+    freeOne: "Première leçon gratuite",
+    freeMany: "{n} premières leçons gratuites",
+    start: "Commencer gratuitement",
+    codeShort: "Mon code",
+    buyNow: "Acheter",
+    buyWhatsApp: "Acheter sur WhatsApp",
+    whyTitle: "Comment vous apprenez ici",
+    features: [
+      { icon: "screen", title: "Pratiquez sur des écrans réalistes", text: "Boîtes mail, portails d'emploi, suivi des candidatures : vous vous entraînez avant de le faire pour de vrai." },
+      { icon: "lab", title: "Un laboratoire et un bureau de maths en main", text: "Une paillasse de chimie virtuelle, et un clavier mathématique qui vérifie votre démarche ligne par ligne." },
+      { icon: "hint", title: "Des corrections qui expliquent", text: "Quand c'est faux, vous voyez pourquoi, avec une aide pour l'erreur exacte commise." },
+      { icon: "phone", title: "Pensé pour votre téléphone", text: "Des étapes courtes et des téléchargements légers. Les leçons déjà ouvertes fonctionnent même sans réseau." },
+      { icon: "send", title: "Une preuve concrète", text: "Les cours emploi se terminent par un vrai e-mail ou une vraie candidature que nous vérifions." },
+      { icon: "badge", title: "Une attestation vérifiable", text: "Chaque attestation a un numéro et un QR code que les employeurs et les écoles peuvent vérifier." },
+    ],
+    howNote: "Un seul paiement par cours. Pas d'abonnement.",
+    referral: "Invitez vos amis : pour 3 amis qui achètent un cours, vous recevez un cours gratuit.",
+    faqTitle: "Questions",
+    faq: [
+      { q: "Ai-je besoin d'un ordinateur ?", a: "Non. Tout fonctionne sur un smartphone, même un Android avec peu de mémoire. Un ordinateur marche aussi." },
+      { q: "Puis-je essayer avant de payer ?", a: "Oui. La première leçon de chaque cours est gratuite, sans compte ni paiement." },
+      { q: "Combien de données cela consomme-t-il ?", a: "Très peu. Les leçons sont courtes et les images compressées. Les leçons déjà ouvertes fonctionnent sans réseau." },
+      { q: "Comment payer ?", a: "Par Mobile Money. Vous recevez votre code d'accès tout de suite et pouvez commencer immédiatement." },
+      { q: "Que vaut l'attestation ?", a: "Elle montre que vous avez terminé le cours et réussi le test final (et, pour les cours emploi, une tâche réelle). Tout le monde peut la vérifier grâce à son QR code. Ce n'est pas un diplôme d'État." },
+      { q: "Est-ce en français ?", a: "Les cours emploi sont en anglais et en français. Les cours GCE sont en anglais, comme l'examen." },
+      { q: "J'ai perdu mon code. Que faire ?", a: "Écrivez-nous sur WhatsApp avec le numéro qui a servi au paiement, et nous vous aiderons." },
+    ],
+    finalTitle: "Commencez aujourd'hui. La première leçon est gratuite.",
+    footer: "Des compétences pratiques pour le travail et les examens, pensées pour le Cameroun.",
   },
   buy: {
     title: "Obtenir l'accès complet",
@@ -316,6 +364,7 @@ const fr: Dict = {
   ...frCv,
   ...frApp,
   ...frChem,
+  ...frMaths,
   // The admin area is used by the owner only and stays in English.
   admin: en.admin,
   watermark: "{name} · {phone}",

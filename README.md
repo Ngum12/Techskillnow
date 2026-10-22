@@ -10,6 +10,7 @@ TechSkillNow is a mobile-first Progressive Web App that teaches practical workpl
 | **A CV That Gets Interviews** *(Get the Job · 1 of 4)* | Finishes with their own tailored, ATS-friendly CV as a PDF, checked by a real-email mission | 1 000 FCFA |
 | **Applications That Get Answers** *(Get the Job · 2 of 4)* | Leaves with a tailored cover letter, a networking profile and a real application sent, and handles every kind of reply | 1 000 FCFA |
 | **Chemistry Practicals: Titration and Salt Analysis** *(GCE Practicals · Chemistry, prototype: lab basics and titration)* | Titrates on a virtual SVG bench, writes the method the way examiners mark it, calculates concentrations, and passes a timed mock | 1 000 FCFA |
+| **A Level Maths: Algebra** *(GCE A Level Maths · Pure Mathematics, topic 1 of 14; lessons 0–4 built)* | Diagnostic with foundation repair, then polynomials, long division and the remainder theorem, worked step by step in the exercise book with line-by-line checking | 500 FCFA |
 
 | | |
 |---|---|
@@ -370,6 +371,8 @@ When `MISSION_EMAIL` is set, learners must send a genuine email from their own G
 - **Email for Work:** a job application, checked for a professional address, a clear subject, a well-named PDF, greeting, closing, signature with phone number, and length.
 - **A CV That Gets Interviews:** their CV tailored to a provided advert. The server opens the PDF in memory and checks the sender, a subject naming the role, the file name (`Firstname_Lastname_CV.pdf`), at most 2 pages, an email address, a phone number and the core sections in the CV text, plus greeting, closing and signature in the message. Each failed check returns specific feedback and the learner can resend. Attachments are never stored.
 - **Applications That Get Answers:** a full application to a provided advert: a short email (greeting, the role, closing, phone signature) with two PDFs, `Firstname_Lastname_CV.pdf` (max 2 pages) and `Firstname_Lastname_Cover_Letter.pdf` (names the role and organisation, under 350 words, greeting, closing, signature). Once it passes, the recruiter replies automatically (a "missing document" request or an interview invitation, stable per learner), shown in the app and sent back by the email worker; the learner's answer is checked too.
+
+Maths topics run on a reusable engine (`lib/maths`: expression parser, numeric equivalence, step checker, misconception detector, M/A marking) with each topic's editable content in `content/maths/<topic>/` (lessons, question generators, misconception hints) and one line in `content/maths/registry.ts`.
 
 Lab courses (Chemistry Practicals) have no real-world mission: the certificate needs the lessons (including the timed mock) and the final test. All chemistry values, colours, error effects and marking points are in `content/chem/*.json`.
 

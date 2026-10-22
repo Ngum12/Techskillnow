@@ -6,6 +6,10 @@ const course: Course = {
   title: "Email for Work",
   promise: "Write and send professional emails with confidence, right from your phone.",
   price: 850,
+  track: "career",
+  audience: "For anyone starting work or looking for a job",
+  cover: "email-15-success",
+  outcomes: ["A professional Gmail address, set up and secured", "Emails with clear subjects, greetings and attachments", "A real application email, sent and checked"],
   freeSteps: 1,
   steps: [
     // 1
