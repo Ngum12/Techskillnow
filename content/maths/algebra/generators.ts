@@ -9,6 +9,7 @@ import { coefficientsOf, evaluatedTermsLatex, inBrackets, numberDivisionLayout, 
 import { near } from "@/lib/maths/exam";
 import type { Rng } from "@/lib/maths/rng";
 import type { ExamGenerator, Generator } from "@/lib/maths/types";
+import { generators2, examGenerators2 } from "./generators-2";
 
 const NAMES = ["Nkeng", "Tabi", "Ngwa", "Fon", "Mbah", "Ayuk"];
 const F = (n: number, d = 1) => new Frac(n, d);
@@ -727,6 +728,6 @@ const examRemainder: ExamGenerator = {
   },
 };
 
-export const generators: Generator[] = [negatives, fractions, expand, factorise, indices, substitute, rearrange, parts, isPoly, evaluatePoly, addSub, multiply, square, numberDivision, polyDivision, remainder, remainderTable];
-export const examGenerators: ExamGenerator[] = [examBasics, examExpand, examDivide, examRemainder];
+export const generators: Generator[] = [negatives, fractions, expand, factorise, indices, substitute, rearrange, parts, isPoly, evaluatePoly, addSub, multiply, square, numberDivision, polyDivision, remainder, remainderTable, ...generators2];
+export const examGenerators: ExamGenerator[] = [examBasics, examExpand, examDivide, examRemainder, ...examGenerators2];
 

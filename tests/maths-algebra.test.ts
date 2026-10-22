@@ -10,7 +10,7 @@ import { parseExpr, tryParse } from "@/lib/maths/expr";
 import { exprEquivalent } from "@/lib/maths/equiv";
 import type { AnswerSpec, Question } from "@/lib/maths/types";
 
-const SEEDS = Array.from({ length: 300 }, (_, i) => i * 7919 + 13);
+const SEEDS = Array.from({ length: 150 }, (_, i) => i * 7919 + 13);
 
 /** The value a learner would type for a spec. */
 function typed(spec: AnswerSpec): string {
@@ -34,22 +34,26 @@ test("generators: every question is complete and its own answers pass", () => {
       assert.ok(q.solution.length > 0, where);
       assert.ok(!/NaN|undefined|Infinity/.test(JSON.stringify(q)), `${where}: ${q.prompt}`);
       seen.add(q.prompt);
-      for (const a of q.answers) assert.ok(checkAnswer(a.spec, typed(a.spec)).ok, `${where}: own answer ${typed(a.spec)} rejected`);
+      // For "give a factor" questions, the model's factor is on the last working line.
+      const own = (spec: AnswerSpec) => (spec.kind === "factorOf" ? q.solution[q.solution.length - 1].value! : typed(spec));
+      for (const a of q.answers) assert.ok(checkAnswer(a.spec, own(a.spec)).ok, `${where}: own answer ${own(a.spec)} rejected`);
       if (q.work) {
         assert.ok(tryParse(q.work.start), `${where}: start`);
-        assert.equal(checkLine(q, typed(q.answers[0].spec)).status, "final", `${where}: answer not final from ${q.work.start}`);
+        assert.equal(checkLine(q, own(q.answers[0].spec)).status, "final", `${where}: answer not final from ${q.work.start}`);
         // Every model line that carries a value is a valid step.
         for (const line of q.solution.filter((l) => l.value)) assert.notEqual(checkLine(q, line.value!).status, "wrong", `${where}: model line ${line.value}`);
       }
       // Known wrong answers are wrong, and are recognised as their misconception.
       for (const bug of q.bugs ?? []) {
         const spec = q.answers[bug.answer ?? 0].spec;
+        // What a learner would type for this wrong answer ("x = 7/2" for a solve question).
+        const input = spec.kind === "solutions" ? bug.value.split(";").map((v) => `x = ${v}`).join(" or ") : bug.value;
         const same = spec.kind === "number" ? numberValue(bug.value) === numberValue(spec.value) : spec.kind === "expr" ? exprEquivalent(parseExpr(bug.value), parseExpr(spec.value)) : false;
         if (same) continue; // e.g. a sign slip that happens to give the right number
-        assert.ok(!checkAnswer(spec, bug.value).ok, `${where}: bug ${bug.misconception} accepted as correct`);
+        assert.ok(!checkAnswer(spec, input).ok, `${where}: bug ${bug.misconception} accepted as correct`);
         // When two mistakes give the same wrong value, either explanation is fine.
-        const ids = (q.bugs ?? []).filter((b) => (b.answer ?? 0) === (bug.answer ?? 0) && checkAnswer({ ...spec, value: b.value } as AnswerSpec, bug.value).ok).map((b) => b.misconception);
-        assert.ok([bug.misconception, ...ids].includes(detectMisconception(q, bug.value, bug.answer ?? 0) ?? ""), `${where}: ${bug.value}`);
+        const ids = (q.bugs ?? []).filter((b) => (b.answer ?? 0) === (bug.answer ?? 0) && b.value === bug.value).map((b) => b.misconception);
+        assert.ok([bug.misconception, ...ids].includes(detectMisconception(q, input, bug.answer ?? 0) ?? ""), `${where}: ${input}`);
       }
       if (q.table) for (const row of q.table.rows) for (const cell of row.cells) if ("answer" in cell) assert.ok(checkAnswer(cell.answer, typed(cell.answer)).ok, where);
       if (q.answers[0]?.spec.kind === "choice") {

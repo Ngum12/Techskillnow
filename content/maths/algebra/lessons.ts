@@ -5,6 +5,7 @@
  * Question generators are in ./generators.ts; hints for common errors in ./misconceptions.json.
  */
 import type { LessonPart, SolutionLine } from "@/lib/maths/types";
+import { lessons2 } from "./lessons-2";
 
 export type AlgebraLesson = { id: string; title: string; body: string[]; skills: { id: string; name: string }[]; parts: LessonPart[] };
 
@@ -485,4 +486,4 @@ const lesson4: AlgebraLesson = {
   ],
 };
 
-export const lessons: AlgebraLesson[] = [lesson0, lesson1, lesson2, lesson3, lesson4];
+export const lessons: AlgebraLesson[] = [lesson0, lesson1, lesson2, lesson3, lesson4, ...lessons2];

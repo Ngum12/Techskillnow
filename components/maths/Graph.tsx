@@ -154,6 +154,36 @@ export function Graph({ spec, onParams }: { spec: GraphSpec; onParams?: (p: Reco
         {curves.map((_, i) => (
           <path key={i} d={path(i)} fill="none" stroke={spec.curves[i]?.colour ?? COLOURS[i % COLOURS.length]} strokeWidth={2.4} strokeLinejoin="round" />
         ))}
+        {spec.highlight &&
+          (() => {
+            // Where the first curve is below (or above) the axis: the curve in colour, and a bar on the x-axis.
+            const want = (y: number) => (spec.highlight === "below" ? y < 0 : y > 0);
+            const n = 300;
+            const runs: [number, number][] = [];
+            let start: number | null = null;
+            let d = "";
+            let pen = false;
+            for (let k = 0; k <= n; k++) {
+              const x = x0 + ((x1 - x0) * k) / n;
+              const y = f(0, x);
+              const on = Number.isFinite(y) && want(y);
+              if (on && start === null) start = x;
+              if (!on && start !== null) (runs.push([start, x]), (start = null));
+              if (on && y > y0 - (y1 - y0) * 4 && y < y1 + (y1 - y0) * 4) {
+                d += `${pen ? "L" : "M"}${X(x).toFixed(1)} ${Y(y).toFixed(1)}`;
+                pen = true;
+              } else pen = false;
+            }
+            if (start !== null) runs.push([start, x1]);
+            return (
+              <g>
+                <path d={d} fill="none" stroke="#c0392b" strokeWidth={4} strokeLinecap="round" opacity={0.85} />
+                {runs.map(([a, b]) => (
+                  <rect key={a} x={X(a)} y={Y(0) - 3.5} width={Math.max(2, X(b) - X(a))} height={7} rx={3.5} fill="#c0392b" opacity={0.75} />
+                ))}
+              </g>
+            );
+          })()}
         {tangentX !== null && Number.isFinite(slope) && (
           <line x1={X(x0)} y1={Y(f(0, tangentX) + slope * (x0 - tangentX))} x2={X(x1)} y2={Y(f(0, tangentX) + slope * (x1 - tangentX))} stroke="#b8452b" strokeWidth={1.5} strokeDasharray="5 4" />
         )}

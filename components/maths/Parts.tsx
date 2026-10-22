@@ -16,7 +16,8 @@ import { MathField } from "./MathInput";
 import { MathText, Tex } from "./Tex";
 import { AnswerSet, ModelLine, Note, PaperMoment, StepWork } from "./Answer";
 import { Graph } from "./Graph";
-import { AreaModel, DivisionView } from "./Visuals";
+import { AreaModel, DivisionView, SignTable } from "./Visuals";
+import type { Sign } from "@/lib/maths/types";
 
 type Gens = { gen: (id: string) => Generator | undefined; exam: (id: string) => ExamGenerator | undefined };
 export const GeneratorsContext = createContext<Gens>({ gen: () => undefined, exam: () => undefined });
@@ -170,7 +171,8 @@ export function GapsPart({ part, onDone, skill }: PartProps<"gaps">) {
   const [values, setValues] = useState<Record<number, string>>({});
   const [checked, setChecked] = useState<Record<number, boolean> | null>(null);
   if (!q) return null;
-  const hidden = part.hide.filter((i) => q.solution[i]?.value);
+  // Negative indexes count from the end (−1 = the last line).
+  const hidden = part.hide.map((i) => (i < 0 ? q.solution.length + i : i)).filter((i) => q.solution[i]?.value);
   const allOk = !!checked && hidden.every((i) => checked[i]);
 
   function check() {
@@ -467,6 +469,61 @@ export function GridPart({ part, onDone, skill }: PartProps<"grid">) {
           <div className="mt-2">
             <AnswerSet q={q} onResult={(ok) => ok && onDone()} />
           </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Sign diagram: fill it, then write the solution ---------- */
+
+export function SignsPart({ part, onDone, skill }: PartProps<"signs">) {
+  const t = useT();
+  const s = t.maths.lesson;
+  const [q, again] = useQuestion(part.generator);
+  const [value, setValue] = useState<Record<string, Sign | "">>({});
+  const [bad, setBad] = useState<Record<string, boolean> | null>(null);
+  const [filled, setFilled] = useState(false);
+  if (!q?.signs) return null;
+  const d = q.signs;
+  const cells = [...d.factors.flatMap((f, r) => f.signs.map((sg, i) => [`f${r}:${i}`, sg] as const)), ...d.result.signs.map((sg, i) => [`res:${i}`, sg] as const)];
+
+  function tap(key: string) {
+    setBad(null);
+    setValue((v) => ({ ...v, [key]: v[key] === "+" ? "-" : v[key] === "-" ? "" : "+" }));
+  }
+  function check() {
+    const res = Object.fromEntries(cells.map(([k, sg]) => [k, value[k] !== sg]));
+    setBad(res);
+    const ok = cells.every(([k]) => !res[k]);
+    recordSkill(skill, ok ? "right" : "wrong");
+    if (ok) setFilled(true);
+  }
+
+  return (
+    <div>
+      <p className="font-semibold">
+        <MathText text={q.prompt} />
+      </p>
+      <p className="mt-1 text-sm text-muted">{s.signsHelp}</p>
+      <div className="mt-3">
+        <SignTable data={d} value={value} onTap={tap} bad={bad ?? undefined} locked={filled} />
+      </div>
+      {!filled && (
+        <button type="button" className="btn btn-primary mt-3 w-full" disabled={cells.some(([k]) => !value[k])} onClick={check}>
+          {t.task.check}
+        </button>
+      )}
+      {bad && !filled && <Note kind="err">{s.signsWrong}</Note>}
+      {filled && (
+        <div className="mt-4">
+          <Note kind="ok">✓ {s.signsDone}</Note>
+          <div className="mt-3">
+            <AnswerSet q={q} onResult={(ok) => ok && onDone()} />
+          </div>
+          <button type="button" className="btn btn-ghost mt-2 w-full" onClick={() => (again(), setValue({}), setBad(null), setFilled(false))}>
+            {s.anotherDiagram}
+          </button>
         </div>
       )}
     </div>

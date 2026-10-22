@@ -125,6 +125,30 @@ function hasVar(e: Expr): boolean {
   return false;
 }
 
+/** (ax + b) or (ax + b)^n, possibly times a number. */
+function isLinearPowerProduct(e: Expr): boolean {
+  if (e.t === "bin" && e.op === "*") return isLinearPowerProduct(e.a) && isLinearPowerProduct(e.b);
+  if (!hasVar(e)) return true;
+  if (e.t === "bin" && e.op === "^") return e.b.t === "num" && Number.isInteger(e.b.v) && e.b.v >= 1 && isLinearPowerProduct(e.a);
+  return isPolynomial(e) && polyDegree(e) === 1;
+}
+
+/** A sum of a polynomial part and terms number / (linear factor)ⁿ: the partial-fraction form. */
+export function isPartialFractions(e: Expr): boolean {
+  let fractions = 0;
+  for (const { e: term } of sumTerms(e)) {
+    if (monomialDegree(term) !== null) continue;
+    let t = term;
+    if (t.t === "bin" && t.op === "*" && !hasVar(t.a) && t.b.t === "bin" && t.b.op === "/") t = t.b;
+    if (t.t === "bin" && t.op === "/" && !hasVar(t.a) && hasVar(t.b) && isLinearPowerProduct(t.b)) {
+      fractions++;
+      continue;
+    }
+    return false;
+  }
+  return fractions >= 1;
+}
+
 /* ---------- Checking ---------- */
 
 export function checkAnswer(spec: AnswerSpec, input: string): AnswerResult {
@@ -147,7 +171,20 @@ export function checkAnswer(spec: AnswerSpec, input: string): AnswerResult {
       if (spec.form === "expanded" && !isExpanded(e)) return { ok: false, reason: "form" };
       if (spec.form === "factorised" && !isFactorised(e)) return { ok: false, reason: "form" };
       if (spec.form === "monomial" && !isMonomialSimplified(e)) return { ok: false, reason: "form" };
+      if (spec.form === "partial" && !isPartialFractions(e)) return { ok: false, reason: "form" };
       return { ok: true };
+    }
+    case "factorOf": {
+      // Any linear factor of the polynomial is right: (x − r) where f(r) = 0.
+      const s = tryParse(text);
+      if (!s || isRelation(s)) return { ok: false, reason: "unreadable" };
+      const e = s.or[0].parts[0];
+      const [y0, y1, y2] = [0, 1, 2].map((x) => evaluate(e, { x }));
+      const a = y1 - y0;
+      if (![y0, y1, y2].every(Number.isFinite) || Math.abs(y2 - y1 - a) > 1e-9 || Math.abs(a) < 1e-12) return { ok: false, reason: "form" };
+      const root = -y0 / a;
+      const f = parseExpr(spec.value);
+      return Math.abs(evaluate(f, { x: root })) < 1e-7 ? { ok: true } : { ok: false, reason: "wrong" };
     }
     case "solutions": {
       const v = spec.variable ?? "x";

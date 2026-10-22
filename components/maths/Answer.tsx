@@ -50,7 +50,13 @@ export function ModelLine({ line, n }: { line: SolutionLine; n?: number }) {
 function reasonText(t: ReturnType<typeof useT>, r: AnswerResult, spec: AnswerSpec): string {
   const s = t.maths.answer;
   if (r.reason === "unreadable") return s.unreadable;
-  if (r.reason === "form") return spec.kind === "expr" && spec.form === "factorised" ? s.formFactorised : spec.kind === "expr" && spec.form === "monomial" ? s.formMonomial : s.formExpanded;
+  if (r.reason === "form") {
+    if (spec.kind === "factorOf") return s.formFactor;
+    if (spec.kind === "expr" && spec.form === "factorised") return s.formFactorised;
+    if (spec.kind === "expr" && spec.form === "monomial") return s.formMonomial;
+    if (spec.kind === "expr" && spec.form === "partial") return s.formPartial;
+    return s.formExpanded;
+  }
   if (r.reason === "notSolved") return s.notSolved;
   return s.wrong;
 }

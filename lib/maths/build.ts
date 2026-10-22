@@ -155,3 +155,15 @@ export function coefficientsOf(input: string, degree: number, v = "x"): number[]
   const check = coeffs.reduce((acc, c, j) => acc + c * extra ** j, 0);
   return Math.abs(check - ys[n]) < 1e-6 * Math.max(1, Math.abs(ys[n])) ? coeffs : null;
 }
+
+/**
+ * Tidies LaTeX produced from random numbers, the way a teacher writes it:
+ * (x + 0) → x, "3x + 0" → "3x", and \frac{A}{(x − 2)} → \frac{A}{x − 2}.
+ */
+export function tidyLatex(s: string): string {
+  return s
+    .replace(/\(x [+-] 0\)/g, "x")
+    .replace(/x [+-] 0(?![\d.])/g, "x")
+    .replace(/ [+-] 0(?=[\s$}]|$)/g, "")
+    .replace(/\{\((-?\d*x [+-] [\d.]+)\)\}/g, "{$1}");
+}

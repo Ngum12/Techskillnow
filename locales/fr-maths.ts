@@ -5,7 +5,7 @@ export const frMaths: typeof enMaths = {
   maths: {
     keypad: { label: "Clavier mathématique", close: "Fermer" },
     graph: { label: "Graphique interactif", zoomIn: "Zoom avant", zoomOut: "Zoom arrière" },
-    visuals: { areaCheck: "Vérifiez avec x = {x} : le grand rectangle a une aire de {total}." },
+    visuals: { areaCheck: "Vérifiez avec x = {x} : le grand rectangle a une aire de {total}.", signFactor: "Facteur", signEmpty: "vide" },
     answer: {
       answer: "Votre réponse",
       placeholder: "Touchez pour écrire",
@@ -13,6 +13,8 @@ export const frMaths: typeof enMaths = {
       formExpanded: "Valeur juste, mais écrivez-la développée et réduite (sans parenthèses, termes semblables regroupés).",
       formFactorised: "Valeur juste, mais la question demande la forme complètement factorisée.",
       formMonomial: "Juste, mais simplifiez en un seul terme.",
+      formPartial: "Valeur juste, mais écrivez-la en éléments simples : un nombre sur chaque facteur, additionnés.",
+      formFactor: "Donnez un facteur du premier degré, par exemple (x − 2).",
       notSolved: "Presque : terminez avec x seul, par ex. x = 2 ou x < 3.",
       wrong: "Pas encore. Vérifiez votre travail ligne par ligne.",
       correct: "Juste. Bravo !",
@@ -71,6 +73,10 @@ export const frMaths: typeof enMaths = {
       paperFirstLines: "Faites-le d'abord dans votre cahier. Puis écrivez votre démarche ligne par ligne : chaque ligne est vérifiée.",
       divisionOnPaper: "Posez la division dans votre cahier comme vous l'avez appris.",
       lessonDone: "Leçon terminée. Vous pouvez refaire n'importe quelle partie pour vous entraîner.",
+      signsHelp: "Touchez chaque case pour choisir + ou −. Trouvez le signe de chaque facteur sur chaque intervalle, puis multipliez les signes pour la dernière ligne.",
+      signsWrong: "Certains signes sont faux. Testez un nombre de chaque intervalle dans chaque facteur.",
+      signsDone: "Tableau de signes terminé. Lisez maintenant la réponse.",
+      anotherDiagram: "Essayer un autre tableau de signes",
     },
     division: {
       numberStage: "Étape {n} : diviser, multiplier, soustraire, puis abaisser le chiffre suivant.",

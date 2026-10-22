@@ -57,7 +57,7 @@ test("algebra lessons: every part points at real generators and follows the rhyt
       if (p.kind === "gaps")
         for (let seed = 1; seed < 200; seed++) {
           const q = runGenerator(gen(p.generator)!, seed);
-          assert.ok(p.hide.some((i) => q.solution[i]?.value), `${where}: seed ${seed} has nothing to fill`);
+          assert.ok(p.hide.some((i) => q.solution[i < 0 ? q.solution.length + i : i]?.value), `${where}: seed ${seed} has nothing to fill`);
         }
       if (p.kind === "division" || p.kind === "table" || p.kind === "grid") {
         const q = runGenerator(gen(p.generator)!, 5);

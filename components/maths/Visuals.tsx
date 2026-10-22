@@ -2,7 +2,7 @@
 /** Small teaching visuals: the area (grid) model and long-division layouts. */
 import { useState } from "react";
 import { useT } from "@/components/I18n";
-import type { DivisionLayout } from "@/lib/maths/types";
+import type { DivisionLayout, Sign, SignDiagram } from "@/lib/maths/types";
 import { Tex } from "./Tex";
 
 /** (x + a)(x + b) as the area of a rectangle split into four parts. Drag the slider to change x. */
@@ -51,6 +51,59 @@ export function AreaModel({ a = 3, b = 2 }: { a?: number; b?: number }) {
         <p className="text-sm text-muted">{s.areaCheck.replace("{x}", String(x)).replace("{total}", String((x + a) * (x + b)))}</p>
       </figcaption>
     </figure>
+  );
+}
+
+/**
+ * A sign diagram: one column per interval between the critical values, one row per factor, and the
+ * result row. Each cell is tapped through blank → + → −. `bad` marks wrong cells after checking.
+ */
+export function SignTable({ data, value, onTap, bad, locked }: { data: SignDiagram; value: Record<string, Sign | "">; onTap: (key: string) => void; bad?: Record<string, boolean>; locked?: boolean }) {
+  const s = useT().maths.visuals;
+  const n = data.critical.length + 1;
+  const header = (i: number) => (i === 0 ? `x < ${data.critical[0]}` : i === n - 1 ? `x > ${data.critical[n - 2]}` : `${data.critical[i - 1]} < x < ${data.critical[i]}`);
+  const rows = [...data.factors.map((f, r) => ({ key: `f${r}`, latex: f.latex })), { key: "res", latex: data.result.latex }];
+  return (
+    <div className="overflow-x-auto rounded-xl border border-line bg-white">
+      <table className="w-full border-collapse text-sm">
+        <thead>
+          <tr className="bg-bg">
+            <th className="border-b border-line px-2 py-2 text-left">{s.signFactor}</th>
+            {Array.from({ length: n }, (_, i) => (
+              <th key={i} className="whitespace-nowrap border-b border-l border-line px-1 py-2 text-center font-normal">
+                <Tex latex={header(i)} />
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.key} className={r.key === "res" ? "border-t-2 border-[#1f2a30] font-bold" : "border-t border-line"}>
+              <td className="whitespace-nowrap px-2 py-1.5">
+                <Tex latex={r.latex} />
+              </td>
+              {Array.from({ length: n }, (_, i) => {
+                const key = `${r.key}:${i}`;
+                const v = value[key] ?? "";
+                return (
+                  <td key={i} className="border-l border-line p-1 text-center">
+                    <button
+                      type="button"
+                      disabled={locked}
+                      onClick={() => onTap(key)}
+                      aria-label={`${r.latex}, ${header(i)}: ${v || s.signEmpty}`}
+                      className={`h-11 w-11 rounded-lg border-2 text-xl font-bold ${bad?.[key] ? "border-err bg-err-soft" : v === "+" ? "border-ok bg-ok-soft text-ok" : v === "-" ? "border-[#c0392b] bg-[#fcebe9] text-[#c0392b]" : "border-dashed border-line"}`}
+                    >
+                      {v === "-" ? "−" : v}
+                    </button>
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 

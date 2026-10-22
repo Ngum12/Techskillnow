@@ -107,7 +107,18 @@ export function realRoots(fn: (x: number) => number, lo = -60, hi = 60, step = 0
       const x = n / d;
       if (Math.abs(fn(x)) < 1e-9 && !roots.some((r) => Math.abs(r - x) < 1e-6)) roots.push(x);
     }
-  return roots.sort((a, b) => a - b).filter((r, i, all) => i === 0 || Math.abs(r - all[i - 1]) > 1e-6);
+  // Snap to simple fractions (0, ½, −⅔ …) so exact boundaries are tested exactly.
+  const snap = (r: number) => {
+    for (let d = 1; d <= 12; d++) {
+      const n = Math.round(r * d);
+      if (Math.abs(r - n / d) < 1e-9) return n / d;
+    }
+    return r;
+  };
+  return roots
+    .map(snap)
+    .sort((a, b) => a - b)
+    .filter((r, i, all) => i === 0 || Math.abs(r - all[i - 1]) > 1e-6);
 }
 
 function sameRoots(f: Expr, g: Expr, v: string): boolean {
@@ -144,7 +155,7 @@ function testPoints(stmts: Statement[], v: string): number[] {
       c.parts.forEach((p) => constants(p).forEach((k) => [k, -k, k + 1e-5, k - 1e-5].forEach((x) => pts.add(x))));
       for (let i = 0; i < c.ops.length; i++) {
         const d: Expr = { t: "bin", op: "-", a: c.parts[i], b: c.parts[i + 1] };
-        for (const r of realRoots((x) => evaluate(d, { [v]: x }), -30, 30, 0.01)) [r, r + 1e-5, r - 1e-5].forEach((x) => pts.add(x));
+        for (const r of realRoots((x) => evaluate(d, { [v]: x }), -30, 30, 0.025)) [r, r + 1e-5, r - 1e-5].forEach((x) => pts.add(x));
       }
     }
   return [...pts];

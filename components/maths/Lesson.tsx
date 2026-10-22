@@ -25,6 +25,7 @@ import {
   PracticePart,
   SayItBackPart,
   SeePart,
+  SignsPart,
   TablePart,
   TrapsPart,
   WorkedPart,
@@ -147,6 +148,8 @@ export function MathsLesson({ task, passed, onPass }: { task: MathsLessonTask; p
         return <TablePart part={part} {...props} />;
       case "grid":
         return <GridPart part={part} {...props} />;
+      case "signs":
+        return <SignsPart part={part} {...props} />;
       case "practice":
         return <PracticePart part={part} {...props} />;
       case "traps":

@@ -1,22 +1,132 @@
 [
-  { "id": "squareOfSum", "title": "Squaring a bracket", "hint": "Careful: $(a + b)^2$ is not $a^2 + b^2$. Write it as $(a + b)(a + b)$ and multiply out: you get a middle term $2ab$ too." },
-  { "id": "negDistribution", "title": "Minus in front of a bracket", "hint": "The minus sign in front of the bracket changes the sign of EVERY term inside, not only the first one: $-(b - c + d) = -b + c - d$." },
-  { "id": "cancelTerms", "title": "Cancelling terms", "hint": "You can only cancel factors (things multiplied), not terms (things added). In $\\frac{x + 3}{x}$ the x on top is added to 3, so it cannot cancel." },
-  { "id": "modulusSum", "title": "Modulus of a sum", "hint": "$|a + b|$ is not always $|a| + |b|$. Try $a = 3, b = -5$: $|3 + (-5)| = 2$ but $|3| + |-5| = 8$." },
-  { "id": "inequalityFlip", "title": "Reversing the inequality", "hint": "When you multiply or divide both sides by a negative number, you must reverse the inequality sign: $-2x > 6$ gives $x < -3$." },
-  { "id": "unknownSign", "title": "Multiplying by an unknown sign", "hint": "Do not multiply both sides by an expression like $(x - 2)$ when you do not know if it is positive or negative. Use a sign diagram instead." },
-  { "id": "orderOfOperations", "title": "Order of operations", "hint": "Multiply before you add or subtract. Work out the multiplication first, then do the subtraction." },
-  { "id": "doubleNegative", "title": "Two minus signs", "hint": "Subtracting a negative number is the same as adding: $5 - (-6) = 5 + 6$." },
-  { "id": "addDenominators", "title": "Adding fractions", "hint": "Do not add the bottoms. First give both fractions the same denominator, then add the tops only." },
-  { "id": "forgotMiddle", "title": "Missing middle term", "hint": "Each term in the first bracket multiplies each term in the second. You should have four products, then collect the two x terms." },
-  { "id": "factorSignSwap", "title": "Signs in the brackets", "hint": "Check your signs by expanding your answer. The two numbers must multiply to the constant term AND add to the x coefficient, with the right signs." },
-  { "id": "multiplyPowers", "title": "Multiplying powers", "hint": "When you multiply powers of the same letter, add the powers: $x^3 \\times x^4 = x^7$, not $x^{12}$." },
-  { "id": "powerOfProduct", "title": "Power of a product", "hint": "The power applies to everything inside the bracket, the number too: $(3x^2)^2 = 9x^4$." },
-  { "id": "squareNegative", "title": "Squaring a negative number", "hint": "A negative number squared is positive: $(-3)^2 = 9$. Use brackets when you substitute a negative number." },
-  { "id": "rearrangeOrder", "title": "Order when rearranging", "hint": "Undo the operations in reverse order. If x was multiplied and then had a number added, first subtract the number, then divide." },
-  { "id": "degreeCount", "title": "Degree is not the number of terms", "hint": "The degree is the highest power of x, not how many terms there are." },
-  { "id": "leadingFirstTerm", "title": "Leading coefficient", "hint": "The leading coefficient belongs to the highest power of x, wherever it is written. Rewrite the polynomial with the powers in descending order first." },
-  { "id": "divisionSign", "title": "Subtracting in long division", "hint": "When you subtract a line in long division, subtract EVERY term: $(2x^2 - 7x) - (2x^2 - 4x) = -3x$. A minus sign in front of a negative gives a plus." },
-  { "id": "factorSign", "title": "The sign in (x + a)", "hint": "For the divisor $(x + a)$, the remainder is $f(-a)$, not $f(a)$. Find the x that makes the divisor zero: $x + a = 0$ gives $x = -a$." },
-  { "id": "linearRoot", "title": "Dividing by (ax − b)", "hint": "For the divisor $(ax - b)$, use $x = \\frac{b}{a}$: the value that makes $ax - b = 0$. For $(2x - 1)$, use $f\\left(\\frac{1}{2}\\right)$." }
+  {
+    "id": "squareOfSum",
+    "title": "Squaring a bracket",
+    "hint": "Careful: $(a + b)^2$ is not $a^2 + b^2$. Write it as $(a + b)(a + b)$ and multiply out: you get a middle term $2ab$ too."
+  },
+  {
+    "id": "negDistribution",
+    "title": "Minus in front of a bracket",
+    "hint": "The minus sign in front of the bracket changes the sign of EVERY term inside, not only the first one: $-(b - c + d) = -b + c - d$."
+  },
+  {
+    "id": "cancelTerms",
+    "title": "Cancelling terms",
+    "hint": "You can only cancel factors (things multiplied), not terms (things added). In $\\frac{x + 3}{x}$ the x on top is added to 3, so it cannot cancel."
+  },
+  {
+    "id": "modulusSum",
+    "title": "Modulus of a sum",
+    "hint": "$|a + b|$ is not always $|a| + |b|$. Try $a = 3, b = -5$: $|3 + (-5)| = 2$ but $|3| + |-5| = 8$."
+  },
+  {
+    "id": "inequalityFlip",
+    "title": "Reversing the inequality",
+    "hint": "When you multiply or divide both sides by a negative number, you must reverse the inequality sign: $-2x > 6$ gives $x < -3$."
+  },
+  {
+    "id": "unknownSign",
+    "title": "Multiplying by an unknown sign",
+    "hint": "Do not multiply both sides by an expression like $(x - 2)$ when you do not know if it is positive or negative. Use a sign diagram instead."
+  },
+  {
+    "id": "orderOfOperations",
+    "title": "Order of operations",
+    "hint": "Multiply before you add or subtract. Work out the multiplication first, then do the subtraction."
+  },
+  {
+    "id": "doubleNegative",
+    "title": "Two minus signs",
+    "hint": "Subtracting a negative number is the same as adding: $5 - (-6) = 5 + 6$."
+  },
+  {
+    "id": "addDenominators",
+    "title": "Adding fractions",
+    "hint": "Do not add the bottoms. First give both fractions the same denominator, then add the tops only."
+  },
+  {
+    "id": "forgotMiddle",
+    "title": "Missing middle term",
+    "hint": "Each term in the first bracket multiplies each term in the second. You should have four products, then collect the two x terms."
+  },
+  {
+    "id": "factorSignSwap",
+    "title": "Signs in the brackets",
+    "hint": "Check your signs by expanding your answer. The two numbers must multiply to the constant term AND add to the x coefficient, with the right signs."
+  },
+  {
+    "id": "multiplyPowers",
+    "title": "Multiplying powers",
+    "hint": "When you multiply powers of the same letter, add the powers: $x^3 \\times x^4 = x^7$, not $x^{12}$."
+  },
+  {
+    "id": "powerOfProduct",
+    "title": "Power of a product",
+    "hint": "The power applies to everything inside the bracket, the number too: $(3x^2)^2 = 9x^4$."
+  },
+  {
+    "id": "squareNegative",
+    "title": "Squaring a negative number",
+    "hint": "A negative number squared is positive: $(-3)^2 = 9$. Use brackets when you substitute a negative number."
+  },
+  {
+    "id": "rearrangeOrder",
+    "title": "Order when rearranging",
+    "hint": "Undo the operations in reverse order. If x was multiplied and then had a number added, first subtract the number, then divide."
+  },
+  {
+    "id": "degreeCount",
+    "title": "Degree is not the number of terms",
+    "hint": "The degree is the highest power of x, not how many terms there are."
+  },
+  {
+    "id": "leadingFirstTerm",
+    "title": "Leading coefficient",
+    "hint": "The leading coefficient belongs to the highest power of x, wherever it is written. Rewrite the polynomial with the powers in descending order first."
+  },
+  {
+    "id": "divisionSign",
+    "title": "Subtracting in long division",
+    "hint": "When you subtract a line in long division, subtract EVERY term: $(2x^2 - 7x) - (2x^2 - 4x) = -3x$. A minus sign in front of a negative gives a plus."
+  },
+  {
+    "id": "factorSign",
+    "title": "The sign in (x + a)",
+    "hint": "For the divisor $(x + a)$, the remainder is $f(-a)$, not $f(a)$. Find the x that makes the divisor zero: $x + a = 0$ gives $x = -a$."
+  },
+  {
+    "id": "linearRoot",
+    "title": "Dividing by (ax − b)",
+    "hint": "For the divisor $(ax - b)$, use $x = \\frac{b}{a}$: the value that makes $ax - b = 0$. For $(2x - 1)$, use $f\\left(\\frac{1}{2}\\right)$."
+  },
+  {
+    "id": "pfSwap",
+    "title": "Numbers under the wrong factor",
+    "hint": "Check which factor each number belongs to: putting $x = a$ removes every term except the one over $(x - a)$, so that value goes over $(x - a)$."
+  },
+  {
+    "id": "pfRepeatedForm",
+    "title": "Repeated factor",
+    "hint": "A repeated factor $(x - b)^2$ needs TWO fractions: $\\frac{B}{x - b} + \\frac{C}{(x - b)^2}$. You are missing one of them."
+  },
+  {
+    "id": "improperNoDivide",
+    "title": "Improper fraction",
+    "hint": "When the top has the same degree as the bottom (or higher), divide first. The whole-number part is missing from your answer."
+  },
+  {
+    "id": "quadRegion",
+    "title": "Inside or outside the roots",
+    "hint": "Sketch the U-shaped curve. It is BELOW the x-axis between the roots and ABOVE it outside them. Check which one the inequality asks for."
+  },
+  {
+    "id": "excludedPoint",
+    "title": "Dividing by zero",
+    "hint": "The value that makes the bottom zero can never be in the answer, even with $\\le$ or $\\ge$: the fraction is not defined there."
+  },
+  {
+    "id": "modulusOneSide",
+    "title": "Only one case",
+    "hint": "A modulus has two cases: the inside can be positive or negative. $|x - 3| = 5$ gives $x - 3 = 5$ OR $x - 3 = -5$. Do not forget the second one."
+  }
 ]

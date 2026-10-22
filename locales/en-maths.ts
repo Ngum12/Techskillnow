@@ -3,7 +3,7 @@ export const enMaths = {
   maths: {
     keypad: { label: "Maths keypad", close: "Close" },
     graph: { label: "Interactive graph", zoomIn: "Zoom in", zoomOut: "Zoom out" },
-    visuals: { areaCheck: "Check with x = {x}: the whole rectangle has area {total}." },
+    visuals: { areaCheck: "Check with x = {x}: the whole rectangle has area {total}.", signFactor: "Factor", signEmpty: "empty" },
     answer: {
       answer: "Your answer",
       placeholder: "Tap to type",
@@ -11,6 +11,8 @@ export const enMaths = {
       formExpanded: "Correct value, but write it expanded and simplified (no brackets, like terms collected).",
       formFactorised: "Correct value, but the question asks for it fully factorised (as a product of brackets).",
       formMonomial: "Correct, but simplify it to a single term.",
+      formPartial: "Correct value, but write it as partial fractions: a number over each factor, added together.",
+      formFactor: "Give one linear factor, for example (x − 2).",
       notSolved: "Nearly there: finish with x on its own, e.g. x = 2 or x < 3.",
       wrong: "Not yet. Check your working line by line.",
       correct: "Correct. Well done!",
@@ -69,6 +71,10 @@ export const enMaths = {
       paperFirstLines: "Work it out in your exercise book first. Then type your working one line at a time: each line is checked.",
       divisionOnPaper: "Set out the long division in your book as you learned.",
       lessonDone: "Lesson complete. You can redo any part for practice.",
+      signsHelp: "Tap each box to choose + or −. Work out the sign of each factor on each interval, then multiply the signs for the last row.",
+      signsWrong: "Some signs are not right. Test a number from each interval in each factor.",
+      signsDone: "Sign diagram complete. Now read off the answer.",
+      anotherDiagram: "Try another sign diagram",
     },
     division: {
       numberStage: "Stage {n}: divide, multiply, subtract, then bring down the next digit.",

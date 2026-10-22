@@ -351,6 +351,8 @@ export function constants(e: Expr, out: number[] = []): number[] {
   if (e.t === "neg" || e.t === "abs" || e.t === "fn") constants(e.a, out);
   if (e.t === "bin") {
     if (e.op === "/" && e.a.t === "num" && e.b.t === "num") out.push(e.a.v / e.b.v);
+    // "-1/2" is read as (−1)/2.
+    if (e.op === "/" && e.a.t === "neg" && e.a.a.t === "num" && e.b.t === "num") out.push(-e.a.a.v / e.b.v);
     constants(e.a, out);
     constants(e.b, out);
   }
