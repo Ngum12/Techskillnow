@@ -31,6 +31,12 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Editorial serif for home-page headlines (loaded by app/page.tsx only). */
+.font-display {
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+  font-weight: 400;
+}
+
 :focus-visible {
   outline: 3px solid var(--color-primary);
   outline-offset: 2px;
