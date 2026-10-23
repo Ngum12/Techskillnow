@@ -1,3 +1,5 @@
+import { ApplicationsDesk, CvDesk, EmailDesk } from "./DeskScenes";
+
 /** Small drawn pictures for the home page (inline SVG: no downloads, sharp on every screen). */
 
 type IconName = "screen" | "lab" | "hint" | "phone" | "send" | "badge" | "check" | "arrow" | "briefcase" | "cap";
@@ -71,79 +73,10 @@ export function Icon({ name, className = "h-6 w-6" }: { name: string; className?
 const COVER = "block h-full w-full";
 
 export function CourseMotif({ id }: { id: string }) {
-  if (id === "email-for-work") {
-    // An inbox with the application email ready to send.
-    return (
-      <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" className={`${COVER} bg-[#e6eee8]`} aria-hidden="true">
-        <rect x="46" y="28" width="208" height="150" rx="8" fill="#fff" stroke="#c9d6cd" strokeWidth="1.5" />
-        <rect x="46" y="28" width="208" height="22" rx="8" fill="#1d5440" />
-        <rect x="46" y="42" width="208" height="8" fill="#1d5440" />
-        {[0, 1, 2].map((i) => (
-          <circle key={i} cx={58 + i * 9} cy="39" r="2.6" fill="#e6eee8" opacity=".8" />
-        ))}
-        {[66, 92, 118, 144].map((y, i) => (
-          <g key={y}>
-            <rect x="58" y={y} width="184" height="20" rx="4" fill={i === 1 ? "#eaf4ee" : "#fff"} stroke={i === 1 ? "#2f9e62" : "#ece7dc"} />
-            <circle cx="70" cy={y + 10} r="5" fill={i === 1 ? "#2f9e62" : "#d6dfd9"} />
-            <rect x="82" y={y + 6} width={i === 1 ? 92 : 70 - i * 6} height="3.5" rx="1.7" fill={i === 1 ? "#1d5440" : "#b9c4bd"} />
-            <rect x="82" y={y + 12} width={i === 1 ? 120 : 100} height="3" rx="1.5" fill="#dde4df" />
-          </g>
-        ))}
-        <path d="M206 96l6 6 12-13" fill="none" stroke="#2f9e62" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-  if (id === "cv") {
-    // A CV page, marked up with a red pen and approved.
-    return (
-      <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" className={`${COVER} bg-[#efe9dd]`} aria-hidden="true">
-        <g transform="rotate(-4 150 104)">
-          <rect x="92" y="18" width="116" height="164" rx="3" fill="#fff" stroke="#d8cfbd" strokeWidth="1.5" />
-          <rect x="106" y="32" width="58" height="7" rx="2" fill="#17201b" />
-          <rect x="106" y="44" width="76" height="3.5" rx="1.7" fill="#b9b2a3" />
-          {[62, 98, 134].map((y) => (
-            <g key={y}>
-              <rect x="106" y={y} width="34" height="4.5" rx="2" fill="#1d5440" />
-              {[0, 1, 2].map((k) => (
-                <rect key={k} x="106" y={y + 10 + k * 8} width={84 - k * 14} height="3" rx="1.5" fill="#d9d3c6" />
-              ))}
-            </g>
-          ))}
-          <ellipse cx="150" cy="113" rx="50" ry="9" fill="none" stroke="#c0392b" strokeWidth="2" />
-        </g>
-        <rect x="214" y="44" width="8" height="96" rx="3" transform="rotate(28 218 92)" fill="#c0392b" />
-        <circle cx="86" cy="150" r="20" fill="#2f9e62" />
-        <path d="M77 150l6 6 12-13" fill="none" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-  if (id === "applications") {
-    // An application tracker: sent, interview, answer.
-    const cols = [
-      { x: 30, cards: 3, done: -1 },
-      { x: 112, cards: 2, done: -1 },
-      { x: 194, cards: 1, done: 0 },
-    ];
-    return (
-      <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" className={`${COVER} bg-[#e7ecef]`} aria-hidden="true">
-        {cols.map((c, i) => (
-          <g key={c.x}>
-            <rect x={c.x} y="30" width="76" height="146" rx="8" fill="#f6f8f9" stroke="#cfd8de" />
-            <rect x={c.x + 10} y="40" width={i === 2 ? 34 : 26} height="5" rx="2.5" fill={i === 2 ? "#1d5440" : "#8b9aa3"} />
-            {Array.from({ length: c.cards }, (_, k) => (
-              <g key={k}>
-                <rect x={c.x + 8} y={54 + k * 38} width="60" height="30" rx="5" fill={c.done === k ? "#eaf4ee" : "#fff"} stroke={c.done === k ? "#2f9e62" : "#dbe2e6"} />
-                <rect x={c.x + 15} y={62 + k * 38} width="34" height="3.5" rx="1.7" fill={c.done === k ? "#1d5440" : "#9aa6ad"} />
-                <rect x={c.x + 15} y={70 + k * 38} width="44" height="3" rx="1.5" fill="#dde3e7" />
-              </g>
-            ))}
-          </g>
-        ))}
-        <path d="M244 64l5 5 10-11" fill="none" stroke="#2f9e62" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M100 96h8m-3-3 3 3-3 3M182 82h8m-3-3 3 3-3 3" stroke="#8b9aa3" strokeWidth="1.6" fill="none" strokeLinecap="round" />
-      </svg>
-    );
-  }
+  // The job courses show their real material on a desk.
+  if (id === "email-for-work") return <EmailDesk />;
+  if (id === "cv") return <CvDesk />;
+  if (id === "applications") return <ApplicationsDesk />;
   if (id.startsWith("chem")) {
     return (
       <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" className={`${COVER} bg-[#eaf3ef]`} aria-hidden="true">
