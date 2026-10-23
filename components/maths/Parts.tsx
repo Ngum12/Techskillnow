@@ -797,12 +797,12 @@ export function SayItBackPart({ part, onDone }: PartProps<"sayItBack">) {
 export function NotebookPage({ page }: { page: NotebookModel }) {
   return (
     <div className="space-y-3 bg-[#fffef9] p-4 text-[#17201b]" style={{ backgroundImage: "repeating-linear-gradient(transparent 0 27px, #dce6ee 27px 28px)" }}>
-      <h3 className="text-lg font-bold text-[#1d5440] underline">{page.heading}</h3>
+      <h3 className="text-lg font-bold text-[#4338ca] underline">{page.heading}</h3>
       {page.blocks.map((b, i) => (
         <div key={i}>
           <p className="font-bold">{b.title}</p>
           {(b.type === "definition" || b.type === "rule" || b.type === "note") && (
-            <p className={b.type === "rule" ? "rounded border border-[#1d5440] p-2" : ""}>
+            <p className={b.type === "rule" ? "rounded border border-[#4338ca] p-2" : ""}>
               <MathText text={b.text} />
             </p>
           )}

@@ -88,7 +88,7 @@ export function CourseMotif({ id }: { id: string }) {
         {[30, 45, 60, 75, 90, 105].map((y) => (
           <line key={y} x1="146" x2="153" y1={y} y2={y} stroke="#41525c" strokeWidth="1" />
         ))}
-        <rect x="137" y="130" width="20" height="5" rx="2" fill="#1d5440" />
+        <rect x="137" y="130" width="20" height="5" rx="2" fill="#4338ca" />
         <path d="M145 135v10" stroke="#41525c" strokeWidth="2" />
         <path d="M134 128 L134 146 L116 164 Q114 168 119 168 L175 168 Q180 168 178 164 L160 146 L160 128" transform="translate(-0 0)" fill="#f6d1e4" stroke="#41525c" strokeWidth="2" />
         <circle cx="146" cy="152" r="2.5" fill="#e0368a" />

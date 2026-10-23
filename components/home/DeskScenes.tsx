@@ -84,15 +84,15 @@ export function EmailDesk() {
         <text x="104" y="25.8" fontSize="3.6" fill="#6b7a72">
           Search mail
         </text>
-        <circle cx="250" cy="24" r="3.4" fill="#1d5440" />
+        <circle cx="250" cy="24" r="3.4" fill="#4338ca" />
         <text x="250" y="25.4" fontSize="3.4" fill="#fff" textAnchor="middle" fontWeight="700">
           N
         </text>
-        <text x="66" y="26" fontSize="4.6" fontWeight="700" fill="#1d5440">
+        <text x="66" y="26" fontSize="4.6" fontWeight="700" fill="#4338ca">
           Mail
         </text>
         {/* Sidebar. */}
-        <rect x="66" y="34" width="27" height="9" rx="4.5" fill="#d7ebe0" />
+        <rect x="66" y="34" width="27" height="9" rx="4.5" fill="#e0e3fc" />
         <text x="79.5" y="40" fontSize="3.6" fontWeight="700" fill="#17201b" textAnchor="middle">
           Compose
         </text>
@@ -104,7 +104,7 @@ export function EmailDesk() {
           ["Spam", "", false],
         ].map(([label, n, on], i) => (
           <g key={String(label)}>
-            {on && <rect x="64" y={47 + i * 8} width="31" height="7" rx="3.5" fill="#e7f0eb" />}
+            {on && <rect x="64" y={47 + i * 8} width="31" height="7" rx="3.5" fill="#eef0fd" />}
             <text x="68" y={51.8 + i * 8} fontSize="3.5" fontWeight={on ? 700 : 400} fill="#2b3530">
               {label}
             </text>
@@ -116,10 +116,10 @@ export function EmailDesk() {
           </g>
         ))}
         {/* Tabs. */}
-        <text x="101" y="38.5" fontSize="3.6" fontWeight="700" fill="#1d5440">
+        <text x="101" y="38.5" fontSize="3.6" fontWeight="700" fill="#4338ca">
           Primary
         </text>
-        <rect x="99" y="41" width="22" height="0.9" fill="#1d5440" />
+        <rect x="99" y="41" width="22" height="0.9" fill="#4338ca" />
         <text x="129" y="38.5" fontSize="3.6" fill="#6b7a72">
           Promotions
         </text>
@@ -170,10 +170,10 @@ export function CvDesk() {
   );
   const heading = (y: number, s: string) => (
     <g>
-      <text x="16" y={y} fontSize="4" fontWeight="700" fill="#1d5440" letterSpacing="0.35">
+      <text x="16" y={y} fontSize="4" fontWeight="700" fill="#4338ca" letterSpacing="0.35">
         {s}
       </text>
-      <line x1="16" x2="114" y1={y + 1.6} y2={y + 1.6} stroke="#1d5440" strokeWidth="0.4" />
+      <line x1="16" x2="114" y1={y + 1.6} y2={y + 1.6} stroke="#4338ca" strokeWidth="0.4" />
     </g>
   );
   return (
@@ -297,7 +297,7 @@ export function ApplicationsDesk() {
       </g>
       {/* Pen across the letter. */}
       <g filter="url(#ap-shadow)" transform="rotate(38 160 150)">
-        <rect x="130" y="146" width="64" height="5" rx="2.5" fill="#1d5440" />
+        <rect x="130" y="146" width="64" height="5" rx="2.5" fill="#4338ca" />
         <path d="M194 146.3l8 2.2-8 2.2z" fill="#c9ccd0" />
       </g>
     </svg>

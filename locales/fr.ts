@@ -95,6 +95,9 @@ const fr: Dict = {
       title: "Trouvez votre cours",
       intro: "Compétences professionnelles et préparation au GCE. La première leçon de chaque cours est gratuite.",
       all: "Tous les cours",
+      readMore: "Lire la suite",
+      readLess: "Réduire",
+      leaveWith: "Vous repartez avec",
       categories: [
         { id: "jobs", label: "Compétences pro" },
         { id: "maths", label: "GCE Maths" },

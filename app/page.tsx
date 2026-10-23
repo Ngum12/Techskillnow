@@ -29,8 +29,8 @@ function categoryOf(c: CourseSummary): string {
 /** A short rule and an uppercase label above a section title. */
 function Eyebrow({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
   return (
-    <p className={`${eyebrow} flex items-center gap-2.5 ${light ? "text-[#9fd3b4]" : "text-primary"}`}>
-      <span className={`h-px w-6 shrink-0 ${light ? "bg-[#9fd3b4]" : "bg-primary"}`} aria-hidden="true" />
+    <p className={`${eyebrow} flex items-center gap-2.5 ${light ? "text-[#a5b4fc]" : "text-primary"}`}>
+      <span className={`h-px w-6 shrink-0 ${light ? "bg-[#a5b4fc]" : "bg-primary"}`} aria-hidden="true" />
       {children}
     </p>
   );
@@ -41,9 +41,9 @@ function Logo({ name, light = false }: { name: string; light?: boolean }) {
     <span className={`flex min-w-0 items-center gap-2.5 font-semibold ${light ? "text-white" : "text-ink"}`}>
       {/* Steps: learning one step at a time. */}
       <svg viewBox="0 0 32 32" className="h-8 w-8 shrink-0" aria-hidden="true">
-        <rect width="32" height="32" rx="8" fill={light ? "#fff" : "#1d5440"} />
-        <path d="M8 23h5v-5h5v-5h6" fill="none" stroke={light ? "#1d5440" : "#fff"} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="24" cy="9" r="2.2" fill={light ? "#1d5440" : "#e9b949"} />
+        <rect width="32" height="32" rx="8" fill={light ? "#fff" : "#4338ca"} />
+        <path d="M8 23h5v-5h5v-5h6" fill="none" stroke={light ? "#4338ca" : "#fff"} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="24" cy="9" r="2.2" fill={light ? "#4338ca" : "#e9b949"} />
       </svg>
       <span className="truncate text-[1.05rem] tracking-tight">{name}</span>
     </span>
@@ -62,6 +62,8 @@ export default async function Home() {
   const catalog = courses.map((c) => ({
     id: c.id,
     title: c.title,
+    promise: c.promise,
+    outcomes: c.outcomes ?? [],
     category: categoryOf(c),
     price: money(c.price),
     lessons: fmt(s.lessons, { n: c.totalSteps }),
@@ -82,7 +84,7 @@ export default async function Home() {
           <Link href="/" aria-label={t.appName}>
             <Logo name={t.appName} />
           </Link>
-          <nav className="hidden items-center gap-8 text-[0.85rem] font-medium text-[#3c4741] md:flex" aria-label={s.nav.courses}>
+          <nav className="hidden items-center gap-8 text-[0.85rem] font-medium text-[#464e63] md:flex" aria-label={s.nav.courses}>
             <a href="#courses" className="hover:text-primary">
               {s.nav.courses}
             </a>
@@ -116,7 +118,7 @@ export default async function Home() {
                 <Eyebrow>{s.eyebrow}</Eyebrow>
               </div>
               <h1 className="font-display text-[2.4rem] leading-[1.05] tracking-[-0.02em] sm:mt-5 sm:text-[3.4rem] lg:text-[3.8rem]">{s.heroTitle}</h1>
-              <p className="mt-4 max-w-xl text-[1rem] leading-relaxed text-[#3c4741] sm:mt-5 sm:text-[1.02rem]">{s.heroText}</p>
+              <p className="mt-4 max-w-xl text-[1rem] leading-relaxed text-[#464e63] sm:mt-5 sm:text-[1.02rem]">{s.heroText}</p>
               <div className="mt-6 flex flex-col gap-3 min-[420px]:flex-row sm:mt-8">
                 <a href="#courses" className="btn btn-primary px-6">
                   {s.ctaFind}
@@ -126,7 +128,7 @@ export default async function Home() {
                   {s.ctaFree}
                 </Link>
               </div>
-              <ul className="mt-8 hidden max-w-lg grid-cols-2 gap-x-6 gap-y-2 text-[0.82rem] text-[#3c4741] md:grid">
+              <ul className="mt-8 hidden max-w-lg grid-cols-2 gap-x-6 gap-y-2 text-[0.82rem] text-[#464e63] md:grid">
                 {s.trust.map((x) => (
                   <li key={x} className="flex items-center gap-2">
                     <Icon name="check" className="h-4 w-4 shrink-0 text-ok" />
@@ -154,7 +156,7 @@ export default async function Home() {
               <p className="hidden max-w-sm text-right text-[0.88rem] text-muted md:block">{s.catalog.intro}</p>
             </div>
             <div className="mt-5 sm:mt-7">
-              <CourseCatalog courses={catalog} categories={s.catalog.categories} allLabel={s.catalog.all} startLabel={s.startFree} />
+              <CourseCatalog courses={catalog} categories={s.catalog.categories} labels={{ all: s.catalog.all, start: s.startFree, more: s.catalog.readMore, less: s.catalog.readLess, leaveWith: s.catalog.leaveWith }} />
             </div>
           </div>
         </section>
@@ -179,16 +181,16 @@ export default async function Home() {
         </section>
 
         {/* Learning by doing */}
-        <section className="bg-[#10231b] text-white">
+        <section className="bg-[#141c33] text-white">
           <div className={`${wrap} grid items-center gap-10 py-12 md:grid-cols-2 md:gap-12 md:py-24`}>
             <div>
               <Eyebrow light>{s.doEyebrow}</Eyebrow>
               <h2 className="font-display mt-4 text-[1.9rem] leading-[1.1] tracking-tight sm:text-[2.6rem]">{s.doTitle}</h2>
-              <p className="mt-5 hidden max-w-lg text-[0.98rem] leading-relaxed text-[#c9d6cf] md:block">{s.doText}</p>
+              <p className="mt-5 hidden max-w-lg text-[0.98rem] leading-relaxed text-[#c7cde0] md:block">{s.doText}</p>
               <ul className="mt-6 grid gap-3 sm:mt-8 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-4">
                 {s.features.map((f) => (
                   <li key={f.title} className="flex items-center gap-3">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/8 text-[#9fd3b4]">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/8 text-[#a5b4fc]">
                       <Icon name={f.icon} className="h-[1.1rem] w-[1.1rem]" />
                     </span>
                     <span className="text-[0.88rem] font-semibold leading-snug">{f.title}</span>
@@ -233,7 +235,7 @@ export default async function Home() {
             <div className="order-1 md:order-2">
               <Eyebrow>{s.certEyebrow}</Eyebrow>
               <h2 className="font-display mt-3 text-[1.9rem] leading-[1.1] tracking-tight sm:text-[2.5rem]">{s.certTitle}</h2>
-              <p className="mt-5 hidden text-[0.95rem] leading-relaxed text-[#3c4741] md:block">{s.certText}</p>
+              <p className="mt-5 hidden text-[0.95rem] leading-relaxed text-[#464e63] md:block">{s.certText}</p>
               <ul className="mt-5 space-y-2 md:mt-6">
                 {s.certPoints.map((x) => (
                   <li key={x} className="flex items-center gap-2.5 text-[0.88rem]">
@@ -287,7 +289,7 @@ export default async function Home() {
           <div className={`${wrap} flex flex-col gap-6 py-12 md:flex-row md:items-center md:justify-between md:py-16`}>
             <div>
               <h2 className="font-display text-[1.9rem] leading-tight tracking-tight sm:text-[2.6rem]">{s.finalTitle}</h2>
-              <p className="mt-2 hidden text-[0.95rem] text-[#cfe3d7] sm:block">{s.finalText}</p>
+              <p className="mt-2 hidden text-[0.95rem] text-[#dcdcfb] sm:block">{s.finalText}</p>
             </div>
             <div className="flex shrink-0 flex-col gap-3 min-[420px]:flex-row">
               <a href="#courses" className="btn bg-white px-6 text-primary hover:bg-primary-soft">
@@ -302,7 +304,7 @@ export default async function Home() {
         </section>
       </main>
 
-      <footer className="bg-[#10231b] text-[#c9d6cf]">
+      <footer className="bg-[#141c33] text-[#c7cde0]">
         <div className={`${wrap} grid gap-8 py-10 sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr] md:gap-10 md:py-14`}>
           <div>
             <Logo name={t.appName} light />

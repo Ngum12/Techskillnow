@@ -39,10 +39,10 @@ export function Burette({ level, capacity = 50, funnel = false, bubble = false, 
       {Array.from({ length: capacity / 5 + 1 }, (_, i) => (
         <line key={i} x1={w - 6} x2={w} y1={buretteY(i * 5, capacity)} y2={buretteY(i * 5, capacity)} stroke={LINE} strokeWidth={0.8} />
       ))}
-      <rect x={0} y={BURETTE.top} width={w} height={full} rx={2} fill="none" stroke={highlight ? "#1d5440" : LINE} strokeWidth={highlight ? 2.5 : 1.2} />
+      <rect x={0} y={BURETTE.top} width={w} height={full} rx={2} fill="none" stroke={highlight ? "#4338ca" : LINE} strokeWidth={highlight ? 2.5 : 1.2} />
       {/* Tap and jet */}
       <rect x={w / 2 - 2} y={BURETTE.bottom} width={4} height={10} fill={ACID} stroke={LINE} strokeWidth={0.8} />
-      <rect x={-6} y={BURETTE.bottom + 2} width={w + 12} height={5} rx={2} fill={flowing ? "#1d5440" : "#c9d3d8"} stroke={LINE} strokeWidth={0.8} />
+      <rect x={-6} y={BURETTE.bottom + 2} width={w + 12} height={5} rx={2} fill={flowing ? "#4338ca" : "#c9d3d8"} stroke={LINE} strokeWidth={0.8} />
       <path d={`M${w / 2 - 2} ${BURETTE.bottom + 10} L${w / 2 - 1} ${BURETTE.bottom + 24} L${w / 2 + 1} ${BURETTE.bottom + 24} L${w / 2 + 2} ${BURETTE.bottom + 10} Z`} fill={bubble ? "#ffffff" : ACID} stroke={LINE} strokeWidth={0.8} />
       {bubble && <circle cx={w / 2} cy={BURETTE.bottom + 15} r={1.6} fill="none" stroke={LINE} strokeWidth={0.6} />}
       {funnel && <path d={`M${-10} ${-16} L${w + 10} ${-16} L${w / 2 + 2} ${4} L${w / 2 - 2} ${4} Z`} fill={GLASS} stroke={LINE} strokeWidth={1.2} />}
@@ -79,7 +79,7 @@ export function Flask({ fill, colour, flash, flashColour, swirling = false, high
         <rect x={0} y={0} width={64} height={80} fill={colour} style={{ ...smooth, transform: `translateY(${72 - h}px)` }} />
         {flash && <ellipse cx={32} cy={72 - h + 6} rx={12} ry={4} fill={flashColour} className="chem-flash" />}
       </g>
-      <path d={body} fill="none" stroke={highlight ? "#1d5440" : LINE} strokeWidth={highlight ? 2.5 : 1.4} />
+      <path d={body} fill="none" stroke={highlight ? "#4338ca" : LINE} strokeWidth={highlight ? 2.5 : 1.4} />
     </g>
   );
 }
@@ -90,7 +90,7 @@ export function Tile({ width = 90 }: { width?: number }) {
 
 /** 25.0 cm³ bulb pipette with a filler on top. `fill` 0–1. */
 export function Pipette({ fill = 0, colour = ACID, highlight = false }: { fill?: number; colour?: string; highlight?: boolean }) {
-  const stroke = highlight ? "#1d5440" : LINE;
+  const stroke = highlight ? "#4338ca" : LINE;
   return (
     <g>
       <ellipse cx={8} cy={8} rx={9} ry={8} fill="#c44" opacity={0.85} />
@@ -103,7 +103,7 @@ export function Pipette({ fill = 0, colour = ACID, highlight = false }: { fill?:
 }
 
 export function Funnel({ highlight = false }: { highlight?: boolean }) {
-  return <path d="M0 0 L36 0 L20 22 L20 38 L16 38 L16 22 Z" fill={GLASS} stroke={highlight ? "#1d5440" : LINE} strokeWidth={highlight ? 2.5 : 1.4} />;
+  return <path d="M0 0 L36 0 L20 22 L20 38 L16 38 L16 22 Z" fill={GLASS} stroke={highlight ? "#4338ca" : LINE} strokeWidth={highlight ? 2.5 : 1.4} />;
 }
 
 export function Beaker({ label, colour, highlight = false }: { label: string; colour: string; highlight?: boolean }) {
@@ -111,7 +111,7 @@ export function Beaker({ label, colour, highlight = false }: { label: string; co
     <g>
       <path d="M0 0 L0 52 Q0 56 4 56 L40 56 Q44 56 44 52 L44 0" fill={GLASS} />
       <rect x={1} y={22} width={42} height={33} fill={colour} />
-      <path d="M-3 -2 L0 0 L0 52 Q0 56 4 56 L40 56 Q44 56 44 52 L44 0" fill="none" stroke={highlight ? "#1d5440" : LINE} strokeWidth={highlight ? 2.5 : 1.4} />
+      <path d="M-3 -2 L0 0 L0 52 Q0 56 4 56 L40 56 Q44 56 44 52 L44 0" fill="none" stroke={highlight ? "#4338ca" : LINE} strokeWidth={highlight ? 2.5 : 1.4} />
       <text x={22} y={42} textAnchor="middle" fontSize={9} fontWeight={600} fill="#17201b">
         {label}
       </text>
@@ -124,7 +124,7 @@ export function WashBottle({ highlight = false }: { highlight?: boolean }) {
     <g>
       <path d="M30 0 L44 -10" stroke={LINE} strokeWidth={2} fill="none" />
       <rect x={26} y={0} width={8} height={10} fill="#c9d3d8" />
-      <path d="M10 10 L50 10 L54 70 Q54 74 50 74 L10 74 Q6 74 6 70 Z" fill="#f4f8fb" stroke={highlight ? "#1d5440" : LINE} strokeWidth={highlight ? 2.5 : 1.4} />
+      <path d="M10 10 L50 10 L54 70 Q54 74 50 74 L10 74 Q6 74 6 70 Z" fill="#f4f8fb" stroke={highlight ? "#4338ca" : LINE} strokeWidth={highlight ? 2.5 : 1.4} />
       <text x={30} y={48} textAnchor="middle" fontSize={8} fill="#41525c">
         H₂O
       </text>
@@ -136,7 +136,7 @@ export function IndicatorBottle({ colour = "#e0368a", highlight = false }: { col
   return (
     <g>
       <rect x={8} y={0} width={12} height={10} rx={2} fill="#4b3a2f" />
-      <rect x={2} y={10} width={24} height={34} rx={4} fill="#fff7e6" stroke={highlight ? "#1d5440" : LINE} strokeWidth={highlight ? 2.5 : 1.4} />
+      <rect x={2} y={10} width={24} height={34} rx={4} fill="#fff7e6" stroke={highlight ? "#4338ca" : LINE} strokeWidth={highlight ? 2.5 : 1.4} />
       <rect x={4} y={26} width={20} height={16} rx={3} fill={colour} opacity={0.7} />
     </g>
   );

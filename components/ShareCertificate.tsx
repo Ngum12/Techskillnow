@@ -33,7 +33,7 @@ async function drawCertificate(t: ReturnType<typeof useT>, p: Props): Promise<Bl
 
   ctx.fillStyle = "#fdfbf6";
   ctx.fillRect(0, 0, W, H);
-  ctx.strokeStyle = "#1d5440";
+  ctx.strokeStyle = "#4338ca";
   ctx.lineWidth = 12;
   ctx.strokeRect(36, 36, W - 72, H - 72);
   ctx.lineWidth = 2;
@@ -51,7 +51,7 @@ async function drawCertificate(t: ReturnType<typeof useT>, p: Props): Promise<Bl
   fitText(ctx, p.name, cx, 410, "700", 60, max);
   ctx.fillStyle = "#4f5a54";
   fitText(ctx, t.certificate.completed, cx, 470, "400", 30, max);
-  ctx.fillStyle = "#1d5440";
+  ctx.fillStyle = "#4338ca";
   fitText(ctx, p.course, cx, 535, "700", 48, max);
   ctx.fillStyle = "#17201b";
   fitText(ctx, p.scoreLine, cx, 595, "600", 28, max);

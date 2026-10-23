@@ -12,7 +12,7 @@ export function HeroScene({ s }: { s: Landing }) {
   const sc = s.scene;
   return (
     <div className="relative mx-auto w-full max-w-[30rem]">
-      <div className="relative overflow-hidden rounded-[20px] bg-primary px-6 pb-28 pt-12 sm:px-10 sm:pb-10">
+      <div className="relative overflow-hidden rounded-[20px] bg-[#141c33] px-6 pb-28 pt-12 sm:px-10 sm:pb-10">
         {/* Quiet grid, like exercise-book paper. */}
         <svg className="absolute inset-0 h-full w-full opacity-[0.09]" aria-hidden="true">
           <defs>
@@ -27,8 +27,8 @@ export function HeroScene({ s }: { s: Landing }) {
           {sc.chip}
         </p>
         {/* The phone. */}
-        <div className="relative mx-auto w-full max-w-[15.5rem] rounded-[2rem] border-[9px] border-[#14231c] bg-white shadow-[0_30px_60px_-20px_rgba(0,0,0,0.45)]">
-          <div className="mx-auto mt-1.5 h-1.5 w-14 rounded-full bg-[#14231c]" aria-hidden="true" />
+        <div className="relative mx-auto w-full max-w-[15.5rem] rounded-[2rem] border-[9px] border-[#2e3858] bg-white shadow-[0_30px_60px_-20px_rgba(0,0,0,0.45)]">
+          <div className="mx-auto mt-1.5 h-1.5 w-14 rounded-full bg-[#2e3858]" aria-hidden="true" />
           <div className="px-3.5 pb-4 pt-3">
             <div className="flex items-center justify-between text-[0.62rem] font-semibold text-muted">
               <span>{sc.course}</span>
@@ -49,7 +49,7 @@ export function HeroScene({ s }: { s: Landing }) {
         </div>
       </div>
       {/* Progress card, overlapping the panel like a note on the desk. */}
-      <div className="absolute -bottom-6 left-3 w-[12.5rem] rounded-xl border border-[#e4ded2] bg-white p-3.5 shadow-[0_12px_30px_-12px_rgba(23,32,27,0.35)] sm:-left-6">
+      <div className="absolute -bottom-6 left-3 w-[12.5rem] rounded-xl border border-[#e4ded2] bg-white p-3.5 shadow-[0_12px_30px_-12px_rgba(20,28,51,0.35)] sm:-left-6">
         <p className="text-[0.62rem] font-bold uppercase tracking-[0.14em] text-primary">{sc.progress}</p>
         <p className="mt-1 text-[0.8rem] font-semibold">{sc.course}</p>
         <div className="mt-2 flex items-center gap-2">
@@ -139,7 +139,7 @@ export function CertificateScene({ s }: { s: Landing }) {
   const c = s.cert;
   return (
     <div className="relative mx-auto w-full max-w-[30rem] -rotate-[1.2deg]">
-      <div className="rounded-[6px] bg-[#fffdf7] p-2.5 shadow-[0_24px_50px_-24px_rgba(23,32,27,0.45)]">
+      <div className="rounded-[6px] bg-[#fffdf7] p-2.5 shadow-[0_24px_50px_-24px_rgba(20,28,51,0.45)]">
         <div className="rounded-[3px] border-2 border-double border-[#b9a77a] px-5 py-6 text-center sm:px-8">
           <p className="text-[0.66rem] font-bold uppercase tracking-[0.2em] text-primary">TechSkillNow</p>
           <p className="font-display mt-2 text-[1.35rem] leading-tight">{c.heading}</p>

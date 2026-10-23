@@ -15,7 +15,7 @@ import { mapPoint, rangeOn, transformLabel, type Transform } from "@/lib/maths/f
 
 const W = 320;
 const H = 240;
-const COLOURS = ["#1d5440", "#b8452b", "#2f5d9c", "#8a5a00"];
+const COLOURS = ["#4338ca", "#b8452b", "#2f5d9c", "#8a5a00"];
 
 function safeParse(s: string): Expr | null {
   try {
@@ -252,7 +252,7 @@ export function Graph({ spec, onParams, mini = false }: { spec: GraphSpec; onPar
           const faint = cv?.faint || (!!tr && i === 0);
           return <path key={i} d={cv?.param ? paramPath(cv.param) : path(i)} fill="none" stroke={faint ? "#b8c2c8" : (cv?.colour ?? COLOURS[i % COLOURS.length])} strokeWidth={faint ? 1.8 : 2.4} strokeLinejoin="round" />;
         })}
-        {tr && <path d={pathOf(g)} fill="none" stroke="#1d5440" strokeWidth={2.8} strokeLinejoin="round" />}
+        {tr && <path d={pathOf(g)} fill="none" stroke="#4338ca" strokeWidth={2.8} strokeLinejoin="round" />}
         {tr &&
           spec.transform!.points.map((p) => {
             const y = f(0, p.x);
@@ -359,7 +359,7 @@ export function Graph({ spec, onParams, mini = false }: { spec: GraphSpec; onPar
             style={{ cursor: "grab" }}
           >
             <circle cx={X(dp)} cy={Y(f(0, dp))} r={16} fill="transparent" />
-            <circle cx={X(dp)} cy={Y(f(0, dp))} r={7} fill="#1d5440" stroke="#fff" strokeWidth={2} />
+            <circle cx={X(dp)} cy={Y(f(0, dp))} r={7} fill="#4338ca" stroke="#fff" strokeWidth={2} />
           </g>
         )}
       </svg>

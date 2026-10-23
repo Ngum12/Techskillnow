@@ -95,6 +95,9 @@ const en = {
       title: "Find your course",
       intro: "Job skills and GCE exam prep. The first lesson of every course is free.",
       all: "All courses",
+      readMore: "Read more",
+      readLess: "Show less",
+      leaveWith: "You leave with",
       categories: [
         { id: "jobs", label: "Job skills" },
         { id: "maths", label: "GCE Maths" },

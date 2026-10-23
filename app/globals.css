@@ -3,12 +3,12 @@
 @theme {
   --color-bg: #fdfbf6;
   --color-surface: #ffffff;
-  --color-ink: #17201b;
-  --color-muted: #4f5a54;
+  --color-ink: #161b2e;
+  --color-muted: #4a5266;
   --color-line: #ddd7ca;
-  --color-primary: #1d5440;
-  --color-primary-dark: #143d2e;
-  --color-primary-soft: #e7f0eb;
+  --color-primary: #4338ca;
+  --color-primary-dark: #3730a3;
+  --color-primary-soft: #eef0fd;
   --color-warn: #9a3a16;
   --color-warn-soft: #fbefe7;
   --color-ok: #17633a;

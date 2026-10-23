@@ -21,13 +21,13 @@ export function MappingDiagram({ left, right, arrows }: { left: string[]; right:
     <svg viewBox={`0 0 260 ${h}`} className="mx-auto block w-full max-w-xs" role="img" aria-label={arrows.map(([i, j]) => `${left[i]} → ${right[j]}`).join(", ")}>
       <defs>
         <marker id="map-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-          <path d="M0 0 L10 5 L0 10 z" fill="#1d5440" />
+          <path d="M0 0 L10 5 L0 10 z" fill="#4338ca" />
         </marker>
       </defs>
       <ellipse cx={55} cy={h / 2} rx={42} ry={h / 2 - 4} fill="#e3ecf7" stroke="#41525c" />
       <ellipse cx={205} cy={h / 2} rx={42} ry={h / 2 - 4} fill="#fdf1df" stroke="#41525c" />
       {arrows.map(([i, j], k) => (
-        <line key={k} x1={72} y1={ly(i)} x2={186} y2={ry(j)} stroke="#1d5440" strokeWidth={1.8} markerEnd="url(#map-arrow)" />
+        <line key={k} x1={72} y1={ly(i)} x2={186} y2={ry(j)} stroke="#4338ca" strokeWidth={1.8} markerEnd="url(#map-arrow)" />
       ))}
       {left.map((v, i) => (
         <text key={`l${i}`} x={55} y={ly(i) + 5} textAnchor="middle" fontSize={15} fontWeight={700} fill="#17201b">
