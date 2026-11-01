@@ -4,10 +4,11 @@
  * ask" and related searches, open pages and save sources. A search coach reads every query and says how to
  * narrow it. The "real Google" buttons open the same search on google.com for live results.
  */
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { GoogleSearchTask, SearchGoal } from "@/lib/research/types";
-import { estimateResults, genericResults, groupDigits, isAcademic, narrowerSearches, readQuery, search, stem, suggestions, tokens, type Source } from "@/lib/research/search";
-import { loadSources, loadTopic, saveSources } from "@/lib/research/store";
+import { cleanQuery, estimateResults, genericResults, groupDigits, isAcademic, narrowerSearches, onSubject, practiceAcademic, readQuery, search, stem, suggestions, tokens, type Source } from "@/lib/research/search";
+import { loadLiveSources, loadSources, loadTopic, saveLiveSources, saveSources } from "@/lib/research/store";
+import type { LiveScope } from "@/lib/research/live";
 import sourcesJson from "@/content/research/sources.json" with { type: "json" };
 import { useT } from "@/components/I18n";
 import { fmt } from "@/lib/i18n";
@@ -16,6 +17,9 @@ import { Feedback } from "@/components/tasks/Feedback";
 import { ArticleView } from "./ArticleView";
 
 const SOURCES = sourcesJson as Source[];
+/** Pages made for a search (practice theses, encyclopedia, blogs…), kept so saved ones can still be found. */
+const MADE = new Map<string, Source>();
+const findSource = (id: string) => SOURCES.find((s) => s.id === id) ?? MADE.get(id);
 const COLOURS = ["#1a73e8", "#d93025", "#188038", "#e37400", "#9334e6", "#007b83", "#b06000"];
 const small = (s: string) => {
   let h = 0;
@@ -23,7 +27,14 @@ const small = (s: string) => {
   return h;
 };
 
-function Wordmark({ scholar, size = "lg" }: { scholar: boolean; size?: "lg" | "sm" }) {
+function Wordmark({ scholar, size = "lg", live = false }: { scholar: boolean; size?: "lg" | "sm"; live?: boolean }) {
+  if (live) {
+    return (
+      <span className={`select-none font-semibold tracking-tight text-[#1f3a5f] ${size === "lg" ? "text-[1.7rem]" : "text-[0.95rem]"}`} style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+        📚 {size === "lg" ? "Live research" : "Live"}
+      </span>
+    );
+  }
   const letters: [string, string][] = [
     ["G", "#4285F4"],
     ["o", "#EA4335"],
@@ -76,7 +87,10 @@ function goalMet(g: SearchGoal, st: { reading: ReturnType<typeof readQuery> | nu
     case "open":
       return (g.academic ? st.opened : st.openedAny).length >= (g.count ?? 1);
     case "save":
-      return st.saved.filter((id) => SOURCES.find((s) => s.id === id && isAcademic(s))).length >= g.count;
+      return st.saved.filter((id) => {
+        const s = findSource(id);
+        return !!s && isAcademic(s);
+      }).length >= g.count;
   }
 }
 
@@ -94,7 +108,19 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
   const [paa, setPaa] = useState<number | null>(null);
   const [visited, setVisited] = useState<string[]>([]);
   const [opened, setOpened] = useState<string[]>([]);
-  const [saved, setSaved] = useState<string[]>(() => (typeof window === "undefined" ? [] : loadSources()));
+  const [saved, setSaved] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    // Real papers saved earlier come back into "My sources".
+    const liveSaved = loadLiveSources();
+    for (const x of liveSaved) MADE.set(x.id, x);
+    return [...loadSources(), ...liveSaved.map((x) => x.id)];
+  });
+  // Scholar steps search real papers (OpenAlex) by default; "Practice" keeps the course's practice results.
+  const [mode, setMode] = useState<"live" | "practice">(scholar ? "live" : "practice");
+  const [scope, setScope] = useState<LiveScope>("all");
+  const [liveRes, setLiveRes] = useState<{ status: "loading" | "ok" | "error"; error?: string; total: number; results: Source[]; ms: number } | null>(null);
+  const request = useRef(0);
+  const isLive = scholar && mode === "live";
   const [done, setDone] = useState<boolean[]>(() => task.goals.map(() => passed));
   const [message, setMessage] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [topic] = useState(() => (typeof window === "undefined" ? null : loadTopic()));
@@ -107,17 +133,26 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
 
   const results = useMemo(() => {
     if (!query) return [] as Source[];
+    if (isLive) return (liveRes?.status === "ok" ? liveRes.results : []).filter((s) => !since || s.year >= since);
     const hits = search(SOURCES, query, { scholar }).map((h) => h.source);
-    if (scholar) return hits.filter((s) => !since || s.year >= since);
-    const generic = genericResults(query).filter((g) => !hits.some((h) => h.id === g.id));
-    const list = reading?.level === "broad" ? [...generic, ...hits] : hits.length >= 4 ? hits : [...hits, ...generic];
+    // Every topic gets research to open: practice theses and articles when fewer than two research results
+    // are about the subject itself (not only the same town or group of people).
+    const practice = hits.filter((h) => isAcademic(h) && onSubject(h, query)).length < 2 ? practiceAcademic(query) : [];
+    const generic = scholar ? [] : genericResults(query).filter((g) => !hits.some((h) => h.id === g.id));
+    for (const m of [...practice, ...generic]) MADE.set(m.id, m);
+    // Results about the subject come first, as on the real engine.
+    const about = hits.filter((h) => onSubject(h, query));
+    const others = hits.filter((h) => !onSubject(h, query));
+    if (scholar) return [...about, ...practice, ...others].filter((s) => !since || s.year >= since);
+    const list = reading?.level === "broad" ? [...generic, ...about, ...practice, ...others] : about.length >= 4 ? [...about, ...others] : [...about, ...practice, ...others, ...generic];
     return list.filter((s) => (tab === "news" ? s.kind === "news" : tab === "books" ? s.kind === "book" : true));
-  }, [query, scholar, since, tab, reading?.level]);
+  }, [query, scholar, since, tab, reading?.level, isLive, liveRes]);
 
-  const open = openId ? (SOURCES.find((s) => s.id === openId) ?? genericResults(query).find((s) => s.id === openId) ?? null) : null;
+  const open = openId ? (findSource(openId) ?? null) : null;
 
   /** Ticks off every goal the learner has now reached, in order, and reports the first one still missing. */
-  function progress(next: { reading: ReturnType<typeof readQuery> | null; opened: string[]; openedAny: string[]; saved: string[] }, action: SearchGoal["kind"]) {
+  /** `academic`: the source just opened or saved is research (so a goal that needs several is on its way). */
+  function progress(next: { reading: ReturnType<typeof readQuery> | null; opened: string[]; openedAny: string[]; saved: string[] }, action: SearchGoal["kind"], academic = false) {
     if (allDone) return;
     const d = [...done];
     let last = -1;
@@ -146,17 +181,53 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
     } else if (g.kind === "operator" && action === "search") {
       setMessage({ kind: "err", text: r.coach.operatorMissing[g.operator] });
     } else if (g.kind === "open" && action === "open" && g.academic) {
-      setMessage({ kind: "err", text: r.coach.notAcademicOpen });
+      setMessage(academic ? { kind: "ok", text: fmt(r.coach.openMore, { n: (g.count ?? 1) - next.opened.length }) } : { kind: "err", text: r.coach.notAcademicOpen });
     } else if (g.kind === "save" && action === "save") {
-      setMessage({ kind: "err", text: r.coach.saveAcademic });
+      const have = next.saved.filter((id) => {
+        const x = findSource(id);
+        return !!x && isAcademic(x);
+      }).length;
+      setMessage(academic ? { kind: "ok", text: fmt(r.coach.saveMore, { n: g.count - have }) } : { kind: "err", text: r.coach.saveAcademic });
     } else {
       setMessage(null);
     }
   }
 
+  /** Real papers from the server (which asks OpenAlex); the latest search wins if several overlap. */
+  async function fetchLive(q: string, sc: LiveScope) {
+    const id = ++request.current;
+    const started = Date.now();
+    setLiveRes({ status: "loading", total: 0, results: [], ms: 0 });
+    try {
+      const res = await fetch(`/api/research/live?q=${encodeURIComponent(q)}&scope=${sc}`);
+      const data = (await res.json().catch(() => ({}))) as { error?: string; total?: number; results?: Source[] };
+      if (id !== request.current) return;
+      if (!res.ok || !data.results) {
+        setLiveRes({ status: "error", error: data.error ?? "unavailable", total: 0, results: [], ms: 0 });
+        return;
+      }
+      for (const x of data.results) MADE.set(x.id, x);
+      setLiveRes({ status: "ok", total: data.total ?? data.results.length, results: data.results, ms: Date.now() - started });
+    } catch {
+      if (id === request.current) setLiveRes({ status: "error", error: "offline", total: 0, results: [], ms: 0 });
+    }
+  }
+
+  function switchMode(m: "live" | "practice") {
+    setMode(m);
+    setOpenId(null);
+    if (m === "live" && query) void fetchLive(query, scope);
+  }
+
+  function changeScope(sc: LiveScope) {
+    setScope(sc);
+    if (query) void fetchLive(query, sc);
+  }
+
   function run(q: string) {
-    const v = q.replace(/\s+/g, " ").trim();
+    const v = cleanQuery(q);
     if (!v) return;
+    if (isLive) void fetchLive(v, scope);
     setInput(v);
     setQuery(v);
     setFocused(false);
@@ -173,20 +244,30 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
     const o = isAcademic(s) && !opened.includes(s.id) ? [...opened, s.id] : opened;
     setVisited(v);
     setOpened(o);
-    progress({ reading, opened: o, openedAny: v, saved }, "open");
+    progress({ reading, opened: o, openedAny: v, saved }, "open", isAcademic(s));
   }
 
   function toggleSave(s: Source) {
     const next = saved.includes(s.id) ? saved.filter((x) => x !== s.id) : [...saved, s.id];
     setSaved(next);
     saveSources(next.filter((id) => SOURCES.some((x) => x.id === id)));
-    if (!saved.includes(s.id)) progress({ reading, opened, openedAny: visited, saved: next }, isAcademic(s) ? "save" : "save");
+    saveLiveSources(next.map((id) => findSource(id)).filter((x): x is Source => !!x && x.id.startsWith("live-")));
+    if (!saved.includes(s.id)) progress({ reading, opened, openedAny: visited, saved: next }, "save", isAcademic(s));
   }
 
   const sugg = focused ? suggestions(SOURCES, input) : [];
-  const url = open ? open.url.replace(/ › /g, "/") : query ? `${scholar ? "scholar.google.com/scholar" : "google.com/search"}?q=${encodeURIComponent(query).replace(/%20/g, "+")}` : scholar ? "scholar.google.com" : "google.com";
-  const count = reading ? estimateResults(reading, scholar) : 0;
-  const seconds = (0.21 + (small(query) % 48) / 100).toFixed(2);
+  const url = open
+    ? open.url.replace(/ › /g, "/")
+    : isLive
+      ? `openalex.org/works${query ? `?search=${encodeURIComponent(query).replace(/%20/g, "+")}` : ""}`
+      : query
+        ? `${scholar ? "scholar.google.com/scholar" : "google.com/search"}?q=${encodeURIComponent(query).replace(/%20/g, "+")}`
+        : scholar
+          ? "scholar.google.com"
+          : "google.com";
+  const count = isLive ? (liveRes?.total ?? 0) : reading ? estimateResults(reading, scholar) : 0;
+  const seconds = isLive ? ((liveRes?.ms ?? 0) / 1000).toFixed(2) : (0.21 + (small(query) % 48) / 100).toFixed(2);
+  const openLink = open && "link" in open ? (open as Source & { link?: string; oaUrl?: string }) : null;
   const related = query ? narrowerSearches(query, open?.field) : [];
   const facetKeys = ["population", "place", "angle", "time"] as const;
   const shown = reading ?? (input ? live : null);
@@ -253,6 +334,16 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
       </div>
       {message && !allDone && <Feedback kind={message.kind} title={message.kind === "ok" ? t.task.correct : r.coach.title} messages={[message.text]} />}
 
+      {scholar && (
+        <div className="mt-4 grid grid-cols-2 gap-1 rounded-xl bg-[#eef0f4] p-1" role="tablist" aria-label={r.live.modeLabel}>
+          {(["live", "practice"] as const).map((m) => (
+            <button key={m} type="button" role="tab" aria-selected={mode === m} onClick={() => switchMode(m)} className={`min-h-11 rounded-lg px-2 text-[0.82rem] font-semibold leading-tight ${mode === m ? "bg-white text-ink shadow-sm" : "text-muted"}`}>
+              {m === "live" ? `📚 ${r.live.modeLive}` : `🧪 ${r.live.modePractice}`}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* The browser */}
       <div className="mt-4 overflow-hidden rounded-2xl border border-[#dadce0] bg-white shadow-[0_8px_24px_-12px_rgba(32,33,36,0.35)]">
         <div className="flex items-center gap-2 bg-[#f1f3f4] px-2.5 py-2">
@@ -267,7 +358,8 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
 
         {!query && !open && (
           <div className="flex min-h-[19rem] flex-col items-center justify-center gap-6 px-4 py-8">
-            <Wordmark scholar={scholar} />
+            <Wordmark scholar={scholar} live={isLive} />
+            {isLive && <p className="-mt-3 max-w-sm text-center text-[0.75rem] text-[#5f6368]">{r.live.tagline}</p>}
             <div className="w-full max-w-md">{searchBox(false)}</div>
             <div className="flex flex-wrap justify-center gap-2">
               <button type="button" onClick={() => run(input)} className="rounded bg-[#f8f9fa] px-4 py-2 text-[0.85rem] text-[#3c4043] hover:shadow">
@@ -287,12 +379,19 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
             <div className="border-b border-[#ebebeb] px-3 pb-0 pt-3">
               <div className="flex items-center gap-3">
                 <button type="button" onClick={() => (setQuery(""), setInput(""))} className="shrink-0">
-                  <Wordmark scholar={scholar} size="sm" />
+                  <Wordmark scholar={scholar} size="sm" live={isLive} />
                 </button>
                 <div className="min-w-0 flex-1">{searchBox(true)}</div>
               </div>
               {scholar ? (
                 <div className="-mx-3 mt-2 flex gap-1 overflow-x-auto px-3 pb-2 text-[0.75rem] [scrollbar-width:none]">
+                  {isLive &&
+                    (["all", "africa", "cm"] as const).map((sc) => (
+                      <button key={sc} type="button" onClick={() => changeScope(sc)} className={`shrink-0 rounded-full border px-3 py-1 ${scope === sc ? "border-[#1f3a5f] bg-[#1f3a5f] font-semibold text-white" : "border-[#dadce0] text-[#3c4043]"}`}>
+                        {r.live.scopes[sc]}
+                      </button>
+                    ))}
+                  {isLive && <span className="mx-1 w-px shrink-0 bg-[#dadce0]" aria-hidden="true" />}
                   {[0, 2024, 2023, 2020].map((y) => (
                     <button key={y} type="button" onClick={() => setSince(y)} className={`shrink-0 rounded-full px-3 py-1 ${since === y ? "bg-[#e8f0fe] font-semibold text-[#1967d2]" : "text-[#5f6368]"}`}>
                       {y ? fmt(r.since, { y }) : r.anyTime}
@@ -315,11 +414,41 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
               )}
             </div>
             <div className="px-3 py-3">
-              <p className="text-[0.75rem] text-[#70757a]">{fmt(scholar ? r.scholarAbout : r.about, { n: groupDigits(count), s: seconds })}</p>
-              {!results.length && (
+              {isLive && liveRes?.status === "loading" ? (
+                <div className="space-y-5 py-2" aria-label={r.live.loading}>
+                  <p className="text-[0.75rem] text-[#70757a]">{r.live.loading}</p>
+                  {[0, 1, 2].map((k) => (
+                    <div key={k} className="animate-pulse space-y-2">
+                      <div className="h-3.5 w-4/5 rounded bg-[#e8eaed]" />
+                      <div className="h-2.5 w-3/5 rounded bg-[#eef0f2]" />
+                      <div className="h-2.5 w-full rounded bg-[#f1f3f4]" />
+                    </div>
+                  ))}
+                </div>
+              ) : isLive && liveRes?.status === "error" ? (
+                <div className="my-3 rounded-xl border border-[#f1c27d] bg-[#fff8eb] p-3 text-[0.85rem] text-[#5c3d00]">
+                  <p className="font-semibold">{r.live.errors[(liveRes.error ?? "unavailable") as keyof typeof r.live.errors] ?? r.live.errors.unavailable}</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <button type="button" className="rounded-full bg-[#1f3a5f] px-3 py-1.5 text-[0.78rem] font-semibold text-white" onClick={() => void fetchLive(query, scope)}>
+                      {r.live.retry}
+                    </button>
+                    <button type="button" className="rounded-full border border-[#1f3a5f] px-3 py-1.5 text-[0.78rem] font-semibold text-[#1f3a5f]" onClick={() => switchMode("practice")}>
+                      {r.live.usePractice}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-[0.75rem] text-[#70757a]">{fmt(scholar ? r.scholarAbout : r.about, { n: groupDigits(count), s: seconds })}</p>
+              )}
+              {!results.length && !(isLive && liveRes?.status !== "ok") && (
                 <div className="py-6 text-[0.85rem] text-[#202124]">
                   <p>{fmt(r.noMatch, { q: query })}</p>
-                  <p className="mt-3 text-[0.8rem] text-[#5f6368]">{r.noMatchTip}</p>
+                  <p className="mt-3 text-[0.8rem] text-[#5f6368]">{isLive ? r.live.noResults : r.noMatchTip}</p>
+                  {isLive && (
+                    <button type="button" className="mt-3 rounded-full border border-[#1f3a5f] px-3 py-1.5 text-[0.78rem] font-semibold text-[#1f3a5f]" onClick={() => switchMode("practice")}>
+                      {r.live.usePractice}
+                    </button>
+                  )}
                 </div>
               )}
               <ol className="mt-2 space-y-5">
@@ -383,6 +512,11 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
               <button type="button" onClick={() => setOpenId(null)} className="rounded-full px-3 py-1.5 text-[0.8rem] font-semibold text-[#1a73e8] hover:bg-[#e8f0fe]">
                 ← {r.backToResults}
               </button>
+              {openLink?.link && (
+                <a href={openLink.oaUrl ?? openLink.link} target="_blank" rel="noopener noreferrer" className="rounded-full px-2 py-1.5 text-[0.78rem] font-semibold text-[#1f3a5f] underline-offset-2 hover:underline">
+                  {openLink.oaUrl ? r.live.readFree : r.live.openReal} ↗
+                </a>
+              )}
               <button type="button" onClick={() => toggleSave(open)} className={`rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold ${saved.includes(open.id) ? "bg-[#e6f4ea] text-[#137333]" : "bg-[#1a73e8] text-white"}`}>
                 {saved.includes(open.id) ? `★ ${r.savedSource}` : `☆ ${r.saveSource}`}
               </button>
@@ -390,13 +524,16 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
           </div>
         )}
       </div>
-      <p className="mt-2 text-center text-[0.72rem] text-muted">{r.disclaimer}</p>
+      <p className="mt-2 text-center text-[0.72rem] text-muted">{isLive ? r.live.disclaimer : r.disclaimer}</p>
 
       {/* Coach */}
       <section className="mt-4 rounded-2xl border border-line bg-surface p-4">
         <p className="text-sm font-bold uppercase tracking-wide text-primary">🧭 {r.coach.title}</p>
         {open ? (
-          <p className={`mt-2 text-[0.9rem] ${isAcademic(open) ? "text-ok" : "text-[#8a5a00]"}`}>{isAcademic(open) ? r.coach.academic : r.coach.kinds[open.kind as "news" | "blog" | "encyclopedia" | "forum"]}</p>
+          <>
+            <p className={`mt-2 text-[0.9rem] ${isAcademic(open) ? "text-ok" : "text-[#8a5a00]"}`}>{isAcademic(open) ? r.coach.academic : r.coach.kinds[open.kind as "news" | "blog" | "encyclopedia" | "forum"]}</p>
+            {open.id.startsWith("live-") && <p className="mt-1 text-[0.85rem] text-muted">📚 {r.live.realPaper}</p>}
+          </>
         ) : (
           <>
             <p className="mt-2 text-[0.9rem] font-semibold">{shown ? r.coach.level[shown.level] : r.coach.level.empty}</p>
@@ -410,7 +547,11 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
                     </li>
                   ))}
                 </ul>
-                {shown.missing.length > 0 && <p className="mt-3 text-[0.85rem]">💡 {r.coach.missing[shown.missing[0]]}</p>}
+                {shown.tooLong ? (
+                  <p className="mt-3 text-[0.85rem]">✂️ {r.coach.tooLong}</p>
+                ) : (
+                  shown.missing.length > 0 && <p className="mt-3 text-[0.85rem]">💡 {r.coach.missing[shown.missing[0]]}</p>
+                )}
               </>
             )}
           </>
@@ -426,13 +567,13 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
           </div>
         )}
         <details className="mt-4 border-t border-line pt-3">
-          <summary className="cursor-pointer text-[0.85rem] font-semibold">{fmt(r.coach.mySources, { n: saved.filter((id) => SOURCES.some((s) => s.id === id)).length })}</summary>
+          <summary className="cursor-pointer text-[0.85rem] font-semibold">{fmt(r.coach.mySources, { n: saved.filter((id) => findSource(id)).length })}</summary>
           {saved.length === 0 ? (
             <p className="mt-2 text-[0.8rem] text-muted">{r.coach.noSources}</p>
           ) : (
             <ul className="mt-2 space-y-1.5">
               {saved
-                .map((id) => SOURCES.find((s) => s.id === id))
+                .map((id) => findSource(id))
                 .filter((s): s is Source => !!s)
                 .map((s) => (
                   <li key={s.id} className="text-[0.8rem]">

@@ -1,0 +1,1317 @@
+{
+ "meta": {
+  "count": 37219
+ },
+ "results": [
+  {
+   "id": "https://openalex.org/W2989728710",
+   "display_name": "A model for mobile money services adoption by traders in Uganda",
+   "publication_year": 2019,
+   "type": "article",
+   "doi": "https://doi.org/10.1002/isd2.12117",
+   "cited_by_count": 25,
+   "authorships": [
+    {
+     "author": {
+      "display_name": "Ramadhan Malinga"
+     }
+    },
+    {
+     "author": {
+      "display_name": "Gilbert Maiga"
+     }
+    }
+   ],
+   "primary_location": {
+    "landing_page_url": "https://doi.org/10.1002/isd2.12117",
+    "source": {
+     "display_name": "The Electronic Journal of Information Systems in Developing Countries"
+    }
+   },
+   "abstract_inverted_index": {
+    "394": [
+     73
+    ],
+    "Abstract": [
+     0
+    ],
+    "Mobile": [
+     1
+    ],
+    "money": [
+     2,
+     33,
+     61,
+     83,
+     122,
+     144,
+     160
+    ],
+    "services": [
+     3,
+     34,
+     62,
+     123,
+     145,
+     161
+    ],
+    "provide": [
+     4
+    ],
+    "benefits": [
+     5
+    ],
+    "for": [
+     6,
+     17,
+     97,
+     125,
+     162
+    ],
+    "trade": [
+     7,
+     163
+    ],
+    "such": [
+     8
+    ],
+    "as": [
+     9,
+     183
+    ],
+    "payment": [
+     10
+    ],
+    "of": [
+     11,
+     31,
+     47,
+     102,
+     120,
+     158
+    ],
+    "bills,": [
+     12
+    ],
+    "reduced": [
+     13
+    ],
+    "cost": [
+     14
+    ],
+    "and": [
+     15,
+     23,
+     29,
+     58,
+     100,
+     112,
+     170,
+     172
+    ],
+    "time": [
+     16
+    ],
+    "transactions,": [
+     18
+    ],
+    "increased": [
+     19
+    ],
+    "savings": [
+     20
+    ],
+    "options,": [
+     21
+    ],
+    "sales,": [
+     22
+    ],
+    "convenience.": [
+     24
+    ],
+    "Despite": [
+     25
+    ],
+    "the": [
+     26,
+     45,
+     52,
+     94,
+     98,
+     117,
+     128,
+     138
+    ],
+    "benefits,": [
+     27
+    ],
+    "adoption": [
+     28,
+     85,
+     124
+    ],
+    "use": [
+     30,
+     156
+    ],
+    "mobile": [
+     32,
+     60,
+     82,
+     121,
+     143,
+     159
+    ],
+    "by": [
+     35,
+     86,
+     146
+    ],
+    "traders": [
+     36,
+     54,
+     87
+    ],
+    "in": [
+     37,
+     56,
+     63,
+     75,
+     176
+    ],
+    "Uganda": [
+     38
+    ],
+    "remain": [
+     39
+    ],
+    "low.": [
+     40
+    ],
+    "This": [
+     41
+    ],
+    "paper": [
+     42
+    ],
+    "reports": [
+     43
+    ],
+    "on": [
+     44
+    ],
+    "results": [
+     46
+    ],
+    "a": [
+     48,
+     76
+    ],
+    "study": [
+     49
+    ],
+    "that": [
+     50,
+     107,
+     152
+    ],
+    "explore": [
+     51
+    ],
+    "challenges": [
+     53
+    ],
+    "face": [
+     55
+    ],
+    "using": [
+     57
+    ],
+    "adopting": [
+     59
+    ],
+    "Uganda.": [
+     64,
+     184
+    ],
+    "Self‐administered": [
+     65
+    ],
+    "questionnaire": [
+     66
+    ],
+    "was": [
+     67
+    ],
+    "used": [
+     68
+    ],
+    "to": [
+     69,
+     80,
+     141
+    ],
+    "collect": [
+     70
+    ],
+    "data": [
+     71
+    ],
+    "from": [
+     72
+    ],
+    "respondents": [
+     74
+    ],
+    "survey.": [
+     77
+    ],
+    "A": [
+     78
+    ],
+    "model": [
+     79,
+     92,
+     167
+    ],
+    "support": [
+     81
+    ],
+    "service": [
+     84
+    ],
+    "is": [
+     88,
+     168
+    ],
+    "proposed.": [
+     89
+    ],
+    "The": [
+     90,
+     148,
+     165
+    ],
+    "proposed": [
+     91,
+     166
+    ],
+    "extends": [
+     93
+    ],
+    "Unified": [
+     95
+    ],
+    "Theory": [
+     96
+    ],
+    "Acceptance": [
+     99
+    ],
+    "Use": [
+     101
+    ],
+    "Technology.": [
+     103
+    ],
+    "Regression": [
+     104
+    ],
+    "analysis": [
+     105
+    ],
+    "indicated": [
+     106
+    ],
+    "performance": [
+     108
+    ],
+    "expectancy,": [
+     109
+    ],
+    "social": [
+     110
+    ],
+    "influences,": [
+     111
+    ],
+    "sensitization": [
+     113
+    ],
+    "constructs": [
+     114
+    ],
+    "significantly": [
+     115,
+     136
+    ],
+    "influence": [
+     116,
+     137
+    ],
+    "behavioural": [
+     118,
+     139
+    ],
+    "intention": [
+     119,
+     140
+    ],
+    "trade.": [
+     126
+    ],
+    "On": [
+     127
+    ],
+    "other": [
+     129,
+     177
+    ],
+    "hand,": [
+     130
+    ],
+    "security,": [
+     131
+    ],
+    "effort": [
+     132
+    ],
+    "expectancy": [
+     133
+    ],
+    "did": [
+     134
+    ],
+    "not": [
+     135
+    ],
+    "adopt": [
+     142
+    ],
+    "traders.": [
+     147
+    ],
+    "findings": [
+     149
+    ],
+    "further": [
+     150
+    ],
+    "reveal": [
+     151
+    ],
+    "facilitating": [
+     153
+    ],
+    "conditions": [
+     154
+    ],
+    "influenced": [
+     155
+    ],
+    "behaviour": [
+     157
+    ],
+    "transactions.": [
+     164
+    ],
+    "flexible": [
+     169
+    ],
+    "generic": [
+     171
+    ],
+    "can": [
+     173
+    ],
+    "be": [
+     174
+    ],
+    "utilized": [
+     175
+    ],
+    "developing": [
+     178
+    ],
+    "countries": [
+     179
+    ],
+    "with": [
+     180
+    ],
+    "similar": [
+     181
+    ],
+    "contexts": [
+     182
+    ]
+   },
+   "biblio": {
+    "volume": "86",
+    "issue": "2",
+    "first_page": null,
+    "last_page": null
+   },
+   "open_access": {
+    "is_oa": true,
+    "oa_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1002/isd2.12117"
+   }
+  },
+  {
+   "id": "https://openalex.org/W4205816835",
+   "display_name": "A model for Ugandan traders' use of mobile money services",
+   "publication_year": 2022,
+   "type": "article",
+   "doi": "https://doi.org/10.53384/inbe.101380943.2779.1862003510",
+   "cited_by_count": 0,
+   "authorships": [
+    {
+     "author": {
+      "display_name": "Mahdi Giozafat"
+     }
+    }
+   ],
+   "primary_location": {
+    "landing_page_url": "https://doi.org/10.53384/inbe.101380943.2779.1862003510",
+    "source": {
+     "display_name": "Industrielle Beziehungen Zeitschrift für Arbeit Organisation und Management"
+    }
+   },
+   "abstract_inverted_index": {
+    "394": [
+     72
+    ],
+    "Mobile": [
+     0
+    ],
+    "money": [
+     1,
+     35,
+     59,
+     83,
+     122,
+     146,
+     160
+    ],
+    "services": [
+     2,
+     60,
+     84,
+     161
+    ],
+    "give": [
+     3
+    ],
+    "trade": [
+     4
+    ],
+    "benefits": [
+     5
+    ],
+    "such": [
+     6
+    ],
+    "as": [
+     7
+    ],
+    "bill": [
+     8
+    ],
+    "payment,": [
+     9
+    ],
+    "decreased": [
+     10
+    ],
+    "transaction": [
+     11
+    ],
+    "costs": [
+     12
+    ],
+    "and": [
+     13,
+     19,
+     32,
+     56,
+     98,
+     108,
+     132,
+     170,
+     172
+    ],
+    "time,": [
+     14
+    ],
+    "expanded": [
+     15
+    ],
+    "savings": [
+     16
+    ],
+    "possibilities,": [
+     17
+    ],
+    "sales,": [
+     18
+    ],
+    "convenience.": [
+     20
+    ],
+    "Despite": [
+     21
+    ],
+    "the": [
+     22,
+     41,
+     49,
+     92,
+     117,
+     128,
+     149,
+     156
+    ],
+    "benefits,": [
+     23
+    ],
+    "traders": [
+     24,
+     79
+    ],
+    "in": [
+     25,
+     61,
+     177
+    ],
+    "Uganda": [
+     26
+    ],
+    "are": [
+     27
+    ],
+    "still": [
+     28
+    ],
+    "slow": [
+     29
+    ],
+    "to": [
+     30,
+     68,
+     80,
+     101,
+     143,
+     184
+    ],
+    "adopt": [
+     31
+    ],
+    "use": [
+     33,
+     81,
+     144
+    ],
+    "mobile": [
+     34,
+     58,
+     82,
+     121,
+     145,
+     159
+    ],
+    "services.": [
+     36,
+     147
+    ],
+    "This": [
+     37
+    ],
+    "article": [
+     38
+    ],
+    "reflects": [
+     39
+    ],
+    "on": [
+     40,
+     91,
+     116,
+     139
+    ],
+    "findings": [
+     42
+    ],
+    "of": [
+     43,
+     95,
+     120,
+     158
+    ],
+    "a": [
+     44,
+     113
+    ],
+    "study": [
+     45
+    ],
+    "that": [
+     46,
+     51,
+     152
+    ],
+    "looked": [
+     47
+    ],
+    "at": [
+     48
+    ],
+    "barriers": [
+     50
+    ],
+    "merchants": [
+     52
+    ],
+    "experience": [
+     53
+    ],
+    "while": [
+     54
+    ],
+    "utilizing": [
+     55
+    ],
+    "implementing": [
+     57
+    ],
+    "Uganda.": [
+     62,
+     185
+    ],
+    "A": [
+     63,
+     75
+    ],
+    "self-administered": [
+     64
+    ],
+    "questionnaire": [
+     65
+    ],
+    "was": [
+     66
+    ],
+    "utilized": [
+     67
+    ],
+    "obtain": [
+     69
+    ],
+    "data": [
+     70,
+     150
+    ],
+    "from": [
+     71
+    ],
+    "survey": [
+     73
+    ],
+    "respondents.": [
+     74
+    ],
+    "model": [
+     76,
+     89
+    ],
+    "for": [
+     77,
+     125,
+     162
+    ],
+    "encouraging": [
+     78
+    ],
+    "is": [
+     85,
+     168
+    ],
+    "offered.": [
+     86
+    ],
+    "The": [
+     87,
+     165
+    ],
+    "suggested": [
+     88,
+     166
+    ],
+    "expands": [
+     90
+    ],
+    "Unified": [
+     93
+    ],
+    "Theory": [
+     94
+    ],
+    "Technology": [
+     96
+    ],
+    "Acceptance": [
+     97
+    ],
+    "Use.": [
+     99
+    ],
+    "According": [
+     100
+    ],
+    "regression": [
+     102
+    ],
+    "study,": [
+     103
+    ],
+    "performance": [
+     104
+    ],
+    "expectancy,": [
+     105
+    ],
+    "social": [
+     106
+    ],
+    "factors,": [
+     107
+    ],
+    "sensitization": [
+     109
+    ],
+    "components": [
+     110
+    ],
+    "all": [
+     111
+    ],
+    "have": [
+     112
+    ],
+    "substantial": [
+     114
+    ],
+    "impact": [
+     115
+    ],
+    "behavioral": [
+     118,
+     141
+    ],
+    "intention": [
+     119,
+     142
+    ],
+    "service": [
+     123
+    ],
+    "uptake": [
+     124
+    ],
+    "trade.": [
+     126
+    ],
+    "On": [
+     127
+    ],
+    "other": [
+     129,
+     178
+    ],
+    "hand,": [
+     130
+    ],
+    "security": [
+     131
+    ],
+    "effort": [
+     133
+    ],
+    "expectation": [
+     134
+    ],
+    "had": [
+     135
+    ],
+    "no": [
+     136
+    ],
+    "significant": [
+     137
+    ],
+    "affect": [
+     138
+    ],
+    "traders'": [
+     140
+    ],
+    "Furthermore,": [
+     148
+    ],
+    "show": [
+     151
+    ],
+    "enabling": [
+     153
+    ],
+    "conditions": [
+     154
+    ],
+    "affected": [
+     155
+    ],
+    "utilization": [
+     157
+    ],
+    "commercial": [
+     163
+    ],
+    "transactions.": [
+     164
+    ],
+    "approach": [
+     167
+    ],
+    "adaptable": [
+     169
+    ],
+    "generic,": [
+     171
+    ],
+    "it": [
+     173
+    ],
+    "may": [
+     174
+    ],
+    "be": [
+     175
+    ],
+    "used": [
+     176
+    ],
+    "developing": [
+     179
+    ],
+    "nations": [
+     180
+    ],
+    "with": [
+     181
+    ],
+    "comparable": [
+     182
+    ],
+    "circumstances": [
+     183
+    ]
+   },
+   "biblio": {
+    "volume": "10",
+    "issue": "4",
+    "first_page": null,
+    "last_page": null
+   },
+   "open_access": {
+    "is_oa": true,
+    "oa_url": "https://doi.org/10.53384/inbe.101380943.2779.1862003510"
+   }
+  },
+  {
+   "id": "https://openalex.org/W4416933955",
+   "display_name": "Mobile Money and Financial Inclusion: Evidence From Petty Traders in Ghana's Informal Sector",
+   "publication_year": 2025,
+   "type": "article",
+   "doi": "https://doi.org/10.1111/rode.70095",
+   "cited_by_count": 3,
+   "authorships": [
+    {
+     "author": {
+      "display_name": "Hamidu Naabo Adishetu"
+     }
+    },
+    {
+     "author": {
+      "display_name": "Yuichiro Uchida"
+     }
+    }
+   ],
+   "primary_location": {
+    "landing_page_url": "https://doi.org/10.1111/rode.70095",
+    "source": {
+     "display_name": "Review of Development Economics"
+    }
+   },
+   "abstract_inverted_index": {
+    "ABSTRACT": [
+     0
+    ],
+    "This": [
+     1
+    ],
+    "study": [
+     2
+    ],
+    "examines": [
+     3
+    ],
+    "the": [
+     4,
+     17,
+     127
+    ],
+    "impact": [
+     5
+    ],
+    "of": [
+     6,
+     21,
+     130
+    ],
+    "mobile": [
+     7,
+     41,
+     65,
+     81,
+     110,
+     131
+    ],
+    "money": [
+     8,
+     42,
+     66,
+     82,
+     111
+    ],
+    "usage": [
+     9
+    ],
+    "on": [
+     10
+    ],
+    "saving": [
+     11,
+     83
+    ],
+    "behaviors": [
+     12
+    ],
+    "among": [
+     13
+    ],
+    "petty": [
+     14,
+     50,
+     74,
+     97
+    ],
+    "traders": [
+     15,
+     51,
+     75,
+     98
+    ],
+    "in": [
+     16,
+     133
+    ],
+    "Accra": [
+     18
+    ],
+    "Central": [
+     19
+    ],
+    "District": [
+     20
+    ],
+    "Ghana.": [
+     22
+    ],
+    "We": [
+     23
+    ],
+    "collected": [
+     24
+    ],
+    "primary": [
+     25
+    ],
+    "data": [
+     26
+    ],
+    "through": [
+     27
+    ],
+    "a": [
+     28
+    ],
+    "structured": [
+     29
+    ],
+    "survey": [
+     30
+    ],
+    "and": [
+     31,
+     34,
+     103,
+     137
+    ],
+    "applied": [
+     32
+    ],
+    "probit": [
+     33
+    ],
+    "logit": [
+     35
+    ],
+    "models": [
+     36
+    ],
+    "to": [
+     37,
+     59,
+     68,
+     79,
+     117,
+     126
+    ],
+    "assess": [
+     38
+    ],
+    "factors": [
+     39
+    ],
+    "affecting": [
+     40
+    ],
+    "use": [
+     43
+    ],
+    "for": [
+     44,
+     61
+    ],
+    "saving.": [
+     45
+    ],
+    "The": [
+     46
+    ],
+    "results": [
+     47
+    ],
+    "reveal": [
+     48
+    ],
+    "that": [
+     49,
+     95
+    ],
+    "with": [
+     52,
+     70,
+     105
+    ],
+    "higher": [
+     53
+    ],
+    "monthly": [
+     54
+    ],
+    "incomes": [
+     55
+    ],
+    "are": [
+     56,
+     99,
+     113
+    ],
+    "more": [
+     57,
+     85,
+     115
+    ],
+    "likely": [
+     58,
+     116
+    ],
+    "save": [
+     60
+    ],
+    "anticipated": [
+     62
+    ],
+    "expenses": [
+     63
+    ],
+    "using": [
+     64
+    ],
+    "compared": [
+     67
+    ],
+    "those": [
+     69
+    ],
+    "lower": [
+     71
+    ],
+    "incomes.": [
+     72
+    ],
+    "Moreover,": [
+     73
+    ],
+    "aged": [
+     76,
+     90
+    ],
+    "15–30": [
+     77
+    ],
+    "tend": [
+     78
+    ],
+    "embrace": [
+     80
+    ],
+    "services": [
+     84
+    ],
+    "than": [
+     86,
+     121
+    ],
+    "their": [
+     87
+    ],
+    "older": [
+     88
+    ],
+    "counterparts": [
+     89
+    ],
+    "31–50.": [
+     91
+    ],
+    "These": [
+     92,
+     123
+    ],
+    "patterns": [
+     93
+    ],
+    "suggest": [
+     94
+    ],
+    "younger": [
+     96
+    ],
+    "both": [
+     100
+    ],
+    "curious": [
+     101
+    ],
+    "about": [
+     102
+    ],
+    "comfortable": [
+     104
+    ],
+    "new": [
+     106
+    ],
+    "financial": [
+     107,
+     135
+    ],
+    "technologies.": [
+     108
+    ],
+    "Overall,": [
+     109
+    ],
+    "users": [
+     112
+    ],
+    "much": [
+     114
+    ],
+    "be": [
+     118
+    ],
+    "financially": [
+     119
+    ],
+    "included": [
+     120
+    ],
+    "non‐users.": [
+     122
+    ],
+    "findings": [
+     124
+    ],
+    "point": [
+     125
+    ],
+    "substantial": [
+     128
+    ],
+    "potential": [
+     129
+    ],
+    "technology": [
+     132
+    ],
+    "expanding": [
+     134
+    ],
+    "access": [
+     136
+    ],
+    "promoting": [
+     138
+    ],
+    "inclusion": [
+     139
+    ],
+    "within": [
+     140
+    ],
+    "Ghana's": [
+     141
+    ],
+    "informal": [
+     142
+    ],
+    "sector.": [
+     143
+    ]
+   },
+   "biblio": {
+    "volume": "30",
+    "issue": "3",
+    "first_page": "2000",
+    "last_page": "2014"
+   },
+   "open_access": {
+    "is_oa": false,
+    "oa_url": null
+   }
+  }
+ ]
+}

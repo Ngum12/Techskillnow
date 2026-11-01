@@ -50,7 +50,9 @@ const MARK: Record<Role, string> = {
  * recommendation) and a short note on what else to read. Off, it is plain text, as on the real site.
  */
 function Abstract({ text, guide, className, style }: { text: string; guide: boolean; className: string; style?: React.CSSProperties }) {
-  const g = useT().research.guide;
+  const t = useT().research;
+  const g = t.guide;
+  if (!text) return <p className={`${className} italic text-[#5f6368]`}>{t.live.noAbstract}</p>;
   if (!guide) {
     return (
       <p className={className} style={style}>
@@ -101,7 +103,7 @@ export function ArticleView({ s, guide = false }: { s: Source; guide?: boolean }
             {s.venue ?? s.site}
           </p>
           <p className="text-[0.68rem] opacity-80">
-            {s.kind === "journal" ? `${p.volume} ${s.volume ?? ""}${s.pages ? ` · pp. ${s.pages}` : ""}` : s.kind === "report" ? p.report : p.book}
+            {s.kind === "journal" ? [s.volume && `${p.volume} ${s.volume}`, s.pages && `pp. ${s.pages}`].filter(Boolean).join(" · ") || p.researchArticle : s.kind === "report" ? p.report : p.book}
           </p>
         </div>
         <div className="px-4 py-4">

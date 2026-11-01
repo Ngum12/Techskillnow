@@ -62,7 +62,7 @@ const ANGLES = [
 ];
 
 const STOP = new Set(
-  "a an the of in on at to for and or with by from about into is are was were be how what why which who does do on its their this that as vs".split(" "),
+  "a an the of in on at to for and or with by from about into is are was were be how what why which who does do on its their this that as vs among within towards toward".split(" "),
 );
 
 /** Very light stemming: "farmers" and "farmer" match, "banking" and "bank" match. */
@@ -100,7 +100,17 @@ export type QueryReading = {
   level: "empty" | "broad" | "focused" | "researchable";
   /** Which facets are missing, in the order a supervisor would ask for them. */
   missing: Facet[];
+  /** More than 12 meaningful words: a pasted description, not a search. */
+  tooLong: boolean;
 };
+
+/** Text pasted from elsewhere (bullets, labels, line breaks) made into one search line. */
+export function cleanQuery(raw: string): string {
+  return raw
+    .replace(/[•·▪●‣⁃]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
 export function readQuery(raw: string): QueryReading {
   const q = raw.trim().toLowerCase();
@@ -123,6 +133,7 @@ export function readQuery(raw: string): QueryReading {
     operators: { quotes: /"[^"]+"/.test(q), pdf: /filetype:pdf/.test(q), site: q.match(/site:(\S+)/)?.[1] ?? null, minus: /(^|\s)-\w/.test(q) },
     level,
     missing,
+    tooLong: words > 12,
   };
 }
 
@@ -185,8 +196,14 @@ export function search(sources: Source[], raw: string, opts: { scholar?: boolean
 }
 
 /** Pages that exist for any search on the real web (an encyclopedia entry, a blog, a forum thread). */
+/** The first few words of a search, as a page would name its subject. */
+function shortTopic(raw: string, max = 8): string {
+  const words = cleanQuery(raw.replace(/"|(site|filetype):\S+/g, "")).replace(/[:;,.!?()]+/g, " ").split(" ").filter(Boolean);
+  return words.slice(0, max).join(" ");
+}
+
 export function genericResults(raw: string): Source[] {
-  const topic = raw.replace(/"|(site|filetype):\S+/g, "").replace(/\s+/g, " ").trim();
+  const topic = shortTopic(raw);
   if (!topic) return [];
   const t = topic.charAt(0).toUpperCase() + topic.slice(1);
   const slug = topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -260,3 +277,75 @@ export function suggestions(sources: Source[], raw: string, max = 6): string[] {
 
 /** "About 1,240,000 results" style number. */
 export const groupDigits = (n: number) => n.toLocaleString("en-US");
+
+const PRACTICE_AUTHORS = ["Mbuh, C. N.", "Ewane, R. T.", "Fon, G. A.", "Takang, E. B.", "Njong, P. M.", "Ashu, L. E.", "Ndikum, F. S.", "Agbor, M. A."];
+
+/**
+ * Two practice academic sources on any topic (a project in a repository and a journal article), so every
+ * learner can practise opening and saving research whatever their field. Like all practice results they are
+ * examples written for the course; the "real Google" buttons find real ones.
+ */
+export function practiceAcademic(raw: string): Source[] {
+  const topic = shortTopic(raw, 10).toLowerCase();
+  if (tokens(topic).length === 0) return [];
+  const slug = topic.replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
+  const h = hash(topic);
+  const keywords = [...new Set(tokens(topic))].slice(0, 6);
+  const inCameroon = readQuery(topic).facets.place ? "" : " in Cameroon";
+  const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
+  return [
+    {
+      id: `practice-thesis-${slug}`,
+      kind: "thesis",
+      site: "Mount Fako University Repository",
+      url: `repo.mountfako-university.cm › handle › ${2021 + (h % 3)} › ${100 + (h % 800)}`,
+      title: `An assessment of ${topic}${inCameroon}`,
+      snippet: `This project examines ${topic}${inCameroon}. Data were collected from respondents with a questionnaire and interviews, and the findings point to the main causes and the groups most affected…`,
+      abstract: `This project examined ${topic}${inCameroon}. Data were collected from 150 respondents using a questionnaire and interviews, and analysed with descriptive statistics. The findings describe the main causes, the groups most affected and the measures currently in place. The study recommends practical actions for the institutions concerned and further research in other towns.`,
+      year: 2021 + (h % 3),
+      authors: [PRACTICE_AUTHORS[h % PRACTICE_AUTHORS.length]],
+      field: "general",
+      keywords,
+      pdf: true,
+      degree: "Bachelor's project",
+      citedBy: h % 5,
+    },
+    {
+      id: `practice-journal-${slug}`,
+      kind: "journal",
+      site: "Central African Journal of Social Research",
+      url: `cajsr.org › article › view › ${300 + (h % 600)}`,
+      title: `${cap(topic)}: evidence from a survey${inCameroon}`,
+      snippet: `Using survey data, this article studies ${topic}${inCameroon}. Results highlight the factors most often reported and the gaps in current measures…`,
+      abstract: `This article studies ${topic}${inCameroon}. A cross-sectional survey of 240 respondents was carried out in two towns. Results show the factors most often reported by respondents and the gaps in current measures. The authors call for better coordination between institutions and for studies with larger samples.`,
+      year: 2022 + (h % 3),
+      authors: [PRACTICE_AUTHORS[(h + 3) % PRACTICE_AUTHORS.length], PRACTICE_AUTHORS[(h + 5) % PRACTICE_AUTHORS.length]],
+      field: "general",
+      keywords,
+      pdf: true,
+      venue: "Central African Journal of Social Research",
+      volume: `${3 + (h % 6)}(${1 + (h % 2)})`,
+      pages: `${10 + (h % 40)}–${28 + (h % 40)}`,
+      citedBy: 2 + (h % 12),
+    },
+  ];
+}
+
+/** Every word that names a group, a place or an angle (they narrow a search but are not its subject). */
+const FACET_WORDS = new Set([...PLACES, ...POPULATIONS, ...ANGLES].flatMap((p) => tokens(p)));
+
+/**
+ * The subject words of a search: what it is about, without the who, where, when and angle
+ * ("drug abuse among students in Buea 2020-2024" → drug, abuse).
+ */
+export function subjectWords(raw: string): string[] {
+  return tokens(cleanQuery(raw)).filter((w) => !FACET_WORDS.has(w) && !/^\d/.test(w));
+}
+
+/** Does this source talk about the subject of the search (not only the same town or group)? */
+export function onSubject(s: Source, raw: string): boolean {
+  const subject = subjectWords(raw);
+  if (!subject.length) return true;
+  const have = new Set(tokens(`${s.title} ${s.keywords.join(" ")}`));
+  return subject.some((w) => have.has(w));
+}

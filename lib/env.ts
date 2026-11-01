@@ -50,6 +50,10 @@ export const env = {
       webhookSecret: process.env.FAPSHI_WEBHOOK_SECRET ?? "",
     };
   },
+  /** OpenAlex (live research search). Optional: without it, searches share a small anonymous allowance. */
+  get openAlexKey() {
+    return process.env.OPENALEX_API_KEY ?? "";
+  },
   get anthropicKey() {
     return process.env.ANTHROPIC_API_KEY ?? "";
   },

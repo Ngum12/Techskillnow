@@ -3,6 +3,8 @@
  * refined on the topic card) and the sources they saved while searching.
  */
 
+import type { Source } from "./search";
+
 export type SavedTopic = { field?: string; title: string; problem?: string; questions?: string[]; objectives?: string[]; keywords?: string };
 
 const TOPIC = "tsn_research_topic";
@@ -29,3 +31,8 @@ export const loadTopic = () => read<SavedTopic | null>(TOPIC, null);
 export const saveTopic = (t: SavedTopic) => write(TOPIC, { ...(loadTopic() ?? {}), ...t });
 export const loadSources = () => read<string[]>(SOURCES, []);
 export const saveSources = (ids: string[]) => write(SOURCES, ids);
+
+/** Real papers saved from the live search, kept whole (they are not in the course's practice sources). */
+const LIVE = "tsn_research_live";
+export const loadLiveSources = () => read<Source[]>(LIVE, []);
+export const saveLiveSources = (list: Source[]) => write(LIVE, list.slice(-50));

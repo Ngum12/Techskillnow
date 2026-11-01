@@ -19,18 +19,45 @@ const METHOD = /\b(questionnaires?|survey(ed)?|interviews?|focus groups?|sampl(e
 /** What was found: results, numbers, comparisons. */
 const FINDING = /\b(show(s|ed)?|found|finds|reveal(s|ed)?|most|only|majority|lower|higher|more|less|fell|increased|reduced|linked|main|strongest|barriers?|adequate|helped|lost|noticed|three times)\b|\d+%/i;
 
+/** Sentences that state the aim: "This study examined…", "We investigate…", "The aim of this paper is…". */
+const AIM = /\b(this( [a-z-]+)? (study|paper|article|research|project|review|report|dissertation|thesis|survey|work)|we (examine|examined|investigate|investigated|assess|assessed|explore|explored|analy[sz]ed?|study|studied|review|propose|present|report)|the (aim|purpose|objective)s? (of|was|is)|aim(s|ed)? (to|at)|sought to|set out to|the (study|paper|article) (studies|examines|explores|investigates|assesses))\b/i;
+/** Headings in structured abstracts ("Methods:", "Results:") and the role of the sentences that follow. */
+const HEADINGS: [RegExp, Role][] = [
+  [/^(background|introduction|context|rationale)\s*[:.]/i, "other"],
+  [/^(objectives?|aims?|purpose|goals?)\s*[:.]/i, "aim"],
+  [/^(methods?|materials and methods|methodology|design|setting|participants|approach)\s*[:.]/i, "method"],
+  [/^(results?|findings?|outcomes?)\s*[:.]/i, "finding"],
+  [/^(conclusions?|recommendations?|implications?)\s*[:.]/i, "recommendation"],
+];
+
+function sentenceRole(s: string): Role {
+  if (NOTE.test(s)) return "other";
+  if (RECOMMEND.test(s)) return "recommendation";
+  if (METHOD.test(s) && !/\b(show|showed|shows|found|finds|indicated|indicates|revealed|reveals|suggested|suggests)\b|%/.test(s) && !FINDING.test(s.replace(METHOD, ""))) return "method";
+  return "finding";
+}
+
 /**
- * The role of each sentence. Abstracts open with the aim. After that: recommendations; sentences that
- * describe how data were collected (unless they also report a result) are the method; results are findings.
+ * The role of each sentence. Structured abstracts follow their headings. Otherwise the aim is the first sentence
+ * that states one (sentences before it are background); if none does, the first sentence is the aim. After the
+ * aim: recommendations, methods (how data were collected, unless a result is reported), and findings.
  */
 export function abstractRoles(text: string): { text: string; role: Role }[] {
-  return sentences(text).map((s, i) => {
-    let role: Role = "finding";
-    if (i === 0) role = "aim";
-    else if (NOTE.test(s)) role = "other";
-    else if (RECOMMEND.test(s)) role = "recommendation";
-    else if (METHOD.test(s) && !/\b(show|showed|shows|found|finds)\b|%/.test(s) && !FINDING.test(s.replace(METHOD, ""))) role = "method";
-    return { text: s, role };
+  const all = sentences(text);
+  let heading: Role | null = null;
+  const firstAim = all.findIndex((s) => AIM.test(s));
+  const aimAt = firstAim >= 0 ? firstAim : 0;
+  return all.map((s, i) => {
+    const h = HEADINGS.find(([re]) => re.test(s));
+    if (h) heading = h[1];
+    if (heading) {
+      // Inside a "Results:" section a recommendation sentence is still a recommendation.
+      const role: Role = heading === "finding" && RECOMMEND.test(s) ? "recommendation" : heading;
+      return { text: s, role };
+    }
+    if (i < aimAt) return { text: s, role: "other" };
+    if (i === aimAt) return { text: s, role: "aim" };
+    return { text: s, role: sentenceRole(s) };
   });
 }
 

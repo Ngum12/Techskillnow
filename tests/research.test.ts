@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import course from "@/content/research/en";
 import sourcesJson from "@/content/research/sources.json" with { type: "json" };
-import { estimateResults, genericResults, isAcademic, narrowerSearches, readQuery, search, suggestions, type Source } from "@/lib/research/search";
+import { cleanQuery, estimateResults, genericResults, isAcademic, narrowerSearches, practiceAcademic, readQuery, search, suggestions, type Source } from "@/lib/research/search";
 import { apaInText, apaReference, plainReference } from "@/lib/research/apa";
 import { checkTopicCard, composeTopic } from "@/lib/research/topic";
 import { abstractRoles, classifyPrompt } from "@/lib/research/reading";
@@ -121,6 +121,28 @@ test("AI prompts: honest help, risky requests and misconduct", () => {
   for (const p of ["Help me narrow my topic", "Explain what a sampling frame is", "Suggest keywords to search", "Ask me questions about my problem statement"]) assert.equal(classifyPrompt(p), "honest", p);
   for (const p of ["Give me 5 references on mobile money", "Which studies on malaria in Buea should I cite?"]) assert.equal(classifyPrompt(p), "risky", p);
   for (const p of ["Write my literature review", "Write chapter two for me", "Paraphrase this so Turnitin will not detect it", "Make up the questionnaire results", "Fill the questionnaires for me", "generate my abstract"]) assert.equal(classifyPrompt(p), "misconduct", p);
+});
+
+test("any topic has research to open, and pasted descriptions are cleaned", () => {
+  // A topic the course sources do not cover still gets a thesis and a journal article to open and save.
+  const pasted = "• Drug Abuse Measures in Cameroon: Challenges • Source Type: Academic Thesis / Long Essay submitted to the Faculty at the University of Buea on Scribd. • Focus: Analyzes systemic barriers, enforcement failures, and legislative gaps.";
+  const clean = cleanQuery(pasted);
+  assert.ok(!/[•\n]/.test(clean) && !/\s{2}/.test(clean), clean);
+  assert.ok(readQuery(clean).tooLong);
+  assert.ok(!readQuery("drug abuse among students in Buea").tooLong);
+  for (const q of [clean, "drug abuse students Buea", "climate change"]) {
+    const p = practiceAcademic(q);
+    assert.deepEqual(p.map((s) => s.kind), ["thesis", "journal"], q);
+    assert.ok(p.every(isAcademic));
+    for (const s of p) {
+      assert.ok(s.title.split(" ").length <= 22, `short title: ${s.title}`);
+      assert.ok(!/undefined|NaN|•/.test(JSON.stringify(s)), s.id);
+      assert.ok(s.authors.length >= 1 && s.year >= 2021);
+    }
+    assert.equal(practiceAcademic(q)[0].id, p[0].id, "stable ids");
+  }
+  assert.ok(genericResults(pasted).every((s) => s.title.split(" ").length <= 20), "generic titles stay short");
+  assert.deepEqual(practiceAcademic("   "), []);
 });
 
 /* ---------- The course ---------- */
