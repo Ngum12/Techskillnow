@@ -11,7 +11,7 @@ const course: Course = {
   id: "research-project",
   locale: "en",
   title: "Your Final Year Project: From Topic to Defence",
-  promise: "Find an original topic, search Google and Google Scholar like a researcher, write questions and objectives that match, reference in APA and prepare your defence.",
+  promise: "Find an original topic, search Google and Google Scholar like a researcher, read papers in minutes, use AI honestly, reference in APA and prepare your defence.",
   price: 1000,
   track: "university",
   audience: "For final year Bachelor's and HND students",
@@ -234,6 +234,105 @@ const course: Course = {
       },
     },
     {
+      title: "Read a paper in 10 minutes",
+      body: [
+        "Nobody reads a research paper from the first line to the last. Researchers read in layers: title, abstract, then only the parts they need.",
+        "Every paper puts things in the same places: the aim in the abstract and the end of the introduction, the sample in the methodology, the numbers in the results, the gap in the suggestions for further research.",
+        "Practise on a full paper: for each question, tap the section where you would look. Watch how much time you save.",
+      ],
+      mistake: "Printing twenty full articles and reading them line by line. You will run out of time before you start writing.",
+      task: {
+        type: "paperSkim",
+        instruction: "This full article came up in your search. Find each answer without reading everything.",
+        paper: {
+          file: "Ayuk_2023_mobile_money_fraud_Buea.pdf",
+          title: "Mobile money fraud and customer trust among students in Buea",
+          authors: "Ayuk, S. O. · Wouri Journal of Business Studies, 10(1), 12–27 (2023)",
+          venue: "Wouri Journal of Business Studies · Vol. 10, No. 1",
+          sections: [
+            {
+              id: "abstract",
+              heading: "Abstract",
+              paragraphs: ["This article studies mobile money fraud and customer trust among university students in Buea. A survey of 320 students found that 41% had received a fraudulent message in the past year and 9% lost money. Students who lost money used mobile money less for six months. The study recommends awareness campaigns on campus and faster reversal of fraudulent transfers."],
+              key: "This article studies mobile money fraud and customer trust among university students in Buea.",
+            },
+            {
+              id: "intro",
+              heading: "1. Introduction",
+              paragraphs: [
+                "Mobile money has become the main way students in Buea receive money from their families and pay for transport, food and data. With this growth, fraudulent messages and calls have multiplied, from fake “wrong transfer” requests to false promotions.",
+                "Little is known about how fraud affects young users' trust in the service. This study therefore set out to measure how common fraud attempts are among students, how many lose money, and whether losing money changes how they use mobile money afterwards.",
+              ],
+            },
+            {
+              id: "lit",
+              heading: "2. Literature review",
+              paragraphs: [
+                "Trust is central to the adoption of digital financial services. Studies in Kenya and Ghana link fraud experiences to lower use of mobile money, especially among first-time users. In Cameroon, research has focused on adoption and charges rather than on fraud.",
+                "This study draws on trust theory, which holds that people continue to use a service when they believe it is reliable and that problems will be fixed.",
+              ],
+            },
+            {
+              id: "method",
+              heading: "3. Methodology",
+              paragraphs: [
+                "A cross-sectional survey design was used. The population was students of three higher education institutions in Buea. A sample of 320 students was selected by stratified random sampling across the three institutions and year groups.",
+                "Data were collected with a structured questionnaire and analysed with descriptive statistics and chi-square tests.",
+              ],
+              key: "A sample of 320 students was selected by stratified random sampling across the three institutions and year groups.",
+            },
+            {
+              id: "results",
+              heading: "4. Results",
+              paragraphs: [
+                "Of the 320 respondents, 131 (41%) had received at least one fraudulent mobile money message in the past year. Twenty-nine students (9%) lost money, with a median loss of 15,000 FCFA.",
+                "Students who lost money reported using mobile money less often for an average of six months.",
+              ],
+              key: "Twenty-nine students (9%) lost money, with a median loss of 15,000 FCFA.",
+            },
+            {
+              id: "discussion",
+              heading: "5. Discussion",
+              paragraphs: [
+                "These findings agree with studies from Kenya and Ghana that link fraud to reduced use of mobile money. Unlike those studies, losses here were concentrated among first-year students, who had less experience with the service.",
+              ],
+              key: "These findings agree with studies from Kenya and Ghana that link fraud to reduced use of mobile money.",
+            },
+            {
+              id: "conclusion",
+              heading: "6. Conclusion and recommendations",
+              paragraphs: [
+                "Fraud attempts are common among students in Buea and losing money reduces trust and use. The study recommends awareness campaigns on campus at the start of each academic year and faster reversal of fraudulent transfers by operators.",
+              ],
+              key: "The study recommends awareness campaigns on campus at the start of each academic year and faster reversal of fraudulent transfers by operators.",
+            },
+            {
+              id: "further",
+              heading: "7. Suggestions for further research",
+              paragraphs: [
+                "This study covered students only. Future research should examine fraud among market traders and older users, who may be more vulnerable, and test whether awareness campaigns actually reduce losses.",
+              ],
+              key: "Future research should examine fraud among market traders and older users, who may be more vulnerable, and test whether awareness campaigns actually reduce losses.",
+            },
+            {
+              id: "refs",
+              heading: "References",
+              paragraphs: ["Ngwa, P. T., & Fotso, A. (2022). Mobile money and financial inclusion in Central Africa: A review of evidence. Wouri Journal of Business Studies, 9(2), 45–63."],
+            },
+          ],
+        },
+        questions: [
+          { question: "What did the author want to find out?", answer: "abstract", why: "The aim is the first sentence of the abstract. It is repeated at the end of the introduction as objectives." },
+          { question: "How many students took part, and how were they chosen?", answer: "method", why: "The sample and how it was selected are always in the methodology." },
+          { question: "How many students actually lost money?", answer: "results", why: "Numbers and percentages are in the results." },
+          { question: "Do these findings agree with studies from other countries?", answer: "discussion", why: "The discussion compares the findings with other studies." },
+          { question: "What does the author recommend?", answer: "conclusion", why: "Recommendations come with the conclusion." },
+          { question: "Which new topic does the author suggest for future researchers? (Useful for finding your own gap!)", answer: "further", why: "Suggestions for further research are a gift: here, fraud among market traders and older users is still unstudied. That could be your topic." },
+        ],
+        success: "You found everything in a few minutes. Read every source like this: title, abstract, then only what you need.",
+      },
+    },
+    {
       title: "Read what others have written",
       body: [
         "For each source, keep a reading note: who and when, what they wanted to find out, how they did it, what they found, and how it helps your own study.",
@@ -380,6 +479,122 @@ const course: Course = {
             explanation: "Ideas, findings and numbers from others are cited wherever they appear, in every chapter.",
           },
         ],
+      },
+    },
+    {
+      title: "Use AI the honest way",
+      body: [
+        "AI chat tools can make you a faster researcher: they help you brainstorm, narrow a topic, find search words and understand hard ideas.",
+        "But they cannot do the work for you. Text written by AI and handed in as yours is plagiarism. AI also invents references and numbers that look real.",
+        "Practise with a study assistant. Choose a message or type your own, check every source it suggests, and learn how to say honestly how you used it.",
+      ],
+      mistake: "Copying references from an AI chat into your project without finding them first. Many do not exist, and examiners check.",
+      task: {
+        type: "aiAssistant",
+        instruction: "Work with the AI on your topic. Honest requests move you forward; the coach warns you about the rest.",
+        greeting: "Hello! I'm your study assistant. How can I help with your project on {topic}?",
+        stages: [
+          {
+            instruction: "Use the AI to brainstorm: ask it for angles you could study.",
+            prompts: [
+              {
+                text: "What are some angles I could study on {topic}? Give me 5 ideas.",
+                ok: true,
+                reply: "Here are five angles you could explore:\n\n1. How charges affect how often traders use mobile money\n2. Whether traders who keep money on their phone save more than those who withdraw daily\n3. Strategies traders use to avoid charges\n4. Differences between men and women traders\n5. Changes after the most recent increase in charges\n\nChoose one you can actually measure in your town, and check what already exists on Google Scholar.",
+                coach: "Honest use: brainstorming gives you options to think about. You still choose, check what exists and decide with your supervisor.",
+              },
+              {
+                text: "Write my chapter one on {topic}.",
+                ok: false,
+                reply: "Sure! Here is Chapter One:\n\n1.1 Background to the study\nMobile money has revolutionised financial services across Africa. According to Smith (2019), over 90% of traders now use it daily, and this trend is expected to grow…",
+                coach: "Misconduct: a chapter written by AI and submitted as yours is plagiarism, and you signed a declaration saying the work is your own. Notice too that “Smith (2019)” and “90%” may be invented.",
+              },
+              {
+                text: "Give me a complete original project with chapters 1 to 5 that nobody has done.",
+                ok: false,
+                reply: "Of course! Title: “The Impact of Digital Finance on Economic Growth in Africa”. Chapter 1: Introduction…",
+                coach: "Misconduct, and a bad topic too: far too broad, and not yours. At the defence the jury will ask why you chose it and how you collected the data.",
+              },
+            ],
+          },
+          {
+            instruction: "Now ask the AI to help you understand something, or to help you narrow your topic.",
+            prompts: [
+              {
+                text: "Explain the difference between a research question and an objective, with an example.",
+                ok: true,
+                reply: "A research question asks what you want to find out; an objective says the same thing as an action.\n\nQuestion: How do withdrawal charges affect the amount traders save each month?\nObjective: To assess the effect of withdrawal charges on traders' monthly savings.\n\nOne objective for each question.",
+                coach: "Honest use: asking for an explanation helps you understand. Write your own questions and objectives afterwards.",
+              },
+              {
+                text: "My topic is still broad. Ask me questions to help me narrow it.",
+                ok: true,
+                reply: "Happy to help. Answer these:\n\n1. Who exactly will you study? (one group)\n2. Where can you reach them? (one town or market)\n3. What do you want to find out about them?\n4. Which period will you cover?\n\nThen put your answers together in one sentence.",
+                coach: "Honest use: the AI asks the questions, you give the answers. The topic stays yours.",
+              },
+              {
+                text: "Rewrite this paragraph from Ebot (2023) so Turnitin cannot detect it.",
+                ok: false,
+                reply: "Here is a rewritten version that will be harder to detect:\n\n“Frequent users of mobile money saw bigger monthly sales and savings, though fees discouraged the smallest traders…”",
+                coach: "Misconduct: disguising someone else's work is still plagiarism, with or without a detector. Paraphrase it yourself and cite (Ebot, 2023).",
+              },
+            ],
+          },
+          {
+            instruction: "Ask the AI for search keywords you can use on Google Scholar.",
+            prompts: [
+              {
+                text: "Suggest search keywords and synonyms for {topic}.",
+                ok: true,
+                reply: "Try these on Google Scholar:\n\n• \"mobile money\" OR \"mobile payments\"\n• transaction charges OR fees\n• savings behaviour OR saving habits\n• market traders OR informal traders\n• Cameroon OR Buea\n\nTip: put two-word terms in quotes and add a place.",
+                coach: "Honest use: the keywords help you search, but you still find and read the sources yourself.",
+              },
+              {
+                text: "Make up realistic questionnaire results for 120 traders so I can write chapter four.",
+                ok: false,
+                reply: "Here are realistic results: 62% of traders reported reduced savings, 24% reported no change, 14% reported increased savings…",
+                coach: "Fabrication: inventing data is the most serious research misconduct. It can lead to the cancellation of your degree. Collect real answers, even from fewer people.",
+              },
+            ],
+          },
+        ],
+        verify: {
+          instruction: "You asked for sources and the AI gave three. Check each one on Google Scholar before you trust it.",
+          prompt: "Give me three sources on {topic}.",
+          reply: "Here are three sources you can cite:",
+          refs: [
+            {
+              text: "Ebot, M. C. (2023). Effect of mobile money services on the growth of small businesses in Douala V Municipality (2018–2022) [Bachelor's project, Sawa University].",
+              query: "\"Effect of mobile money services on the growth of small businesses\"",
+              real: true,
+              why: "Found: it is a real project in the Sawa University Repository. Read it before citing it.",
+            },
+            {
+              text: "Mbah, K. T. (2021). Mobile money charges and traders' savings in Buea. Journal of Central African Finance, 12(4), 88–101.",
+              query: "\"Mobile money charges and traders' savings in Buea\"",
+              real: false,
+              why: "Nothing found, even with the exact title. The AI invented it: the author, the journal and the pages look real, but they are not. Citing it would be fabrication.",
+            },
+            {
+              text: "Ngwa, P. T., & Fotso, A. (2022). Mobile money and financial inclusion in Central Africa: A review of evidence. Wouri Journal of Business Studies, 9(2), 45–63.",
+              query: "\"Mobile money and financial inclusion in Central Africa\"",
+              real: true,
+              why: "Found: a real journal article. Open it and read the abstract before you cite it.",
+            },
+          ],
+        },
+        disclosure: {
+          question: "Your university allows AI for planning if you say so. Which statement should go in your project (for example in the methodology or the acknowledgements)?",
+          options: [
+            "No statement: nobody will know.",
+            "AI wrote parts of this project.",
+            "I used Study Assistant, an AI tool, to brainstorm angles for my topic and to suggest search keywords. I found and checked every source myself, and the writing, data and analysis are my own.",
+            "I used AI a little.",
+          ],
+          answer: 2,
+          why: "It names the tool, says exactly what it was used for, and confirms that the sources, writing, data and analysis are yours.",
+        },
+        success: "You used AI like a good researcher: to think faster, never to replace your own reading, data and writing. Always check your university's rules on AI.",
       },
     },
     {
@@ -534,14 +749,14 @@ const course: Course = {
     questions: [
       { step: 1, question: "Which part of a project is written last but placed near the front?", options: ["The declaration", "The abstract", "Chapter one", "The references"], answer: 1 },
       { step: 2, question: "Which of these is a researchable topic?", options: ["Education in Africa", "Mobile money is better than banks", "Factors affecting the use of mosquito nets among pregnant women in Kumba", "Problems of the youth"], answer: 2 },
-      { step: 4, question: "A good topic says…", options: ["Only the subject", "Who, where, what about it, and when", "The supervisor's name", "The number of pages"], answer: 1 },
+      { step: 14, question: "An AI chat gives you three references for your topic. What do you do?", options: ["Copy them into your reference list", "Find each one on Google Scholar first; cite only those that exist and that you have read", "Ask the AI if they are real", "Delete your other sources"], answer: 1 },
       { step: 5, question: "Someone already did your exact topic. What should you do?", options: ["Do it again anyway", "Give up research", "Change the place, group, period or angle", "Copy their chapters"], answer: 2 },
       { step: 7, question: "You have three research questions. How many specific objectives?", options: ["One", "Three, one for each question", "Five", "As many as you like"], answer: 1 },
-      { step: 9, question: "What does filetype:pdf do in a Google search?", options: ["Downloads a PDF reader", "Shows only PDF documents", "Converts pages to PDF", "Searches only in Cameroon"], answer: 1 },
-      { step: 10, question: "Which source can you cite in your literature review?", options: ["A blog listing project topics", "A forum thread", "A peer-reviewed journal article", "An encyclopedia page"], answer: 2 },
-      { step: 11, question: "In APA, how do you cite a project by Ebot from 2023 in the text?", options: ["(Clarisse, 2023)", "(Ebot, 2023)", "(Sawa University, 2023)", "(Ebot Clarisse 2023)"], answer: 1 },
-      { step: 14, question: "“How often do you use mobile money and do you save with it?” What is wrong?", options: ["It is too short", "It asks two things at once", "It is in English", "Nothing"], answer: 1 },
-      { step: 15, question: "8 of 20 respondents chose an answer. What percentage is that?", options: ["8%", "20%", "40%", "80%"], answer: 2 },
+      { step: 10, question: "What does filetype:pdf do in a Google search?", options: ["Downloads a PDF reader", "Shows only PDF documents", "Converts pages to PDF", "Searches only in Cameroon"], answer: 1 },
+      { step: 11, question: "Which source can you cite in your literature review?", options: ["A blog listing project topics", "A forum thread", "A peer-reviewed journal article", "An encyclopedia page"], answer: 2 },
+      { step: 12, question: "In APA, how do you cite a project by Ebot from 2023 in the text?", options: ["(Clarisse, 2023)", "(Ebot, 2023)", "(Sawa University, 2023)", "(Ebot Clarisse 2023)"], answer: 1 },
+      { step: 16, question: "“How often do you use mobile money and do you save with it?” What is wrong?", options: ["It is too short", "It asks two things at once", "It is in English", "Nothing"], answer: 1 },
+      { step: 17, question: "8 of 20 respondents chose an answer. What percentage is that?", options: ["8%", "20%", "40%", "80%"], answer: 2 },
     ],
   },
 };

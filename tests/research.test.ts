@@ -5,6 +5,7 @@ import sourcesJson from "@/content/research/sources.json" with { type: "json" };
 import { estimateResults, genericResults, isAcademic, narrowerSearches, readQuery, search, suggestions, type Source } from "@/lib/research/search";
 import { apaInText, apaReference, plainReference } from "@/lib/research/apa";
 import { checkTopicCard, composeTopic } from "@/lib/research/topic";
+import { abstractRoles, classifyPrompt } from "@/lib/research/reading";
 import type { Task } from "@/content/types";
 
 const SOURCES = sourcesJson as Source[];
@@ -105,6 +106,23 @@ test("topic card checks, like a supervisor", () => {
   assert.equal(composeTopic({ idea: "loan repayment", angle: "factors affecting", population: "microfinance clients", place: "Fako", period: "2019–2024" }), "Factors affecting loan repayment among microfinance clients in Fako (2019–2024)");
 });
 
+test("smart reading: every academic abstract shows its aim and findings", () => {
+  for (const s of SOURCES.filter(isAcademic)) {
+    const roles = abstractRoles(s.abstract).map((x) => x.role);
+    assert.equal(roles[0], "aim", s.id);
+    if (s.kind !== "book") assert.ok(roles.includes("finding"), `${s.id}: ${roles.join(",")}`);
+  }
+  // "the recommended four visits" is a finding, not a recommendation.
+  assert.notEqual(abstractRoles(SOURCES.find((s) => s.id === "anc-attendance")!.abstract)[1].role, "recommendation");
+  assert.equal(abstractRoles("This study looked at X. The study recommends Y.")[1].role, "recommendation");
+});
+
+test("AI prompts: honest help, risky requests and misconduct", () => {
+  for (const p of ["Help me narrow my topic", "Explain what a sampling frame is", "Suggest keywords to search", "Ask me questions about my problem statement"]) assert.equal(classifyPrompt(p), "honest", p);
+  for (const p of ["Give me 5 references on mobile money", "Which studies on malaria in Buea should I cite?"]) assert.equal(classifyPrompt(p), "risky", p);
+  for (const p of ["Write my literature review", "Write chapter two for me", "Paraphrase this so Turnitin will not detect it", "Make up the questionnaire results", "Fill the questionnaires for me", "generate my abstract"]) assert.equal(classifyPrompt(p), "misconduct", p);
+});
+
 /* ---------- The course ---------- */
 
 const flat = (t: Task): Task[] => (t.type === "sequence" ? t.tasks.flatMap(flat) : [t]);
@@ -114,7 +132,7 @@ test("research course: price, series, steps and assessment", () => {
   assert.equal(course.id, "research-project");
   assert.equal(course.price, 1000);
   assert.equal(course.track, "university");
-  assert.equal(course.steps.length, 17);
+  assert.equal(course.steps.length, 19);
   assert.equal(course.freeSteps, 3);
   assert.equal(course.steps[2].task?.type, "googleSearch", "the Google search is free to try");
   assert.equal(course.assessment.questions.length, 10);
@@ -196,6 +214,26 @@ test("research course: every exercise can be completed", () => {
       case "interview":
         assert.ok(t.required <= t.cards.length);
         break;
+      case "paperSkim": {
+        const ids = new Set(t.paper.sections.map((x) => x.id));
+        for (const q of t.questions) assert.ok(ids.has(q.answer), q.question);
+        for (const sec of t.paper.sections) if (sec.key) assert.ok(sec.paragraphs.some((p) => p.includes(sec.key!)), `${sec.id}: key sentence is in the text`);
+        for (const q of t.questions) assert.ok(t.paper.sections.find((x) => x.id === q.answer)!.key, `${q.answer}: has a highlight`);
+        break;
+      }
+      case "aiAssistant": {
+        for (const st of t.stages) {
+          assert.ok(st.prompts.some((p) => p.ok), `${st.instruction}: an honest prompt exists`);
+          assert.ok(st.prompts.some((p) => !p.ok), `${st.instruction}: a temptation exists`);
+          // The written prompts are classified the same way as typed ones.
+          for (const p of st.prompts) assert.equal(classifyPrompt(p.text.replace("{topic}", "mobile money")) === "misconduct", !p.ok, p.text);
+        }
+        // Each real reference is found on the practice Scholar; the invented one is not.
+        for (const r of t.verify.refs) assert.equal(search(SOURCES, r.query, { scholar: true }).length > 0, r.real, r.text);
+        assert.ok(t.verify.refs.some((r) => !r.real) && t.verify.refs.some((r) => r.real));
+        assert.ok(t.disclosure.answer < t.disclosure.options.length);
+        break;
+      }
     }
   }
   // The note card and the references use real practice sources.

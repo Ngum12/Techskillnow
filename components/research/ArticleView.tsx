@@ -7,6 +7,7 @@ import { useT } from "@/components/I18n";
 import { fmt } from "@/lib/i18n";
 import { apaReference } from "@/lib/research/apa";
 import type { Source } from "@/lib/research/search";
+import { abstractRoles, type Role } from "@/lib/research/reading";
 
 const serif = { fontFamily: "Georgia, 'Times New Roman', serif" } as const;
 
@@ -36,7 +37,59 @@ function CiteBox({ s }: { s: Source }) {
   );
 }
 
-export function ArticleView({ s }: { s: Source }) {
+const MARK: Record<Role, string> = {
+  aim: "bg-[#e0e7ff]",
+  method: "bg-[#dbeafe]",
+  finding: "bg-[#dcfce7]",
+  recommendation: "bg-[#fef3c7]",
+  other: "",
+};
+
+/**
+ * The abstract, with the reading guide on: each sentence highlighted by its role (aim, method, finding,
+ * recommendation) and a short note on what else to read. Off, it is plain text, as on the real site.
+ */
+function Abstract({ text, guide, className, style }: { text: string; guide: boolean; className: string; style?: React.CSSProperties }) {
+  const g = useT().research.guide;
+  if (!guide) {
+    return (
+      <p className={className} style={style}>
+        {text}
+      </p>
+    );
+  }
+  const parts = abstractRoles(text);
+  const used = (["aim", "method", "finding", "recommendation"] as const).filter((r) => parts.some((x) => x.role === r));
+  return (
+    <>
+      <div className="mt-2 rounded-md border border-[#c7d2fe] bg-[#f5f7ff] p-2.5 text-[0.75rem] leading-relaxed text-[#1e1b4b]" style={{ fontFamily: "Arial, Helvetica, sans-serif" }}>
+        <p className="font-bold">🔎 {g.title}</p>
+        <p className="mt-0.5">{g.text}</p>
+        <div className="mt-1.5 flex flex-wrap gap-1.5">
+          {used.map((r) => (
+            <span key={r} className={`rounded px-1.5 py-0.5 font-semibold ${MARK[r]}`}>
+              {g.roles[r]}
+            </span>
+          ))}
+        </div>
+      </div>
+      <p className={className} style={style}>
+        {parts.map((x, i) => (
+          <span key={i}>
+            <span className={`${MARK[x.role]} rounded-sm`} title={x.role === "other" ? undefined : g.roles[x.role]}>
+              {x.text}
+            </span>{" "}
+          </span>
+        ))}
+      </p>
+      <p className="mt-2 text-[0.72rem] text-[#5f6368]" style={{ fontFamily: "Arial, Helvetica, sans-serif" }}>
+        📄 {g.fullText}
+      </p>
+    </>
+  );
+}
+
+export function ArticleView({ s, guide = false }: { s: Source; guide?: boolean }) {
   const r = useT().research;
   const p = r.page;
 
@@ -65,9 +118,7 @@ export function ArticleView({ s }: { s: Source }) {
             <span className="rounded border border-[#1f3a5f] px-3 py-1.5 text-[0.72rem] font-semibold text-[#1f3a5f]">❝ {p.cite}</span>
           </div>
           <h2 className="mt-4 text-[0.9rem] font-bold text-[#1f2933]">{p.abstract}</h2>
-          <p className="mt-1 text-[0.85rem] leading-relaxed text-[#3c4043]" style={serif}>
-            {s.abstract}
-          </p>
+          <Abstract text={s.abstract} guide={guide} className="mt-1 text-[0.85rem] leading-relaxed text-[#3c4043]" style={serif} />
           <p className="mt-3 text-[0.72rem] font-bold text-[#1f2933]">{p.keywords}</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {s.keywords.map((k) => (
@@ -118,7 +169,7 @@ export function ArticleView({ s }: { s: Source }) {
             </tbody>
           </table>
           <h2 className="mt-4 text-[0.88rem] font-bold text-[#202124]">{p.abstract}</h2>
-          <p className="mt-1 text-[0.85rem] leading-relaxed text-[#3c4043]">{s.abstract}</p>
+          <Abstract text={s.abstract} guide={guide} className="mt-1 text-[0.85rem] leading-relaxed text-[#3c4043]" />
           <div className="mt-4 rounded border border-[#eceff1]">
             <p className="bg-[#f6f7f8] px-3 py-1.5 text-[0.72rem] font-bold text-[#5f6368]">{p.files}</p>
             <p className="flex items-center justify-between px-3 py-2 text-[0.78rem]">

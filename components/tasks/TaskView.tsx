@@ -52,6 +52,8 @@ const ReferenceBuilder = dynamic(() => import("@/components/research/ReferenceBu
 const DataTally = dynamic(() => import("@/components/research/DataTally").then((m) => m.DataTally), { loading });
 const ProjectAnatomy = dynamic(() => import("@/components/research/ProjectAnatomy").then((m) => m.ProjectAnatomy), { loading });
 const TopicCardBuilder = dynamic(() => import("@/components/research/TopicCardBuilder").then((m) => m.TopicCardBuilder), { loading });
+const PaperSkim = dynamic(() => import("@/components/research/PaperSkim").then((m) => m.PaperSkim), { loading });
+const AiAssistant = dynamic(() => import("@/components/research/AiAssistant").then((m) => m.AiAssistant), { loading });
 
 export function TaskView({ task, passed, onPass }: { task: Task; passed: boolean; onPass: () => void }) {
   const props = { passed, onPass };
@@ -150,5 +152,9 @@ export function TaskView({ task, passed, onPass }: { task: Task; passed: boolean
       return <ProjectAnatomy task={task} {...props} />;
     case "topicCard":
       return <TopicCardBuilder task={task} {...props} />;
+    case "paperSkim":
+      return <PaperSkim task={task} {...props} />;
+    case "aiAssistant":
+      return <AiAssistant task={task} {...props} />;
   }
 }

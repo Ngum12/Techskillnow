@@ -98,6 +98,7 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
   const [done, setDone] = useState<boolean[]>(() => task.goals.map(() => passed));
   const [message, setMessage] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [topic] = useState(() => (typeof window === "undefined" ? null : loadTopic()));
+  const [guide, setGuide] = useState(true);
 
   const reading = useMemo(() => (query ? readQuery(query) : null), [query]);
   const live = useMemo(() => readQuery(input), [input]);
@@ -370,7 +371,13 @@ export function GoogleSim({ task, passed, onPass }: { task: GoogleSearchTask; pa
         {open && (
           <div>
             <div className="max-h-[32rem] overflow-y-auto">
-              <ArticleView s={open} />
+              {isAcademic(open) && (
+                <label className="flex items-center justify-end gap-2 border-b border-[#ebebeb] bg-[#f8f9fa] px-3 py-1.5 text-[0.72rem] font-semibold text-[#3c4043]">
+                  <input type="checkbox" checked={guide} onChange={(e) => setGuide(e.target.checked)} className="h-4 w-4 accent-[#4338ca]" />
+                  {r.guide.toggle}
+                </label>
+              )}
+              <ArticleView s={open} guide={guide && isAcademic(open)} />
             </div>
             <div className="flex items-center justify-between gap-2 border-t border-[#ebebeb] bg-[#f8f9fa] px-3 py-2">
               <button type="button" onClick={() => setOpenId(null)} className="rounded-full px-3 py-1.5 text-[0.8rem] font-semibold text-[#1a73e8] hover:bg-[#e8f0fe]">

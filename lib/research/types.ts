@@ -96,6 +96,41 @@ export type ProjectAnatomyTask = {
   success: string;
 };
 
+/**
+ * Smart reading: a full paper in a PDF viewer. For each question the learner taps the section where they would
+ * look; the right section opens with its key sentence highlighted. Nobody reads a paper from start to end.
+ */
+export type PaperSkimTask = {
+  type: "paperSkim";
+  instruction: string;
+  paper: {
+    file: string;
+    title: string;
+    authors: string;
+    venue: string;
+    sections: { id: string; heading: string; paragraphs: string[]; key?: string }[];
+  };
+  questions: { question: string; answer: string; why: string }[];
+  success: string;
+};
+
+/** A message to the practice AI assistant: honest use moves on; misconduct gets a realistic reply and a warning. */
+export type AiPrompt = { text: string; ok: boolean; reply: string; coach: string };
+
+/**
+ * Using AI honestly: stages of prompts to choose (or type), then checking the references the AI suggests
+ * (one does not exist), then an honest statement of AI use. {topic} is replaced with the learner's topic.
+ */
+export type AiAssistantTask = {
+  type: "aiAssistant";
+  instruction: string;
+  greeting: string;
+  stages: { instruction: string; prompts: AiPrompt[] }[];
+  verify: { instruction: string; prompt: string; reply: string; refs: { text: string; query: string; real: boolean; why: string }[] };
+  disclosure: { question: string; options: string[]; answer: number; why: string };
+  success: string;
+};
+
 /** The learner's own topic, checked and ready for the supervisor. */
 export type TopicCardTask = { type: "topicCard"; instruction: string; success: string };
 
@@ -108,4 +143,6 @@ export type ResearchTask =
   | ReferenceBuilderTask
   | DataTallyTask
   | ProjectAnatomyTask
+  | PaperSkimTask
+  | AiAssistantTask
   | TopicCardTask;
