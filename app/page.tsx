@@ -21,6 +21,7 @@ const eyebrow = "text-[0.7rem] font-bold uppercase tracking-[0.16em]";
  * add a category here (and its label in the locale files) when a new kind of course arrives.
  */
 function categoryOf(c: CourseSummary): string {
+  if (c.track === "university") return "university";
   if (c.track !== "exam") return "jobs";
   if (c.id.startsWith("maths")) return "maths";
   return "science";

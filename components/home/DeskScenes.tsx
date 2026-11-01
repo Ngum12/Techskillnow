@@ -303,3 +303,106 @@ export function ApplicationsDesk() {
     </svg>
   );
 }
+
+/** A laptop on a search for the topic, beside a bound final year project and sticky notes. */
+export function ResearchDesk() {
+  const results = [
+    { title: "Effect of mobile money charges on traders' savings…", meta: "Ebot, M. C. - Sawa University, 2023" },
+    { title: "Mobile money and financial inclusion in Central…", meta: "Ngwa, P. T., Fotso, A. - 2022" },
+    { title: "Mobile money fraud and customer trust among…", meta: "Ayuk, S. O. - 2023" },
+  ];
+  return (
+    <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" className="block h-full w-full" role="img" aria-label="Your Final Year Project: a search for a topic beside a bound project" style={T}>
+      <Desk id="rs" />
+      {/* Bound project, front left. */}
+      <g filter="url(#rs-shadow)" transform="rotate(-10 52 120)">
+        <rect x="6" y="64" width="86" height="116" rx="2" fill="#1f3a5f" />
+        <rect x="10" y="64" width="4" height="116" fill="#16304f" />
+        <text x="53" y="92" fontSize="5.2" fontWeight="700" fill="#e9d9a6" textAnchor="middle" letterSpacing="0.5">
+          FINAL YEAR
+        </text>
+        <text x="53" y="99" fontSize="5.2" fontWeight="700" fill="#e9d9a6" textAnchor="middle" letterSpacing="0.5">
+          PROJECT
+        </text>
+        <line x1="30" x2="76" y1="105" y2="105" stroke="#e9d9a6" strokeWidth="0.6" />
+        {[113, 118, 123].map((y, i) => (
+          <rect key={y} x={26 + i * 3} y={y} width={54 - i * 6} height="2" rx="1" fill="#c8b98c" opacity="0.7" />
+        ))}
+        <text x="53" y="168" fontSize="3.6" fill="#e9d9a6" textAnchor="middle">
+          June 2024
+        </text>
+      </g>
+      {/* Sticky notes. */}
+      <g filter="url(#rs-shadow)">
+        <rect x="270" y="20" width="38" height="36" fill="#f7e27c" transform="rotate(6 289 38)" />
+        <text x="276" y="34" fontSize="4" fill="#5b4a00" transform="rotate(6 289 38)">
+          Who?
+        </text>
+        <text x="276" y="40" fontSize="4" fill="#5b4a00" transform="rotate(6 289 38)">
+          Where?
+        </text>
+        <text x="276" y="46" fontSize="4" fill="#5b4a00" transform="rotate(6 289 38)">
+          When?
+        </text>
+        <rect x="276" y="118" width="34" height="32" fill="#a8d8f0" transform="rotate(-8 293 134)" />
+        <text x="281" y="132" fontSize="3.8" fill="#16304f" transform="rotate(-8 293 134)">
+          RQ1 ↔ O1
+        </text>
+        <text x="281" y="139" fontSize="3.8" fill="#16304f" transform="rotate(-8 293 134)">
+          RQ2 ↔ O2
+        </text>
+      </g>
+      {/* Laptop with the scholar search. */}
+      <g filter="url(#rs-shadow)">
+        <path d="M86 150h176l12 11H74z" fill="#c9ccd0" />
+        <path d="M74 161h200v3a3 3 0 0 1-3 3H77a3 3 0 0 1-3-3z" fill="#9fa4aa" />
+        <rect x="92" y="18" width="164" height="133" rx="7" fill="#1d2124" />
+        <rect x="98" y="24" width="152" height="121" rx="1.5" fill="#fff" />
+      </g>
+      <g>
+        <text x="104" y="35" fontSize="6.2" fontWeight="700">
+          <tspan fill="#4285F4">G</tspan>
+          <tspan fill="#EA4335">o</tspan>
+          <tspan fill="#FBBC05">o</tspan>
+          <tspan fill="#4285F4">g</tspan>
+          <tspan fill="#34A853">l</tspan>
+          <tspan fill="#EA4335">e</tspan>
+          <tspan fill="#5f6368" fontWeight="400" fontSize="5">
+            {" "}
+            Scholar
+          </tspan>
+        </text>
+        <rect x="104" y="39" width="138" height="8" rx="4" fill="#fff" stroke="#dfe1e5" strokeWidth="0.6" />
+        <text x="109" y="44.6" fontSize="3.6" fill="#202124">
+          mobile money charges traders Buea
+        </text>
+        <text x="104" y="54" fontSize="2.9" fill="#70757a">
+          About 1,240 results (0.04 sec)
+        </text>
+        {results.map((r, i) => {
+          const y = 61 + i * 24;
+          return (
+            <g key={r.title}>
+              <text x="104" y={y} fontSize="3.9" fill="#1a0dab">
+                {r.title}
+              </text>
+              <text x="104" y={y + 5} fontSize="3" fill="#006621">
+                {r.meta}
+              </text>
+              <rect x="104" y={y + 8} width="132" height="1.6" rx="0.8" fill="#dadce0" />
+              <rect x="104" y={y + 11.5} width="110" height="1.6" rx="0.8" fill="#dadce0" />
+              <text x="104" y={y + 17} fontSize="2.8" fill="#1a0dab">
+                {i === 0 ? "★ Saved" : "☆ Save"}   ❝ Cite   Cited by {[6, 38, 11][i]}
+              </text>
+            </g>
+          );
+        })}
+      </g>
+      {/* Pen. */}
+      <g filter="url(#rs-shadow)" transform="rotate(-24 210 168)">
+        <rect x="170" y="164" width="64" height="5" rx="2.5" fill="#4338ca" />
+        <path d="M234 164.3l8 2.2-8 2.2z" fill="#c9ccd0" />
+      </g>
+    </svg>
+  );
+}

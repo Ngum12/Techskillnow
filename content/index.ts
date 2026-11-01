@@ -10,6 +10,7 @@ import applicationsFr from "./applications/fr";
 import chemTitrationEn from "./chem/en";
 import mathsAlgebraEn from "./maths/algebra/en";
 import mathsFunctionsEn from "./maths/functions/en";
+import researchEn from "./research/en";
 
 const courses: Record<string, Partial<Record<Locale, Course>>> = {
   "email-for-work": { en: emailForWorkEn, fr: emailForWorkFr },
@@ -19,6 +20,8 @@ const courses: Record<string, Partial<Record<Locale, Course>>> = {
   "chem-titration": { en: chemTitrationEn },
   "maths-algebra": { en: mathsAlgebraEn },
   "maths-functions": { en: mathsFunctionsEn },
+  // English first; the French (mémoire) version will follow.
+  "research-project": { en: researchEn },
 };
 
 export const DEFAULT_COURSE_ID = "email-for-work";

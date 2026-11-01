@@ -42,6 +42,16 @@ const ChemCalc = dynamic(() => import("@/components/chem/ChemCalc").then((m) => 
 const ErrorCards = dynamic(() => import("@/components/chem/ErrorCards").then((m) => m.ErrorCards), { loading });
 const MathsLesson = dynamic(() => import("@/components/maths/Lesson").then((m) => m.MathsLesson), { loading });
 const MethodChallenge = dynamic(() => import("@/components/chem/ErrorCards").then((m) => m.MethodChallenge), { loading });
+// Research project course.
+const GoogleSim = dynamic(() => import("@/components/research/GoogleSim").then((m) => m.GoogleSim), { loading });
+const CardSort = dynamic(() => import("@/components/research/CardSort").then((m) => m.CardSort), { loading });
+const TopicFunnel = dynamic(() => import("@/components/research/TopicFunnel").then((m) => m.TopicFunnel), { loading });
+const Alignment = dynamic(() => import("@/components/research/Alignment").then((m) => m.Alignment), { loading });
+const NoteCard = dynamic(() => import("@/components/research/NoteCard").then((m) => m.NoteCard), { loading });
+const ReferenceBuilder = dynamic(() => import("@/components/research/ReferenceBuilder").then((m) => m.ReferenceBuilder), { loading });
+const DataTally = dynamic(() => import("@/components/research/DataTally").then((m) => m.DataTally), { loading });
+const ProjectAnatomy = dynamic(() => import("@/components/research/ProjectAnatomy").then((m) => m.ProjectAnatomy), { loading });
+const TopicCardBuilder = dynamic(() => import("@/components/research/TopicCardBuilder").then((m) => m.TopicCardBuilder), { loading });
 
 export function TaskView({ task, passed, onPass }: { task: Task; passed: boolean; onPass: () => void }) {
   const props = { passed, onPass };
@@ -122,5 +132,23 @@ export function TaskView({ task, passed, onPass }: { task: Task; passed: boolean
       return <MethodChallenge task={task} {...props} />;
     case "mathsLesson":
       return <MathsLesson task={task} {...props} />;
+    case "googleSearch":
+      return <GoogleSim task={task} {...props} />;
+    case "cardSort":
+      return <CardSort task={task} {...props} />;
+    case "topicFunnel":
+      return <TopicFunnel task={task} {...props} />;
+    case "alignment":
+      return <Alignment task={task} {...props} />;
+    case "noteCard":
+      return <NoteCard task={task} {...props} />;
+    case "referenceBuilder":
+      return <ReferenceBuilder task={task} {...props} />;
+    case "dataTally":
+      return <DataTally task={task} {...props} />;
+    case "projectAnatomy":
+      return <ProjectAnatomy task={task} {...props} />;
+    case "topicCard":
+      return <TopicCardBuilder task={task} {...props} />;
   }
 }

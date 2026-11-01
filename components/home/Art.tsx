@@ -1,4 +1,4 @@
-import { ApplicationsDesk, CvDesk, EmailDesk } from "./DeskScenes";
+import { ApplicationsDesk, CvDesk, EmailDesk, ResearchDesk } from "./DeskScenes";
 
 /** Small drawn pictures for the home page (inline SVG: no downloads, sharp on every screen). */
 
@@ -77,6 +77,7 @@ export function CourseMotif({ id }: { id: string }) {
   if (id === "email-for-work") return <EmailDesk />;
   if (id === "cv") return <CvDesk />;
   if (id === "applications") return <ApplicationsDesk />;
+  if (id === "research-project") return <ResearchDesk />;
   if (id.startsWith("chem")) {
     return (
       <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" className={`${COVER} bg-[#eaf3ef]`} aria-hidden="true">
