@@ -19,7 +19,7 @@ const lesson0: FunctionsLesson = {
   title: "Lesson 0 · Check your foundations",
   body: [
     "Functions use skills you already have: substitution, solving equations, reading graphs, interval notation, and from the Algebra topic: factorising, quadratic inequalities and modulus.",
-    "This short check finds any gaps and repairs them before you start. Have your exercise book and a pen ready.",
+    "This short check is optional. It finds any gaps and repairs them before you start. Prefer to go straight to lesson 1? Skip it.",
   ],
   skills: [
     { id: "fn.pre.solve", name: "Solving linear equations" },

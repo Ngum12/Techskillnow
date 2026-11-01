@@ -162,8 +162,10 @@ export const enMaths = {
     diagnostic: {
       progress: "Starting check · question {n} of {total}",
       seeResults: "See my results",
-      allStrong: "Your foundations are strong. You are ready for Algebra!",
-      repaired: "Foundations repaired. You are ready for Algebra!",
+      allStrong: "Your foundations are strong. You are ready for this topic!",
+      repaired: "Foundations repaired. You are ready for this topic!",
+      optional: "This check is optional. It finds gaps in the skills this topic needs and repairs them before you start.",
+      skip: "Skip the check and go to the course",
       repairTitle: "Quick repair {n} of {total}: {name}",
       repairIntro: "Read the explanation, then get two questions right in a row.",
       repairProgress: "Right in a row: {n} of 2",

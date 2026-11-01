@@ -164,8 +164,10 @@ export const frMaths: typeof enMaths = {
     diagnostic: {
       progress: "Test de départ · question {n} sur {total}",
       seeResults: "Voir mes résultats",
-      allStrong: "Vos bases sont solides. Vous êtes prêt(e) pour l'Algèbre !",
-      repaired: "Bases consolidées. Vous êtes prêt(e) pour l'Algèbre !",
+      allStrong: "Vos bases sont solides. Vous êtes prêt(e) pour ce chapitre !",
+      repaired: "Bases consolidées. Vous êtes prêt(e) pour ce chapitre !",
+      optional: "Ce test est facultatif. Il repère les lacunes dans les notions dont ce chapitre a besoin et les corrige avant de commencer.",
+      skip: "Passer le test et aller au cours",
       repairTitle: "Révision rapide {n} sur {total} : {name}",
       repairIntro: "Lisez l'explication, puis réussissez deux questions d'affilée.",
       repairProgress: "Réussies d'affilée : {n} sur 2",

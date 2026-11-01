@@ -940,7 +940,21 @@ export function MasteryPart({ part, onDone }: PartProps<"mastery">) {
 
 /* ---------- Lesson 0: diagnostic and foundation repair ---------- */
 
-export function DiagnosticPart({ part, onDone }: PartProps<"diagnostic">) {
+/** The starting check is optional: the learner can skip it at any point and go straight to the course. */
+export function DiagnosticPart(props: PartProps<"diagnostic">) {
+  const s = useT().maths.diagnostic;
+  return (
+    <div>
+      <p className="mb-4 rounded-xl bg-bg p-3 text-sm text-muted">{s.optional}</p>
+      <DiagnosticBody {...props} />
+      <button type="button" className="btn btn-ghost mt-5 w-full" onClick={props.onDone}>
+        {s.skip}
+      </button>
+    </div>
+  );
+}
+
+function DiagnosticBody({ part, onDone }: PartProps<"diagnostic">) {
   const t = useT();
   const s = t.maths.diagnostic;
   const { gen } = useContext(GeneratorsContext);

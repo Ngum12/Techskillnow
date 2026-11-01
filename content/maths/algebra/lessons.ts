@@ -18,7 +18,7 @@ const lesson0: AlgebraLesson = {
   title: "Lesson 0 · Check your foundations",
   body: [
     "Algebra in Upper and Lower Sixth builds on skills from Form 5: negative numbers, fractions, brackets, factorising, indices, substitution and rearranging.",
-    "This short check finds any gaps. If you find one, you get a quick repair before you start. Have your exercise book and a pen ready.",
+    "This short check is optional. It finds any gaps, and if you find one, you get a quick repair before you start. Prefer to go straight to lesson 1? Skip it.",
   ],
   skills: [
     { id: "pre.negatives", name: "Negative numbers" },
