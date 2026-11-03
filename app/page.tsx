@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+import logo from "@/public/TechKey Laptop Learning Logo.png";
 import { Newsreader } from "next/font/google";
 import { getDict, fmt, money } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale";
@@ -40,12 +42,7 @@ function Eyebrow({ children, light = false }: { children: React.ReactNode; light
 function Logo({ name, light = false }: { name: string; light?: boolean }) {
   return (
     <span className={`flex min-w-0 items-center gap-2.5 font-semibold ${light ? "text-white" : "text-ink"}`}>
-      {/* Steps: learning one step at a time. */}
-      <svg viewBox="0 0 32 32" className="h-8 w-8 shrink-0" aria-hidden="true">
-        <rect width="32" height="32" rx="8" fill={light ? "#fff" : "#4338ca"} />
-        <path d="M8 23h5v-5h5v-5h6" fill="none" stroke={light ? "#4338ca" : "#fff"} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="24" cy="9" r="2.2" fill={light ? "#4338ca" : "#e9b949"} />
-      </svg>
+      <Image src={logo} alt="" width={40} height={40} className="h-10 w-10 shrink-0 object-contain" />
       <span className="truncate text-[1.05rem] tracking-tight">{name}</span>
     </span>
   );
