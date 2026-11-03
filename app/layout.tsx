@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t.landing.promise,
     applicationName: t.appName,
     appleWebApp: { capable: true, title: t.appName, statusBarStyle: "default" },
-    icons: { icon: "/TechKey%20Laptop%20Learning%20Logo.png", apple: "/icons/apple-touch-icon.png" },
+    icons: { icon: "/Glossy%20Purple%20and%20Gold%20TSN%20Ribbon%20Logo.png", apple: "/icons/apple-touch-icon.png" },
   };
 }
 
