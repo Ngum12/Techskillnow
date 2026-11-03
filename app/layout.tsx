@@ -13,7 +13,13 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t.landing.promise,
     applicationName: t.appName,
     appleWebApp: { capable: true, title: t.appName, statusBarStyle: "default" },
-    icons: { icon: "/Glossy%20Purple%20and%20Gold%20TSN%20Ribbon%20Logo.png", apple: "/icons/apple-touch-icon.png" },
+    icons: {
+      icon: [
+        { url: "/icons/tsn-32.png", sizes: "32x32", type: "image/png" },
+        { url: "/icons/tsn-192.png", sizes: "192x192", type: "image/png" },
+      ],
+      apple: { url: "/icons/tsn-180.png", sizes: "180x180", type: "image/png" },
+    },
   };
 }
 
