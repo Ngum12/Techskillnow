@@ -9,6 +9,7 @@ import { MockSignup } from "./MockSignup";
 
 // Larger simulations load on demand, only when a learner reaches that step (small downloads on 3G).
 const loading = () => <p className="py-8 text-center text-muted">…</p>;
+const CreatorStudio = dynamic(() => import("@/components/creator/CreatorStudio").then((m) => m.CreatorStudio), { loading });
 const RecruiterScan = dynamic(() => import("./RecruiterScan").then((m) => m.RecruiterScan), { loading });
 const AdvertHighlighter = dynamic(() => import("./AdvertHighlighter").then((m) => m.AdvertHighlighter), { loading });
 const ExperienceMiner = dynamic(() => import("./ExperienceMiner").then((m) => m.ExperienceMiner), { loading });
@@ -58,6 +59,8 @@ const AiAssistant = dynamic(() => import("@/components/research/AiAssistant").th
 export function TaskView({ task, passed, onPass }: { task: Task; passed: boolean; onPass: () => void }) {
   const props = { passed, onPass };
   switch (task.type) {
+    case "creatorLab":
+      return <CreatorStudio task={task} {...props} />;
     case "multipleChoice":
       return <MultipleChoice task={task} {...props} />;
     case "fixText":

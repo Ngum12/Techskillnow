@@ -11,8 +11,10 @@ import chemTitrationEn from "./chem/en";
 import mathsAlgebraEn from "./maths/algebra/en";
 import mathsFunctionsEn from "./maths/functions/en";
 import researchEn from "./research/en";
+import digitalProductEn from "./digital-product/en";
 
 const courses: Record<string, Partial<Record<Locale, Course>>> = {
+  "digital-product": { en: digitalProductEn },
   "email-for-work": { en: emailForWorkEn, fr: emailForWorkFr },
   cv: { en: cvEn, fr: cvFr },
   applications: { en: applicationsEn, fr: applicationsFr },

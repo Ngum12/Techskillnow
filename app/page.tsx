@@ -59,6 +59,7 @@ export default async function Home() {
   const cheapest = courses.length ? Math.min(...courses.map((c) => c.price)) : 0;
   const catalog = courses.map((c) => ({
     id: c.id,
+    cover: c.cover,
     title: c.title,
     promise: c.promise,
     outcomes: c.outcomes ?? [],

@@ -2,6 +2,7 @@ import type { ErrorData, Indicator, LabSettings, TitrationSystem } from "@/lib/c
 import type { Checkpoint } from "@/lib/chem/marking";
 import type { MathsLessonTask } from "@/lib/maths/types";
 import type { ResearchTask } from "@/lib/research/types";
+import type { CreatorLabTask } from "@/lib/creator/types";
 
 export type { MathsLessonTask };
 
@@ -392,6 +393,7 @@ export type MethodChallengeTask = {
 export type SequenceTask = { type: "sequence"; tasks: Task[]; /** Optional illustration shown above each part (null = none). */ images?: (string | null)[] };
 
 export type Task =
+  | CreatorLabTask
   | MultipleChoiceTask
   | FixTextTask
   | ComposeTask
