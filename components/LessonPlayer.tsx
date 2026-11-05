@@ -76,8 +76,11 @@ function Player({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLab
   const [showCv, setShowCv] = useState(false);
   const [showInvite, setShowInvite] = useState(false);
 
-  const passedKey = `tsn_passed_${courseId}`;
-  const pendingKey = `tsn_pending_${courseId}`;
+  // Revised creator lessons have different objectives and numbering. Keep the old
+  // draft, but do not mark new simulations passed using the previous course cache.
+  const courseRevision = courseId === "digital-product" ? "_guided_v2" : "";
+  const passedKey = `tsn_passed_${courseId}${courseRevision}`;
+  const pendingKey = `tsn_pending_${courseId}${courseRevision}`;
   const stepKey = `${locale}:${n}`;
 
   useEffect(() => {
@@ -302,7 +305,7 @@ function Player({ courseId, total, freeSteps, paid, initialStep, buyHref, buyLab
                 )}
                 {step.task && (
                   <section className="mt-6 border-t border-line pt-5">
-                    <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">{t.learn.practice}</h2>
+                    <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">{step.task.type === "creatorWorkshop" ? "Your guided workshop" : t.learn.practice}</h2>
                     <LessonProvider value={lesson}>
                       <TaskView key={stepKey} task={step.task} passed={passed.includes(n)} onPass={markPassed} />
                     </LessonProvider>

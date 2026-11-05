@@ -17,7 +17,7 @@ function CourseCard({ c, category, labels }: { c: CatalogCourse; category: strin
     <li className="flex flex-col overflow-hidden rounded-[14px] border border-[#e4ded2] bg-white transition-shadow hover:shadow-[0_18px_40px_-24px_rgba(20,28,51,0.35)]">
       <div className="flex gap-3.5 p-3.5 sm:flex-col sm:gap-0 sm:p-0">
         <Link href={`/learn/${c.id}`} tabIndex={-1} aria-hidden="true" className="aspect-square w-24 shrink-0 self-start overflow-hidden sm:self-stretch rounded-[10px] border border-[#ece7dc] sm:aspect-[16/9] sm:w-full sm:rounded-none sm:border-0 sm:border-b">
-          {c.cover ? <img src={`/illustrations/${c.cover}.webp`} alt="" width={1000} height={700} loading="lazy" className="h-full w-full object-cover" /> : <CourseMotif id={c.id} />}
+          {c.cover ? <img src={`/illustrations/${c.cover}.webp`} alt="" width={1000} height={700} loading="lazy" className={`h-full w-full ${c.id === "digital-product" ? "bg-[#f3efe6] object-contain" : "object-cover"}`} /> : <CourseMotif id={c.id} />}
         </Link>
         <div className="min-w-0 flex-1 sm:px-5 sm:pt-5">
           <p className="text-[0.62rem] font-bold uppercase tracking-[0.14em] text-primary sm:text-[0.68rem]">{category}</p>

@@ -1,44 +1,68 @@
-# Digital product creator course
+# Digital product creator course — guided workshop revision
 
-- Course ID: `digital-product`
-- Base price: **2,500 FCFA** (existing referral pricing still applies).
-- Language: English. The existing locale fallback serves this version for French requests.
-- 16 lessons; first 2 free; 12-question final assessment, 80% pass mark.
-- Uses existing course registration, checkout, access codes, progress, assessment and certificate workflows. No database migration required.
+- ID: `digital-product`; base price **2,500 FCFA**; existing referral pricing is unchanged.
+- 21 lessons; first 4 free, including the first ChatGPT account and prompting simulations.
+- English, with the existing English fallback for French requests.
+- Existing checkout, access-code, progress, assessment and certificate workflows; no database migration.
 
-## Learning path
+## Teaching pattern
 
-1. Identify a useful result rather than an income promise.
-2. Save the learner's audience, product promise and experience.
-3. Interview five potential readers and record actual findings.
-4. Set up ChatGPT, Canva and storage; understand each tool's purpose.
-5. Assemble a reader's route and create the outline.
-6. Build a personalised AI prompt; use it in the real service.
-7. Repair vague practice instructions; author an actionable original draft.
-8. Check claims, originality and visual permissions.
-9. Inspect the phone preview; export the PDF; design in Canva if desired.
-10. Run a real beginner trial and revise the guide.
-11. Set a product price; explore hypothetical fees and costs.
-12. Create a real Selar account and store.
-13. Check actual payment and payout availability and verification.
-14. Create the real listing; rehearse PDF upload, checkout and delivery.
-15. Write a seven-day launch kit with permission-based promotion.
-16. Practise customer support and download final deliverables.
+Each lesson first presents two or three sequential learning cards. Every card includes a plain-language explanation, a worked example and a highlighted takeaway. Only then does the learner enter a guided simulation. Reading cards can be revisited without discarding the mounted simulation.
 
-## Implementation
+The active course now uses `creatorWorkshop`. The previous long-form `creatorLab` renderer remains for backward compatibility with cached task payloads; it is not used by this course's revised lesson definitions. The new local completion cache does not inherit passes from the old lesson numbering. Existing saved project strings under `tsn_creator_project_v1` are preserved. Because lesson numbers changed, returning learners should revisit the pathway from lesson 1 rather than assume old saved progress describes the same lesson.
 
-`content/digital-product/en.ts` contains all instructional content and curated scenarios. `creatorLab` is the new task type. `CreatorStudio` is loaded on demand by the existing task renderer. `PublishingRehearsal` is a fictional training interface, not an imitation claimed to match Selar's current screens.
+## Pathway and visible results
 
-The six uploaded illustrations are retained. Smaller WebP derivatives in `public/illustrations/creator-*` are used for the course. Course cards now support the existing optional cover field.
+1. Turn through a four-page finished sample and inspect why each page works.
+2. Build a reader/outcome/title card from a worked example.
+3. Rehearse ChatGPT account creation and identify workspace controls.
+4. Type a taught prompt and inspect an authored assistant response.
+5. Repair a weak prompt, receive ingredient feedback and compare the improved response.
+6. Request and save an outline.
+7. Request and inspect an action/checkpoint/fix draft.
+8. Tap problematic draft lines and replace them with defensible wording.
+9. Assemble an instruction from three small inputs and see it enter the editable draft.
+10. Rehearse Canva account creation and locate design/upload/export controls.
+11. Create a document, fix readability, inspect pages and export an actual PDF.
+12. Understand Google-account access to Drive and locate its storage controls.
+13. Move files into purpose-specific folders and download a real project backup.
+14. Hear practice reader questions and revise the visible document.
+15. Change price/fee/cost controls; compare zero/three/ten sales.
+16. Rehearse Selar account creation and locate seller tools.
+17. Save a practice store profile and inspect the resulting identity.
+18. Attach a real PDF, build a listing and inspect the published practice offer.
+19. Inspect payout requirements and rehearse pending/failed/confirmed payment and file delivery.
+20. Compose a launch post, inspect its status preview and answer a buyer question.
+21. Complete a sequential real-platform handover and download the launch pack.
 
-The product project saves locally under `tsn_creator_project_v1`. It is **not** linked to a learner account and does **not** sync across devices. Shared-device notices, clear-project controls, JSON backup/restore and download tools are provided. Private verification notes are excluded from the customer PDF but included in the learner's launch pack. Import accepts only known string fields, limits lengths and requires confirmation before replacing local work.
+## Account simulations
 
-PDF export loads jsPDF on demand and produces a simple selectable-text document. It uses standard fonts suitable for English/French text, normalises unsupported punctuation, and does not claim to provide full Canva layout or arbitrary writing-system support. Visual preview font/colour controls do not change the export layout. Learners should use Canva for advanced layouts and original demonstration photos.
+ChatGPT, Canva, Selar and Google Drive all offer a signup rehearsal and an “already have an account” skip. All learners still complete a workspace-control tour. The email path uses a supplied dummy email, dummy password and training inbox code. A separate Google account-selection route avoids incorrectly pretending Google sign-in requires the same email signup screens.
 
-No AI API calls, real payments, Selar integrations or credential collection are introduced. AI prompts are generated from the saved project and copied into the learner's chosen service. Real account, verification, reader-trial and launch tasks are learner declarations, not independently verified evidence. All practice payment states are explicitly simulated. The rehearsal's PDF remains in memory for that session and is never uploaded.
+These are representative, labelled training interfaces. They do not claim to reproduce current vendor screens exactly or open accounts. Live methods, screen labels, eligibility and verification requirements can change. Do not collect real passwords, payment PINs, OTPs or identity documents. Only official services should receive real account information.
 
-Before revising platform-specific instructions, check Selar's current Cameroon account requirements, accepted payment methods, payout routes, fees and holding periods. Do not promise MTN/Orange availability without checking the actual account and checkout. Hypothetical fee defaults in the sandbox are not Selar's published prices.
+## Prompting and drafting
 
-## Current environment evidence
+`ChatWalkthrough` contains a New chat control, editable composer, prompt ingredient feedback, visible user messages and authored assistant responses. Initial prompt exercises show the worked prompt; the correction exercise starts with an intentionally weak prompt and a weak-response example. Completed responses can save the outline/draft into the learner project.
 
-TypeScript checks pass. The production build encounters the existing homepage Newsreader download failure because this environment cannot reach Google Fonts. No font verification bypass or mock responses were used. Database-backed purchases, payouts and signed-in progress require the configured external credentials and have not been exercised as real transactions.
+No live AI API calls are made. The response examples are explicitly labelled course-authored training responses. They do not prove factual correctness, demand or earnings. The real-world handover asks learners to apply the practised prompt structure to their own original subject, tested method and verified evidence.
+
+## Design and assets
+
+Creator illustrations and the course card use containment rather than cropping. Other course illustration behaviour is preserved. All six original PNGs remain; the course uses smaller WebP derivatives.
+
+The training designer has document selection, title, page tabs, size/contrast controls, optional original-image upload and actual jsPDF download. All three pages must be inspected before export. The PDF uses narrow phone-friendly pages, the selected readable type scale and an optional uploaded image. The training preview is not claimed to implement every Canva layout feature. Standard PDF fonts support English/French text; other scripts require separate review.
+
+## Storage and boundaries
+
+Project data is local to the current browser; it does not sync across learner accounts or devices. Backup/restore, storage warnings and shared-phone clearing remain available. Original images should also be retained in the learner's own product folder; an image selected in a designer session is not part of the JSON draft backup.
+
+Practice uploads stay in memory for the current browser session, and practice publishing/payment states never contact Selar or move money. Profile and listing forms display results instead of pretending to create live stores. Real-world actions are explicit learner declarations, not automatically verified claims.
+
+Check current Selar Cameroon payment/payout routes, verification requirements, fees and holds before updating platform-specific guidance. The money sandbox uses hypothetical adjustable fees. No real transactions or external messages are sent by this course.
+
+## Validation limits
+
+TypeScript compilation is checked. Phone-sized browser review uses local course fixtures only inside the inspection browser so that individual workshop screens can be viewed without weakening paid server access. The deployed API still decides which lessons are free or paid. Real account creation, real payouts and the learner's originality/reader trials require actual external work.
+
+The current environment has a pre-existing Google Fonts access restriction that blocked production builds of the homepage Newsreader font. Do not claim a production build passed or use fake font responses to bypass that restriction.

@@ -3,6 +3,7 @@ import type { Checkpoint } from "@/lib/chem/marking";
 import type { MathsLessonTask } from "@/lib/maths/types";
 import type { ResearchTask } from "@/lib/research/types";
 import type { CreatorLabTask } from "@/lib/creator/types";
+import type { CreatorWorkshopTask } from "@/lib/creator/workshop";
 
 export type { MathsLessonTask };
 
@@ -393,6 +394,7 @@ export type MethodChallengeTask = {
 export type SequenceTask = { type: "sequence"; tasks: Task[]; /** Optional illustration shown above each part (null = none). */ images?: (string | null)[] };
 
 export type Task =
+  | CreatorWorkshopTask
   | CreatorLabTask
   | MultipleChoiceTask
   | FixTextTask

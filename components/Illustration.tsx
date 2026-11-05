@@ -4,8 +4,9 @@ import { useState } from "react";
 /** Lazy-loaded WebP from /public/illustrations, with a neutral placeholder if the file is missing. */
 export function Illustration({ name, alt = "", priority = false }: { name?: string; alt?: string; priority?: boolean }) {
   const [failed, setFailed] = useState(!name);
+  const showFullImage = name?.startsWith("creator-");
   return (
-    <div className="aspect-[3/2] w-full overflow-hidden rounded-xl bg-[#f3efe6]">
+    <div className={`${showFullImage ? "" : "aspect-[3/2]"} w-full overflow-hidden rounded-xl bg-[#f3efe6]`}>
       {failed ? (
         <svg viewBox="0 0 300 200" className="h-full w-full" aria-hidden="true">
           <rect x="105" y="62" width="90" height="62" rx="8" fill="none" stroke="#c9c1b0" strokeWidth="5" />
@@ -21,7 +22,7 @@ export function Illustration({ name, alt = "", priority = false }: { name?: stri
           loading={priority ? "eager" : "lazy"}
           decoding="async"
           onError={() => setFailed(true)}
-          className="h-full w-full object-cover"
+          className={showFullImage ? "h-auto max-h-[24rem] w-full object-contain" : "h-full w-full object-cover"}
         />
       )}
     </div>
